@@ -98,7 +98,7 @@ def clean_matrix(output_file: str, logger: logging.Logger):
             
             if 'error' in row and pd.notna(row['error']):
                 remove = True
-                reason = f'Scraping error: {row[''error'']}'
+                reason = f"Scraping error: {row['error']}"
             elif ('company_name' not in row) or (pd.isna(row['company_name'])) or (str(row['company_name']).strip().lower() == 'unknown'):
                 if ('contact_emails' not in row or pd.isna(row['contact_emails']) or not str(row['contact_emails']).strip()) and ('phone_numbers' not in row or pd.isna(row['phone_numbers']) or not str(row['phone_numbers']).strip()):
                     remove = True
