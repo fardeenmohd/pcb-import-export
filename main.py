@@ -7,7 +7,7 @@ from ddgs import DDGS
 from tkinter import ttk
 
 from logger_util import setup_logger
-from processor import run_pipeline
+from processor import run_pipeline, clean_matrix
 
 # Load environment variables
 load_dotenv()
@@ -147,8 +147,14 @@ class App(ctk.CTk):
         self.tab_database.grid_columnconfigure(0, weight=1)
         self.tab_database.grid_rowconfigure(1, weight=1)
         
-        btn_sync = ctk.CTkButton(self.tab_database, text="Sync / Load Local Matrix", command=self.load_local_matrix)
-        btn_sync.grid(row=0, column=0, pady=10, padx=10, sticky="w")
+        btn_frame = ctk.CTkFrame(self.tab_database, fg_color="transparent")
+        btn_frame.grid(row=0, column=0, pady=10, padx=10, sticky="w")
+        
+        btn_sync = ctk.CTkButton(btn_frame, text="Sync / Load Local Matrix", command=self.load_local_matrix)
+        btn_sync.pack(side="left", padx=(0, 10))
+        
+        btn_clean = ctk.CTkButton(btn_frame, text="Clean Matrix", command=self.clean_local_matrix, fg_color="#b30000", hover_color="#800000")
+        btn_clean.pack(side="left")
         
         frame = ctk.CTkFrame(self.tab_database)
         frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
@@ -196,6 +202,11 @@ class App(ctk.CTk):
                 self.logger.error(f"Failed to load matrix: {e}")
         else:
             self.logger.warning("No local matrix found to load.")
+            
+    def clean_local_matrix(self):
+        output_file = "Suppliers_Matrix.xlsx"
+        clean_matrix(output_file, self.logger)
+        self.load_local_matrix()
             
     def setup_buyers_tab(self):
         self.tab_buyers.grid_columnconfigure(0, weight=1)

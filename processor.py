@@ -80,3 +80,45 @@ def run_pipeline(urls: List[str], logger: logging.Logger, output_file: str = "Su
         logger.info(f"Successfully saved results to {output_file}")
     except Exception as e:
         logger.error(f"Failed to save Excel file: {e}")
+
+def clean_matrix(output_file: str, logger: logging.Logger):
+    if not os.path.exists(output_file):
+        logger.warning('No matrix to clean.')
+        return
+    try:
+        df = pd.read_excel(output_file)
+        initial_count = len(df)
+        
+        removed_rows = []
+        keep_indices = []
+        
+        for idx, row in df.iterrows():
+            remove = False
+            reason = ''
+            
+            if 'error' in row and pd.notna(row['error']):
+                remove = True
+                reason = f'Scraping error: {row[''error'']}'
+            elif ('company_name' not in row) or (pd.isna(row['company_name'])) or (str(row['company_name']).strip().lower() == 'unknown'):
+                if ('contact_emails' not in row or pd.isna(row['contact_emails']) or not str(row['contact_emails']).strip()) and ('phone_numbers' not in row or pd.isna(row['phone_numbers']) or not str(row['phone_numbers']).strip()):
+                    remove = True
+                    reason = 'No company name and no contact info'
+                    
+            if remove:
+                url = row['url'] if 'url' in row else 'Unknown'
+                removed_rows.append(f'Removed URL: {url} - Reason: {reason}')
+            else:
+                keep_indices.append(idx)
+                
+        if len(removed_rows) > 0:
+            df_cleaned = df.loc[keep_indices]
+            df_cleaned.to_excel(output_file, index=False)
+            
+            logger.info(f'Cleaned matrix. Removed {len(removed_rows)} out of {initial_count} rows.')
+            for msg in removed_rows:
+                logger.info(msg)
+        else:
+            logger.info('Matrix is already clean. No rows removed.')
+    except Exception as e:
+        logger.error(f'Failed to clean matrix: {e}')
+
