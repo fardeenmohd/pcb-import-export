@@ -1,5 +1,7 @@
 import customtkinter as ctk
 import threading
+import sys
+import subprocess
 import pandas as pd
 import os
 from dotenv import load_dotenv
@@ -41,6 +43,14 @@ class App(ctk.CTk):
         self.setup_database_tab()
         self.setup_buyers_tab()
         self.setup_logs_tab()
+        
+        self.btn_restart = ctk.CTkButton(self, text="Restart App", command=self.restart_app, width=100, fg_color="#b35900", hover_color="#804000")
+        self.btn_restart.grid(row=1, column=0, pady=(0, 10), padx=20, sticky="e")
+
+    def restart_app(self):
+        self.logger.info("Restarting application...")
+        self.destroy()
+        subprocess.Popen([sys.executable] + sys.argv)
 
     def setup_discovery_tab(self):
         self.tab_discovery.grid_columnconfigure(0, weight=1)
