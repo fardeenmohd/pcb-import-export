@@ -3,7 +3,7 @@ import threading
 import pandas as pd
 import os
 from dotenv import load_dotenv
-from duckduckgo_search import DDGS
+from ddgs import DDGS
 from tkinter import ttk
 
 from logger_util import setup_logger
