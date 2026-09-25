@@ -1,0 +1,10 @@
+playwright
+playwright-stealth
+beautifulsoup4
+pandas
+google-genai
+pydantic
+customtkinter
+openpyxl
+python-dotenv
+duckduckgo-search
