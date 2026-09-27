@@ -189,7 +189,7 @@ class App(ctk.CTk):
             self.discovery_textbox.insert("end", f"Error: {error}")
         else:
             self.lbl_disc_status.configure(text=f"Status: Found {len(urls)} URLs")
-            self.discovery_textbox.insert("end", "\\n".join(urls) + "\\n")
+            self.discovery_textbox.insert("end", "\n".join(urls) + "\n")
 
     def setup_suppliers_tab(self):
         self.tab_suppliers.grid_columnconfigure(0, weight=1)
@@ -201,7 +201,7 @@ class App(ctk.CTk):
         
         self.sup_urls_textbox = ctk.CTkTextbox(self.tab_suppliers, height=80)
         self.sup_urls_textbox.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
-        self.sup_urls_textbox.insert("0.0", "https://www.sahasraelectronics.com\\n")
+        self.sup_urls_textbox.insert("0.0", "https://www.sahasraelectronics.com\n")
         
         control_frame = ctk.CTkFrame(self.tab_suppliers)
         control_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
@@ -253,7 +253,7 @@ class App(ctk.CTk):
         if not urls_text:
             return
             
-        urls = [url.strip() for url in urls_text.split("\\n") if url.strip()]
+        urls = [url.strip() for url in urls_text.split("\n") if url.strip()]
         threading.Thread(target=self.run_pipeline_thread, args=(urls, pipeline_type), daemon=True).start()
 
     def run_pipeline_thread(self, urls, pipeline_type):
@@ -373,7 +373,7 @@ class App(ctk.CTk):
         self.ui_queue.put((self._append_log, (message,)))
         
     def _append_log(self, message):
-        self.log_textbox.insert("end", message + "\\n")
+        self.log_textbox.insert("end", message + "\n")
         self.log_textbox.see("end")
         
         active_tab = self.tabview.get()
