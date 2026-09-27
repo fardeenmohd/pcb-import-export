@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import threading
+import queue
 import sys
 import subprocess
 import pandas as pd
@@ -24,6 +25,8 @@ class App(ctk.CTk):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         
+        self.ui_queue = queue.Queue()
+        
         self.logger = setup_logger(self.log_callback)
         
         self.tabview = ctk.CTkTabview(self)
@@ -45,6 +48,19 @@ class App(ctk.CTk):
         
         self.btn_restart = ctk.CTkButton(self, text="Restart App", command=self.restart_app, width=100, fg_color="#b35900", hover_color="#804000")
         self.btn_restart.grid(row=1, column=0, pady=(0, 10), padx=20, sticky="e")
+        
+        # Start UI event polling loop
+        self.poll_queue()
+
+    def poll_queue(self):
+        # Safely execute background thread UI tasks on the main thread
+        while not self.ui_queue.empty():
+            try:
+                task, args = self.ui_queue.get_nowait()
+                task(*args)
+            except queue.Empty:
+                break
+        self.after(100, self.poll_queue)
 
     def restart_app(self):
         self.logger.info("Restarting application...")
@@ -161,10 +177,10 @@ class App(ctk.CTk):
                 results = list(ddgs.text(query, region=region_code, max_results=max_results))
             
             urls = [r.get('href') for r in results if r.get('href')]
-            self.after(0, self.on_discovery_complete, urls, None)
+            self.ui_queue.put((self.on_discovery_complete, (urls, None)))
         except Exception as e:
             self.logger.error(f"Search failed: {e}")
-            self.after(0, self.on_discovery_complete, [], str(e))
+            self.ui_queue.put((self.on_discovery_complete, ([], str(e))))
             
     def on_discovery_complete(self, urls, error):
         self.btn_search.configure(state="normal")
@@ -173,7 +189,7 @@ class App(ctk.CTk):
             self.discovery_textbox.insert("end", f"Error: {error}")
         else:
             self.lbl_disc_status.configure(text=f"Status: Found {len(urls)} URLs")
-            self.discovery_textbox.insert("end", "\n".join(urls) + "\n")
+            self.discovery_textbox.insert("end", "\\n".join(urls) + "\\n")
 
     def setup_suppliers_tab(self):
         self.tab_suppliers.grid_columnconfigure(0, weight=1)
@@ -185,7 +201,7 @@ class App(ctk.CTk):
         
         self.sup_urls_textbox = ctk.CTkTextbox(self.tab_suppliers, height=80)
         self.sup_urls_textbox.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
-        self.sup_urls_textbox.insert("0.0", "https://www.sahasraelectronics.com\n")
+        self.sup_urls_textbox.insert("0.0", "https://www.sahasraelectronics.com\\n")
         
         control_frame = ctk.CTkFrame(self.tab_suppliers)
         control_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
@@ -237,7 +253,7 @@ class App(ctk.CTk):
         if not urls_text:
             return
             
-        urls = [url.strip() for url in urls_text.split("\n") if url.strip()]
+        urls = [url.strip() for url in urls_text.split("\\n") if url.strip()]
         threading.Thread(target=self.run_pipeline_thread, args=(urls, pipeline_type), daemon=True).start()
 
     def run_pipeline_thread(self, urls, pipeline_type):
@@ -248,7 +264,7 @@ class App(ctk.CTk):
             output_file = "Buyers_Matrix.xlsx"
             run_buyer_pipeline(urls, self.logger, output_file=output_file)
             
-        self.after(0, self.on_pipeline_complete, output_file, pipeline_type)
+        self.ui_queue.put((self.on_pipeline_complete, (output_file, pipeline_type)))
         
     def on_pipeline_complete(self, output_file, pipeline_type):
         if pipeline_type == "supplier":
@@ -354,12 +370,12 @@ class App(ctk.CTk):
                 self.log_textbox.insert("0.0", f.read())
                 
     def log_callback(self, message):
-        self.after(0, self._append_log, message)
+        self.ui_queue.put((self._append_log, (message,)))
         
     def _append_log(self, message):
         self.log_textbox.insert("end", message + "\\n")
         self.log_textbox.see("end")
-        # Find which tab is active and update its status label
+        
         active_tab = self.tabview.get()
         if active_tab == "Suppliers Scraper":
             self.lbl_sup_status.configure(text=f"Status: {message[:50]}...")
