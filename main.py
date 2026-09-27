@@ -58,8 +58,11 @@ class App(ctk.CTk):
         control_frame = ctk.CTkFrame(self.tab_discovery)
         control_frame.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         
-        self.query_entry = ctk.CTkEntry(control_frame, placeholder_text="Enter base query (e.g., IoT hardware startups)", width=300)
+        self.query_entry = ctk.CTkEntry(control_frame, placeholder_text="Enter base query", width=250)
         self.query_entry.pack(side="left", padx=10, pady=10)
+        
+        self.btn_suggest = ctk.CTkButton(control_frame, text="💡 Suggest", width=70, command=self.suggest_query, fg_color="#4B0082", hover_color="#300050")
+        self.btn_suggest.pack(side="left", padx=5)
         
         self.region_var = ctk.StringVar(value="wt-wt")
         self.region_dropdown = ctk.CTkOptionMenu(
@@ -92,6 +95,42 @@ class App(ctk.CTk):
         
         self.discovery_textbox = ctk.CTkTextbox(self.tab_discovery, wrap="none")
         self.discovery_textbox.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+
+    def suggest_query(self):
+        import random
+        strategy = self.strategy_var.get()
+        
+        buyer_queries = [
+            "EV charging station manufacturers",
+            "Battery management system startups",
+            "Industrial IoT sensor manufacturers",
+            "Programmable Logic Controller OEM",
+            "Solar inverter manufacturers",
+            "Smart energy meter OEM",
+            "Wearable health tracker startups",
+            "Patient monitoring device OEM",
+            "Smart home automation hub manufacturers",
+            "Commercial drone hardware startups"
+        ]
+        
+        supplier_queries = [
+            "PCB manufacturers Delhi NCR",
+            "Printed circuit board assembly Noida",
+            "FR4 PCB fabricators Gurgaon",
+            "Multilayer PCB suppliers India",
+            "Rigid-flex PCB manufacturers",
+            "Turnkey PCB assembly services",
+            "HDI PCB manufacturers",
+            "MCPCB LED board manufacturers"
+        ]
+        
+        if "Supplier" in strategy:
+            q = random.choice(supplier_queries)
+        else:
+            q = random.choice(buyer_queries)
+            
+        self.query_entry.delete(0, "end")
+        self.query_entry.insert(0, q)
 
     def start_discovery(self):
         query = self.query_entry.get().strip()
