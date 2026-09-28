@@ -130,20 +130,8 @@ class App(ctk.CTk):
     def suggest_query_thread(self, strategy, region):
         try:
             from google import genai
-            client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
-            
-            if strategy == "Suppliers":
-                target = "Indian PCB manufacturers and suppliers of electronic components, chips, or microcontrollers."
-            else:
-                region_name = region.split(" (")[0]
-                target = f"hardware OEMs, IoT startups, or medical/automotive electronic brands in {region_name} that BUILD physical products."
-                
-            prompt = f"You are a B2B sourcing expert.\\nThe user wants to find: {target}\\n\\nGenerate a single, highly specific DuckDuckGo search query to find their actual company websites.\\nDo not include any quotes or explanations. Just return the raw query string.\\nExample for Buyers: Industrial IoT sensor OEMs Australia\\nExample for Suppliers: Rigid-flex PCB manufacturers India"
-            
-            response = client.models.generate_content(
-                model='gemini-flash-latest',
-                contents=prompt
-            )
+            from llm_fallback import generate_with_fallback
+            response = generate_with_fallback(prompt, logger=self.logger)
             query = response.text.strip().replace('"', '').replace('\\n', '')
             self.ui_queue.put((self.on_suggest_complete, (query,)))
         except Exception as e:
@@ -204,22 +192,14 @@ class App(ctk.CTk):
             class FilteredURLs(BaseModel):
                 urls: List[str]
                 
-            client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
-            
-            if strategy == "Suppliers":
-                filter_goal = "Indian PCB manufacturers, electronic component suppliers, or microcontrollers distributors. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
-            else:
-                filter_goal = "Actual company websites for Hardware OEMs, startups, or brands that build physical products. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
-                
-            prompt = f"You are an expert lead generation AI.\\nThe user is searching for: {filter_goal}\\n\\nHere are the raw search results from DuckDuckGo:\\n{search_context}\\n\\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
-            
-            response = client.models.generate_content(
-                model='gemini-flash-latest',
-                contents=prompt,
+            from llm_fallback import generate_with_fallback
+            response = generate_with_fallback(
+                prompt=prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
                     response_schema=FilteredURLs,
                 ),
+                logger=self.logger
             )
             
             filtered_data = FilteredURLs.model_validate_json(response.text)

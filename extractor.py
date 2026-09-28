@@ -46,22 +46,15 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
 
     logger.info("Sending text to Gemini for extraction...")
     try:
-        client = genai.Client(api_key=api_key)
-        
-        prompt = (
-            "Analyze the following text scraped from a PCB manufacturer's website. "
-            "Extract the information required by the JSON schema. If information is not found, leave it empty or false.\n\n"
-            f"Website Text:\n{text[:30000]}" # limit to avoid exceeding context too much if absurdly large
-        )
-        
-        response = client.models.generate_content(
-            model='gemini-flash-latest',
-            contents=prompt,
+        from llm_fallback import generate_with_fallback
+        response = generate_with_fallback(
+            prompt=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 response_schema=SupplierCapabilities,
                 temperature=0.0
             ),
+            logger=logger
         )
         
         # Parse the JSON response into our Pydantic model
@@ -87,33 +80,15 @@ class BuyerInfo(BaseModel):
     is_hardware_oem: bool
 
 def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[BuyerInfo]:
-    client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
-    prompt = f'''
-    You are an expert B2B lead generation analyst.
-    Analyze the following scraped text from a company's website.
-    We are looking for OEM (Original Equipment Manufacturer) companies, hardware startups, or medical/automotive brands that BUILD physical electronic products and thus require Printed Circuit Boards (PCBs).
-    CRITICAL INSTRUCTION: You must aggressively scan the text (especially footers/headers) to find ANY email addresses (e.g. sales@, info@) and phone numbers. If the company name is missing, infer it from the domain or copyright text.
-    Extract the following information:
-    - company_name: The name of the company (default 'Unknown').
-    - industry: E.g., Consumer Electronics, Medical Devices, Automotive, Industrial Automation.
-    - target_products: What physical hardware products do they manufacture?
-    - contact_emails: List of emails found.
-    - phone_numbers: List of phone numbers found.
-    - locations: List of their office/factory locations.
-    - estimated_company_size: Startup, Mid-Market, Enterprise.
-    - is_hardware_oem: True if they actually manufacture physical electronic hardware (i.e. they are a potential buyer of PCBs). False if they are just a software company, a marketing agency, or a PCB supplier themselves.
-
-    TEXT TO ANALYZE:
-    {text}
-    '''
     try:
-        response = client.models.generate_content(
-            model='gemini-flash-latest',
-            contents=prompt,
+        from llm_fallback import generate_with_fallback
+        response = generate_with_fallback(
+            prompt=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 response_schema=BuyerInfo,
             ),
+            logger=logger
         )
         return BuyerInfo.model_validate_json(response.text)
     except Exception as e:
