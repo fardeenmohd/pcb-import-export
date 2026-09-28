@@ -14,6 +14,9 @@ class AdvancedCapabilities(BaseModel):
     blind_buried_vias: bool = False
     bga_assembly: bool = False
 
+class SupplierList(BaseModel):
+    suppliers: List['SupplierCapabilities']
+
 class SupplierCapabilities(BaseModel):
     company_name: Optional[str] = Field(description="Name of the company")
     contact_emails: List[str] = Field(default_factory=list, description="List of extracted email addresses")
@@ -28,7 +31,7 @@ class SupplierCapabilities(BaseModel):
     lead_time_days: Optional[str] = Field(description="Expected turnaround or lead time")
     advanced_capabilities: AdvancedCapabilities = Field(default_factory=AdvancedCapabilities, description="Advanced manufacturing capabilities")
 
-def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[SupplierCapabilities]:
+def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[List[SupplierCapabilities]]:
     """
     Uses Gemini API to extract structured supplier data from plain text.
     """
@@ -47,8 +50,9 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
     logger.info("Sending text to Gemini for extraction...")
     try:
         prompt = (
-            "Analyze the following text scraped from a PCB manufacturer's website. "
-            "Extract the information required by the JSON schema. If information is not found, leave it empty or false.\n\n"
+            "Analyze the following text scraped from a PCB manufacturer's website OR a B2B directory page (like IndiaMart). "
+            "CRITICAL INSTRUCTION: If the page contains a list of multiple different PCB suppliers/manufacturers, you MUST extract EACH of them as a separate entry in the list! Do NOT name the company 'IndiaMart' or 'JustDial'. "
+            "Extract the information required by the JSON schema for each company found.\n\n"
             f"Website Text:\n{text[:30000]}"
         )
         from llm_fallback import generate_with_fallback
@@ -56,7 +60,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
             prompt=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
-                response_schema=SupplierCapabilities,
+                response_schema=SupplierList,
                 temperature=0.0
             ),
             logger=logger
@@ -65,7 +69,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
         # Parse the JSON response into our Pydantic model
         if response.text:
             logger.info("Successfully extracted data via Gemini.")
-            return SupplierCapabilities.model_validate_json(response.text)
+            return SupplierList.model_validate_json(response.text).suppliers
         else:
             logger.error("Gemini returned empty response.")
             return None
@@ -73,6 +77,9 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
     except Exception as e:
         logger.error(f"Extraction failed: {e}")
         return None
+
+class BuyerList(BaseModel):
+    buyers: List['BuyerInfo']
 
 class BuyerInfo(BaseModel):
     company_name: str
@@ -84,13 +91,14 @@ class BuyerInfo(BaseModel):
     estimated_company_size: str
     is_hardware_oem: bool
 
-def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[BuyerInfo]:
+def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[BuyerInfo]]:
     prompt = f'''
     You are an expert B2B lead generation analyst.
     Analyze the following scraped text from a company's website.
     We are looking for OEM (Original Equipment Manufacturer) companies, hardware startups, or medical/automotive brands that BUILD physical electronic products and thus require Printed Circuit Boards (PCBs).
     CRITICAL INSTRUCTION: You must aggressively scan the text (especially footers/headers) to find ANY email addresses (e.g. sales@, info@) and phone numbers. If the company name is missing, infer it from the domain or copyright text.
-    Extract the following information:
+    CRITICAL INSTRUCTION: If this is a directory page containing MULTIPLE companies, you MUST extract EACH hardware OEM as a separate entry in the list!
+    Extract the following information for EACH company found:
     - company_name: The name of the company (default 'Unknown').
     - industry: E.g., Consumer Electronics, Medical Devices, Automotive, Industrial Automation.
     - target_products: What physical hardware products do they manufacture?
@@ -109,11 +117,11 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[BuyerInfo]
             prompt=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
-                response_schema=BuyerInfo,
+                response_schema=BuyerList,
             ),
             logger=logger
         )
-        return BuyerInfo.model_validate_json(response.text)
+        return BuyerList.model_validate_json(response.text).buyers
     except Exception as e:
         logger.error(f"Gemini API extraction failed: {e}")
         return None
