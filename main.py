@@ -300,7 +300,7 @@ class App(ctk.CTk):
         else:
             textbox.insert("0.0", "Output file not found. Scraper may have failed.")
 
-    def create_database_tab_ui(self, tab, sync_cmd, clean_cmd):
+    def create_database_tab_ui(self, tab, sync_cmd, clean_cmd, delete_all_cmd):
         tab.grid_columnconfigure(0, weight=1)
         tab.grid_rowconfigure(1, weight=1)
         
@@ -312,6 +312,9 @@ class App(ctk.CTk):
         
         btn_clean = ctk.CTkButton(btn_frame, text="Clean Matrix", command=clean_cmd, fg_color="#b30000", hover_color="#800000")
         btn_clean.pack(side="left")
+        
+        btn_delete_all = ctk.CTkButton(btn_frame, text="Delete All Entries", command=delete_all_cmd, fg_color="#660000", hover_color="#4d0000")
+        btn_delete_all.pack(side="left", padx=10)
         
         frame = ctk.CTkFrame(tab)
         frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
@@ -339,15 +342,27 @@ class App(ctk.CTk):
         self.sup_tree = self.create_database_tab_ui(
             self.tab_sup_db, 
             lambda: self.load_matrix(self.sup_tree, "Suppliers_Matrix.xlsx"),
-            lambda: self.clean_local_matrix("Suppliers_Matrix.xlsx", self.sup_tree)
+            lambda: self.clean_local_matrix("Suppliers_Matrix.xlsx", self.sup_tree),
+            lambda: self.delete_all_entries("Suppliers_Matrix.xlsx", self.sup_tree)
         )
         
     def setup_buy_db_tab(self):
         self.buy_tree = self.create_database_tab_ui(
             self.tab_buy_db, 
             lambda: self.load_matrix(self.buy_tree, "Buyers_Matrix.xlsx"),
-            lambda: self.clean_local_matrix("Buyers_Matrix.xlsx", self.buy_tree)
+            lambda: self.clean_local_matrix("Buyers_Matrix.xlsx", self.buy_tree),
+            lambda: self.delete_all_entries("Buyers_Matrix.xlsx", self.buy_tree)
         )
+
+    def delete_all_entries(self, output_file, tree):
+        import tkinter.messagebox as messagebox
+        if messagebox.askyesno("Confirm Delete", f"Are you sure you want to completely delete {output_file}?\nThis action cannot be undone."):
+            if os.path.exists(output_file):
+                os.remove(output_file)
+                self.logger.info(f"Deleted {output_file}.")
+            tree.delete(*tree.get_children())
+            tree["columns"] = []
+            self.ui_queue.put((self._append_log, (f"Cleared database {output_file}",)))
 
     def load_matrix(self, tree, output_file):
         if os.path.exists(output_file):
