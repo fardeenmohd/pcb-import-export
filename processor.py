@@ -135,10 +135,6 @@ def process_single_buyer_url(url: str, logger: logging.Logger) -> List[Dict]:
         
     flat_data_list = []
     for extracted_data in extracted_data_list:
-        if not extracted_data.is_hardware_oem:
-            logger.info(f"Skipping {url} - {extracted_data.company_name} is not a true Hardware OEM/Buyer")
-            continue
-            
         flat_data = {
             "url": url,
             "company_name": extracted_data.company_name,
@@ -153,7 +149,7 @@ def process_single_buyer_url(url: str, logger: logging.Logger) -> List[Dict]:
         flat_data_list.append(flat_data)
         
     if not flat_data_list:
-        return [{"url": url, "error": "Not a hardware OEM buyer (Skipped)"}]
+        return [{"url": url, "error": "No companies extracted"}]
         
     logger.info(f"Finished processing buyer {url} - Found {len(flat_data_list)} OEMs")
     return flat_data_list
