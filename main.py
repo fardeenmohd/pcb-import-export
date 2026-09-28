@@ -74,27 +74,28 @@ class App(ctk.CTk):
         control_frame = ctk.CTkFrame(self.tab_discovery)
         control_frame.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         
-        self.query_entry = ctk.CTkEntry(control_frame, placeholder_text="Enter base query", width=250)
-        self.query_entry.pack(side="left", padx=10, pady=10)
-        
-        self.btn_suggest = ctk.CTkButton(control_frame, text="💡 Suggest", width=70, command=self.suggest_query, fg_color="#4B0082", hover_color="#300050")
-        self.btn_suggest.pack(side="left", padx=5)
-        
-        self.region_var = ctk.StringVar(value="wt-wt")
+        self.strategy_var = ctk.StringVar(value="Buyers")
+        self.strategy_dropdown = ctk.CTkOptionMenu(
+            control_frame, 
+            values=["Suppliers", "Buyers"],
+            variable=self.strategy_var, width=120,
+            command=self.on_strategy_change
+        )
+        self.strategy_dropdown.pack(side="left", padx=5)
+
+        self.region_var = ctk.StringVar(value="Global (wt-wt)")
         self.region_dropdown = ctk.CTkOptionMenu(
             control_frame, 
             values=["Global (wt-wt)", "Australia (au-en)", "Poland (pl-pl)", "Netherlands (nl-nl)", "Malaysia (my-en)", "USA (us-en)"],
             variable=self.region_var, width=120
         )
         self.region_dropdown.pack(side="left", padx=5)
-
-        self.strategy_var = ctk.StringVar(value="custom")
-        strategy_dropdown = ctk.CTkOptionMenu(
-            control_frame, 
-            values=["Custom Query", "IndiaMart/TradeIndia (Suppliers)", "Crunchbase/AngelList (Buyers)", "B2B OEM Directories (Buyers)"],
-            variable=self.strategy_var, width=200
-        )
-        strategy_dropdown.pack(side="left", padx=5)
+        
+        self.query_entry = ctk.CTkEntry(control_frame, placeholder_text="Enter base query", width=250)
+        self.query_entry.pack(side="left", padx=10, pady=10)
+        
+        self.btn_suggest = ctk.CTkButton(control_frame, text="💡 Suggest", width=70, command=self.suggest_query, fg_color="#4B0082", hover_color="#300050")
+        self.btn_suggest.pack(side="left", padx=5)
         
         self.results_slider = ctk.CTkSlider(control_frame, from_=5, to=50, number_of_steps=9, width=100)
         self.results_slider.set(15)
@@ -112,38 +113,50 @@ class App(ctk.CTk):
         self.discovery_textbox = ctk.CTkTextbox(self.tab_discovery, wrap="none")
         self.discovery_textbox.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
 
+    def on_strategy_change(self, choice):
+        if choice == "Suppliers":
+            self.region_dropdown.configure(state="disabled")
+        else:
+            self.region_dropdown.configure(state="normal")
+
     def suggest_query(self):
         import random
         strategy = self.strategy_var.get()
+        region = self.region_var.get()
         
-        buyer_queries = [
-            "EV charging station manufacturers",
-            "Battery management system startups",
-            "Industrial IoT sensor manufacturers",
-            "Programmable Logic Controller OEM",
-            "Solar inverter manufacturers",
-            "Smart energy meter OEM",
-            "Wearable health tracker startups",
-            "Patient monitoring device OEM",
-            "Smart home automation hub manufacturers",
-            "Commercial drone hardware startups"
-        ]
-        
-        supplier_queries = [
-            "PCB manufacturers Delhi NCR",
-            "Printed circuit board assembly Noida",
-            "FR4 PCB fabricators Gurgaon",
-            "Multilayer PCB suppliers India",
-            "Rigid-flex PCB manufacturers",
-            "Turnkey PCB assembly services",
-            "HDI PCB manufacturers",
-            "MCPCB LED board manufacturers"
-        ]
-        
-        if "Supplier" in strategy:
+        if strategy == "Suppliers":
+            supplier_queries = [
+                "PCB manufacturers India",
+                "Printed circuit board assembly suppliers India",
+                "FR4 PCB fabricators India",
+                "Multilayer PCB suppliers India",
+                "Rigid-flex PCB manufacturers India",
+                "Turnkey PCB assembly services India",
+                "HDI PCB manufacturers India",
+                "MCPCB LED board manufacturers India",
+                "electronic components suppliers India",
+                "microcontrollers distributors India"
+            ]
             q = random.choice(supplier_queries)
         else:
-            q = random.choice(buyer_queries)
+            # Buyers strategy - suggest based on region
+            base_queries = [
+                "EV charging station manufacturers",
+                "Battery management system startups",
+                "Industrial IoT sensor OEMs",
+                "Programmable Logic Controller manufacturers",
+                "Solar inverter startups",
+                "Smart energy meter OEMs",
+                "Wearable health tracker startups",
+                "Patient monitoring device manufacturers",
+                "Smart home automation hub OEMs",
+                "Commercial drone hardware startups"
+            ]
+            region_name = region.split(" (")[0]
+            if region_name == "Global":
+                q = random.choice(base_queries)
+            else:
+                q = f"{random.choice(base_queries)} {region_name}"
             
         self.query_entry.delete(0, "end")
         self.query_entry.insert(0, q)
@@ -154,22 +167,21 @@ class App(ctk.CTk):
             return
             
         strategy = self.strategy_var.get()
-        if strategy == "IndiaMart/TradeIndia (Suppliers)":
-            query += " (site:indiamart.com OR site:tradeindia.com OR site:justdial.com)"
-        elif strategy == "Crunchbase/AngelList (Buyers)":
-            query += " (site:crunchbase.com OR site:angellist.com OR site:tracxn.com)"
-        elif strategy == "B2B OEM Directories (Buyers)":
-            query += " (site:thomasnet.com OR site:kompass.com OR site:globalsources.com)"
+        if strategy == "Suppliers":
+            query += " (site:indiamart.com OR site:tradeindia.com OR site:justdial.com OR site:exportersindia.com)"
+            region_code = "in-en"
+        else:
+            query += " (site:crunchbase.com OR site:angellist.com OR site:thomasnet.com OR site:globalsources.com)"
+            region_code = self.region_var.get().split(" (")[1].replace(")", "")
             
         max_results = int(self.results_slider.get())
-        region_code = self.region_var.get().split(" (")[1].replace(")", "")
         
         self.btn_search.configure(state="disabled")
         self.lbl_disc_status.configure(text="Status: Searching...")
         self.discovery_textbox.delete("0.0", "end")
         
         threading.Thread(target=self.discover_urls_thread, args=(query, max_results, region_code), daemon=True).start()
-        
+
     def discover_urls_thread(self, query, max_results, region_code):
         try:
             self.logger.info(f"Searching DuckDuckGo for: {query} [Region: {region_code}]")
