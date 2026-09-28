@@ -97,11 +97,11 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
     Analyze the following scraped text from a company's website.
     We are looking for OEM (Original Equipment Manufacturer) companies, hardware startups, or medical/automotive brands that BUILD physical electronic products and thus require Printed Circuit Boards (PCBs).
     CRITICAL INSTRUCTION: You must aggressively scan the text (especially footers/headers) to find ANY email addresses (e.g. sales@, info@) and phone numbers. If the company name is missing, infer it from the domain or copyright text.
-    CRITICAL INSTRUCTION: If this is a directory page containing MULTIPLE companies, you MUST extract EACH hardware OEM as a separate entry in the list!
-    Extract the following information for EACH company found:
+    CRITICAL INSTRUCTION: If this is a directory page containing MULTIPLE companies, you MUST extract EACH company as a separate entry in the list! Do NOT skip a company just because you think they aren't a hardware OEM.
+    Extract the following information for EVERY company found, EVEN IF they are not an OEM (if they aren't, just extract whatever products or services they offer in the 'target_products' field):
     - company_name: The name of the company (default 'Unknown').
     - industry: E.g., Consumer Electronics, Medical Devices, Automotive, Industrial Automation.
-    - target_products: What physical hardware products do they manufacture?
+    - target_products: What physical hardware products do they manufacture? (Or what services/software do they offer if not hardware)
     - contact_emails: List of emails found.
     - phone_numbers: List of phone numbers found.
     - locations: List of their office/factory locations.
