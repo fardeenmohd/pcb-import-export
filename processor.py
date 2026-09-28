@@ -135,6 +135,10 @@ def process_single_buyer_url(url: str, logger: logging.Logger) -> Dict:
     if not extracted_data:
         return {"url": url, "error": "Failed to extract data"}
         
+    if not extracted_data.is_hardware_oem:
+        logger.info(f"Skipping {url} - Not a true Hardware OEM/Buyer")
+        return {"url": url, "error": "Not a hardware OEM buyer (Skipped)"}
+        
     flat_data = {
         "url": url,
         "company_name": extracted_data.company_name,
