@@ -55,7 +55,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
         )
         
         response = client.models.generate_content(
-            model='gemini-flash-lite-latest',
+            model='gemini-1.5-flash',
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
@@ -92,6 +92,7 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[BuyerInfo]
     You are an expert B2B lead generation analyst.
     Analyze the following scraped text from a company's website.
     We are looking for OEM (Original Equipment Manufacturer) companies, hardware startups, or medical/automotive brands that BUILD physical electronic products and thus require Printed Circuit Boards (PCBs).
+    CRITICAL INSTRUCTION: You must aggressively scan the text (especially footers/headers) to find ANY email addresses (e.g. sales@, info@) and phone numbers. If the company name is missing, infer it from the domain or copyright text.
     Extract the following information:
     - company_name: The name of the company (default 'Unknown').
     - industry: E.g., Consumer Electronics, Medical Devices, Automotive, Industrial Automation.
@@ -107,7 +108,7 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[BuyerInfo]
     '''
     try:
         response = client.models.generate_content(
-            model='gemini-flash-lite-latest',
+            model='gemini-1.5-flash',
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",

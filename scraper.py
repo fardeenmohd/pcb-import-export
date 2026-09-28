@@ -36,8 +36,8 @@ def scrape_url(url: str, logger: logging.Logger = None) -> str:
             logger.debug(f"Extracting text from HTML for {url}")
             soup = BeautifulSoup(html, 'html.parser')
             
-            # Remove unwanted tags to reduce LLM token usage
-            for element in soup(["script", "style", "nav", "header", "footer", "noscript", "meta"]):
+            # Remove unwanted tags to reduce LLM token usage (DO NOT remove header/footer/nav as they contain emails!)
+            for element in soup(["script", "style", "noscript", "meta", "svg", "button", "iframe"]):
                 element.decompose()
                 
             # Get text and clean up whitespace
