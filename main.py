@@ -171,7 +171,7 @@ class App(ctk.CTk):
             query += " (site:indiamart.com OR site:tradeindia.com OR site:justdial.com OR site:exportersindia.com)"
             region_code = "in-en"
         else:
-            query += " -\"PCB manufacturer\" -\"PCB assembly\" -\"printed circuit board\" (site:crunchbase.com OR site:angellist.com OR site:thomasnet.com OR site:globalsources.com)"
+            query += " -\"PCB manufacturer\" -\"PCB assembly\" -\"printed circuit board\""
             region_code = self.region_var.get().split(" (")[1].replace(")", "")
             
         max_results = int(self.results_slider.get())
