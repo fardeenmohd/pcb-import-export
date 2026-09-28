@@ -120,46 +120,40 @@ class App(ctk.CTk):
             self.region_dropdown.configure(state="normal")
 
     def suggest_query(self):
-        import random
         strategy = self.strategy_var.get()
         region = self.region_var.get()
-        
-        if strategy == "Suppliers":
-            supplier_queries = [
-                "PCB manufacturers India",
-                "Printed circuit board assembly suppliers India",
-                "FR4 PCB fabricators India",
-                "Multilayer PCB suppliers India",
-                "Rigid-flex PCB manufacturers India",
-                "Turnkey PCB assembly services India",
-                "HDI PCB manufacturers India",
-                "MCPCB LED board manufacturers India",
-                "electronic components suppliers India",
-                "microcontrollers distributors India"
-            ]
-            q = random.choice(supplier_queries)
-        else:
-            # Buyers strategy - suggest based on region
-            base_queries = [
-                "EV charging station manufacturers",
-                "Battery management system startups",
-                "Industrial IoT sensor OEMs",
-                "Programmable Logic Controller manufacturers",
-                "Solar inverter startups",
-                "Smart energy meter OEMs",
-                "Wearable health tracker startups",
-                "Patient monitoring device manufacturers",
-                "Smart home automation hub OEMs",
-                "Commercial drone hardware startups"
-            ]
-            region_name = region.split(" (")[0]
-            if region_name == "Global":
-                q = random.choice(base_queries)
-            else:
-                q = f"{random.choice(base_queries)} {region_name}"
-            
+        self.btn_suggest.configure(state="disabled")
         self.query_entry.delete(0, "end")
-        self.query_entry.insert(0, q)
+        self.query_entry.insert(0, "Generating AI suggestion...")
+        threading.Thread(target=self.suggest_query_thread, args=(strategy, region), daemon=True).start()
+
+    def suggest_query_thread(self, strategy, region):
+        try:
+            from google import genai
+            client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
+            
+            if strategy == "Suppliers":
+                target = "Indian PCB manufacturers and suppliers of electronic components, chips, or microcontrollers."
+            else:
+                region_name = region.split(" (")[0]
+                target = f"hardware OEMs, IoT startups, or medical/automotive electronic brands in {region_name} that BUILD physical products."
+                
+            prompt = f"You are a B2B sourcing expert.\\nThe user wants to find: {target}\\n\\nGenerate a single, highly specific DuckDuckGo search query to find their actual company websites.\\nDo not include any quotes or explanations. Just return the raw query string.\\nExample for Buyers: Industrial IoT sensor OEMs Australia\\nExample for Suppliers: Rigid-flex PCB manufacturers India"
+            
+            response = client.models.generate_content(
+                model='gemini-flash-lite-latest',
+                contents=prompt
+            )
+            query = response.text.strip().replace('"', '').replace('\\n', '')
+            self.ui_queue.put((self.on_suggest_complete, (query,)))
+        except Exception as e:
+            self.logger.error(f"Suggest failed: {e}")
+            self.ui_queue.put((self.on_suggest_complete, ("Error generating query",)))
+            
+    def on_suggest_complete(self, query):
+        self.query_entry.delete(0, "end")
+        self.query_entry.insert(0, query)
+        self.btn_suggest.configure(state="normal")
 
     def start_discovery(self):
         query = self.query_entry.get().strip()
@@ -188,12 +182,58 @@ class App(ctk.CTk):
             with DDGS() as ddgs:
                 results = list(ddgs.text(query, region=region_code, max_results=max_results))
             
-            urls = [r.get('href') for r in results if r.get('href')]
+            if not results:
+                self.ui_queue.put((self.on_discovery_complete, ([], None)))
+                return
+                
+            self.logger.info("Sending results to Gemini for smart filtering...")
+            self.ui_queue.put((self.update_discovery_status, ("Status: AI Filtering...",)))
+            
+            strategy = self.strategy_var.get()
+            
+            # Format results for Gemini
+            search_context = ""
+            for i, r in enumerate(results):
+                search_context += f"[{i}] URL: {r.get('href')}\\nTitle: {r.get('title')}\\nSnippet: {r.get('body')}\\n\\n"
+                
+            from google import genai
+            from google.genai import types
+            from pydantic import BaseModel
+            from typing import List
+            
+            class FilteredURLs(BaseModel):
+                urls: List[str]
+                
+            client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])
+            
+            if strategy == "Suppliers":
+                filter_goal = "Indian PCB manufacturers, electronic component suppliers, or microcontrollers distributors. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+            else:
+                filter_goal = "Actual company websites for Hardware OEMs, startups, or brands that build physical products. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                
+            prompt = f"You are an expert lead generation AI.\\nThe user is searching for: {filter_goal}\\n\\nHere are the raw search results from DuckDuckGo:\\n{search_context}\\n\\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
+            
+            response = client.models.generate_content(
+                model='gemini-flash-lite-latest',
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=FilteredURLs,
+                ),
+            )
+            
+            filtered_data = FilteredURLs.model_validate_json(response.text)
+            urls = filtered_data.urls
+            
+            self.logger.info(f"AI filtered {len(results)} raw results down to {len(urls)} high-quality URLs.")
             self.ui_queue.put((self.on_discovery_complete, (urls, None)))
         except Exception as e:
-            self.logger.error(f"Search failed: {e}")
+            self.logger.error(f"Search/Filter failed: {e}")
             self.ui_queue.put((self.on_discovery_complete, ([], str(e))))
             
+    def update_discovery_status(self, text):
+        self.lbl_disc_status.configure(text=text)
+
     def on_discovery_complete(self, urls, error):
         self.btn_search.configure(state="normal")
         if error:
