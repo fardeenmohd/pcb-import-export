@@ -1,37 +1,30 @@
-# NCR PCB Supplier Discovery Agent
+# Global PCB Intelligence Agent
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
-![CustomTkinter](https://img.shields.io/badge/GUI-CustomTkinter-blueviolet.svg)
-![Playwright](https://img.shields.io/badge/Automation-Playwright-green.svg)
-![Gemini API](https://img.shields.io/badge/LLM-Gemini_1.5_Flash-orange.svg)
+An automated, AI-powered desktop application built to map the global supply and demand chain for Printed Circuit Boards (PCBs) and electronic components. 
 
-## Project Overview
-This project is an automated Python pipeline and local desktop GUI application designed to scrape, analyze, and qualify Printed Circuit Board (PCB) and PCBA manufacturers in the Delhi-NCR region.
+The application discovers, scrapes, and intelligently extracts complex capabilities from **Indian PCB Suppliers** (supply side) and international **Hardware OEMs/Startups** (demand side) to build a structured, actionable capability matrix.
 
-The goal is to generate a highly structured capability matrix of Indian suppliers to match with mid-tier international buyers. The agent bypasses basic anti-bot protections, extracts raw text from corporate B2B websites, and uses the Gemini API via Pydantic structured outputs to extract technical specifications. All operations are managed via a modern local GUI with realtime logging, progress tracking, and integrated Excel data visualization.
+## 🚀 Features
 
-## Technology Stack
+- **Dual-Strategy URL Discovery Engine**: 
+  - **Suppliers Mode**: Automatically targets Indian directories (IndiaMart, TradeIndia, JustDial) and filters specifically for PCB manufacturers, component distributors, and assembly services.
+  - **Buyers Mode**: Targets international hardware OEMs, IoT startups, and medical/automotive electronic brands across strategic offshore regions (Australia, Poland, Netherlands, Malaysia, USA).
+  - **Smart Suggestions**: Auto-generates high-converting search queries based on selected strategies and geographic regions.
+- **AI-Powered Data Extraction**: Utilizes **Google Gemini 1.5 Flash Lite** to read raw website text and strictly extract Pydantic-validated JSON schemas (Company Name, Layer Counts, Surface Finishes, Industry, Certifications, Contact Info, etc.).
+- **Headless Stealth Scraping**: Uses **Playwright Stealth** to bypass anti-bot protections and dynamically render JavaScript-heavy company websites.
+- **Thread-Safe GUI**: A sleek, modern dashboard built with **CustomTkinter**, featuring real-time logging, interactive data grids, and async background workers to prevent UI freezing.
+- **Smart Matrix Management**: Automatically syncs scraped data to local Excel files (`Suppliers_Matrix.xlsx` and `Buyers_Matrix.xlsx`). Features a "Clean Matrix" engine that intelligently scrubs failed scrapes or empty company profiles.
 
-### 🎨 Frontend (GUI)
-* **[CustomTkinter](https://customtkinter.tomschimansky.com/)**: Used to build a modern, responsive local desktop interface with built-in dark mode and premium aesthetics.
-* **Tkinter Treeview**: Used for displaying the Supplier Matrix directly inside the app natively in a spreadsheet-like grid.
+## 🛠️ Technology Stack
 
-### ⚙️ Backend (Scraping & Data Processing)
-* **[Playwright](https://playwright.dev/python/)**: Used in headless mode to programmatically navigate websites, wait for dynamic DOM content, and extract HTML.
-* **[Playwright Stealth](https://github.com/Atelier-Nunn/playwright-stealth)**: Applies evasions to the Playwright browser context to successfully bypass basic anti-bot protections like Cloudflare.
-* **[BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)**: Used to parse the DOM and strip out unnecessary tokens (`<script>`, `<style>`, `<nav>`, `<header>`) to reduce LLM context windows and costs.
-* **[Pandas](https://pandas.pydata.org/) & OpenPyXL**: Used to flatten the Pydantic schemas and append structured supplier data to local Excel (`.xlsx`) files.
-* **DuckDuckGo-Search**: Used to programmatically discover targeted URLs (e.g. from B2B Yellow Pages like IndiaMart and TradeIndia) without requiring paid search APIs.
-* **Concurrent Futures (Threading)**: The pipeline uses a `ThreadPoolExecutor` to process multiple URLs in parallel on background threads to ensure the GUI remains responsive.
+- **Frontend / GUI**: `customtkinter`, `tkinter.ttk` (Thread-safe UI polling via queues)
+- **Web Scraping**: `playwright`, `playwright-stealth`, `beautifulsoup4`
+- **Search Engine API**: `duckduckgo-search` (`ddgs`)
+- **AI & LLM Integration**: `google-genai` (Gemini SDK), `pydantic`
+- **Data Persistence**: `pandas`, `openpyxl` (Excel)
+- **Concurrency**: `concurrent.futures.ThreadPoolExecutor`, `threading`, `queue`
 
-### 🧠 AI & LLM Extraction
-* **[Google GenAI SDK](https://ai.google.dev/docs)**: Integrates with the Gemini API to analyze the raw, unstructured scraped text.
-* **[Pydantic](https://docs.pydantic.dev/latest/)**: Enforces strict JSON Schema requirements on the LLM's output. The pipeline extracts booleans and arrays for technical specs (e.g., HDI capabilities, layer counts, surface finishes, certifications, MOQs).
-* **Gemini Flash-Lite Model**: Configured to use the cost-effective `gemini-flash-lite-latest` model (compatible with Google AI Studio Free Tier).
-
----
-
-## Installation & Setup
+## ⚙️ Installation
 
 1. **Clone the repository:**
    ```bash
@@ -39,10 +32,9 @@ The goal is to generate a highly structured capability matrix of Indian supplier
    cd pcb-import-export
    ```
 
-2. **Create and activate a virtual environment:**
+2. **Set up a virtual environment (Optional but recommended):**
    ```bash
    python -m venv venv
-   # On Windows
    .\venv\Scripts\activate
    ```
 
@@ -52,15 +44,43 @@ The goal is to generate a highly structured capability matrix of Indian supplier
    playwright install chromium
    ```
 
-4. **Set up API Keys:**
+4. **Environment Variables:**
    Create a `.env` file in the root directory and add your Google Gemini API key:
    ```env
-   GEMINI_API_KEY="your_google_ai_studio_api_key_here"
+   GEMINI_API_KEY=your_google_ai_studio_api_key_here
    ```
 
-5. **Run the Application:**
-   You can either run the Python file directly:
-   ```bash
-   python main.py
-   ```
-   *Or use the provided `Run_Scraper_App.bat` script on Windows to launch it without a persistent console window.*
+## 🖥️ Usage
+
+You can launch the GUI without keeping a persistent console window open by running the provided batch script:
+
+```bash
+Run_Scraper_App.bat
+```
+
+*(This executes the application via `pythonw.exe` to suppress the terminal).*
+
+### General Workflow:
+1. **URL Discovery Tab**: Select either Suppliers or Buyers, pick a region, and hit "Discover URLs".
+2. **Scraper Tabs**: Copy the discovered URLs, paste them into the respective Scraper tab (Supplier or Buyer), and click Start. The background agent will invisibly scrape and analyze the websites.
+3. **Database Tabs**: Navigate to the Database tabs to view your successfully extracted leads in a clean grid format. Click "Sync" to refresh, or "Clean Matrix" to automatically delete junk data.
+
+## 🧠 Extracted Schemas
+
+**Supplier Capabilities Extracted:**
+- PCB Manufacturing vs Assembly
+- Max Layer Count
+- Materials (FR-4, MCPCB, Rogers, Flexible)
+- Advanced Tech (HDI, Blind/Buried Vias, BGA)
+- Certifications (ISO 9001, ISO 13485, IATF 16949)
+- Contact Info (Emails, Phones)
+
+**Buyer Intelligence Extracted:**
+- Hardware OEM Verification (Ensures they build physical products)
+- Target Products (e.g., PLCs, EV Chargers, Medical devices)
+- Industry Classification
+- Estimated Company Size
+- Contact Info & Locations
+
+---
+*Built with Antigravity AI*
