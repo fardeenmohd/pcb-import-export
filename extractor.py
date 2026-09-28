@@ -55,7 +55,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
         )
         
         response = client.models.generate_content(
-            model='gemini-1.5-flash',
+            model='gemini-flash-latest',
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
@@ -108,7 +108,7 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[BuyerInfo]
     '''
     try:
         response = client.models.generate_content(
-            model='gemini-1.5-flash',
+            model='gemini-flash-latest',
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",

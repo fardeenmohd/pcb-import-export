@@ -141,7 +141,7 @@ class App(ctk.CTk):
             prompt = f"You are a B2B sourcing expert.\\nThe user wants to find: {target}\\n\\nGenerate a single, highly specific DuckDuckGo search query to find their actual company websites.\\nDo not include any quotes or explanations. Just return the raw query string.\\nExample for Buyers: Industrial IoT sensor OEMs Australia\\nExample for Suppliers: Rigid-flex PCB manufacturers India"
             
             response = client.models.generate_content(
-                model='gemini-flash-lite-latest',
+                model='gemini-flash-latest',
                 contents=prompt
             )
             query = response.text.strip().replace('"', '').replace('\\n', '')
@@ -214,7 +214,7 @@ class App(ctk.CTk):
             prompt = f"You are an expert lead generation AI.\\nThe user is searching for: {filter_goal}\\n\\nHere are the raw search results from DuckDuckGo:\\n{search_context}\\n\\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
             
             response = client.models.generate_content(
-                model='gemini-flash-lite-latest',
+                model='gemini-flash-latest',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
