@@ -542,12 +542,6 @@ Example: freight forwarders India to {region_name} container shipping
         elif active_tab == "URL Discovery":
             self.lbl_disc_status.configure(text=f"Status: {message[:50]}...")
 
-if __name__ == "__main__":
-    ctk.set_appearance_mode("dark")
-    ctk.set_default_color_theme("blue")
-    app = App()
-    app.mainloop()
-
     def setup_logistics_tab(self):
         self.tab_logistics.grid_columnconfigure(0, weight=1)
         self.tab_logistics.grid_rowconfigure(3, weight=1)
@@ -580,3 +574,11 @@ if __name__ == "__main__":
         
     def delete_all_log_db(self):
         self.delete_all_matrix("Logistics_Matrix.xlsx", self.tab_log_db.winfo_children()[1].winfo_children()[0])
+
+if __name__ == "__main__":
+    ctk.set_appearance_mode("dark")
+    ctk.set_default_color_theme("blue")
+    app = App()
+    app.mainloop()
+
+
