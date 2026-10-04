@@ -130,7 +130,7 @@ class App(ctk.CTk):
     def suggest_query_thread(self, strategy, region):
         try:
             if strategy == "Suppliers":
-                target = "Indian manufacturers of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, and Testing Equipment."
+                target = "manufacturers across ALL of India (including Mumbai, Bangalore, Pune, Gujarat, Chennai, etc. - do not restrict to just Delhi NCR) of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, and Testing Equipment."
             else:
                 region_name = region.split(" (")[0]
                 target = f"B2B buyers or OEMs in {region_name} specializing in Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment."
@@ -200,7 +200,7 @@ class App(ctk.CTk):
                 urls: List[str]
                 
             if strategy == "Suppliers":
-                filter_goal = "Indian manufacturers of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Manufacturers across all of India (nationwide) of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
                 filter_goal = "Actual company websites for buyers/OEMs of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
