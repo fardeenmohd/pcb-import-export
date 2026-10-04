@@ -376,7 +376,7 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         if pipeline_type == "logistics":
             self.btn_log_start.configure(state="normal")
             self.lbl_log_status.configure(text="Status: Completed.")
-            self.load_log_db()
+            self.load_matrix(self.log_tree, "Logistics_Matrix.xlsx")
             self.display_matrix_text(output_file, self.log_output_textbox)
         elif pipeline_type == "supplier":
             self.btn_sup_start.configure(state="normal")
@@ -487,9 +487,9 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
     def setup_log_db_tab(self):
         self.log_tree = self.create_database_tab_ui(
             self.tab_log_db, 
-            self.load_log_db, 
-            self.clean_log_db, 
-            self.delete_all_log_db
+            lambda: self.load_matrix(self.log_tree, "Logistics_Matrix.xlsx"),
+            lambda: self.clean_local_matrix("Logistics_Matrix.xlsx", self.log_tree),
+            lambda: self.delete_all_entries("Logistics_Matrix.xlsx", self.log_tree)
         )
 
     def setup_logs_tab(self):
@@ -544,14 +544,7 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         self.log_output_textbox = ctk.CTkTextbox(self.tab_logistics)
         self.log_output_textbox.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
 
-    def load_log_db(self):
-        self.load_matrix(self.tab_log_db.winfo_children()[1].winfo_children()[0], "Logistics_Matrix.xlsx")
-    
-    def clean_log_db(self):
-        self.clean_matrix("Logistics_Matrix.xlsx", self.tab_log_db.winfo_children()[1].winfo_children()[0])
-        
-    def delete_all_log_db(self):
-        self.delete_all_matrix("Logistics_Matrix.xlsx", self.tab_log_db.winfo_children()[1].winfo_children()[0])
+
 
 if __name__ == "__main__":
     ctk.set_appearance_mode("dark")
