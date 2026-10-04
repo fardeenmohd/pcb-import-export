@@ -182,13 +182,10 @@ Example: Variable Frequency Drives industrial distributors {region_name}
             # Use temperature=0.9 to ensure we get different niches each time the user clicks suggest!
             # Since generate_with_fallback might not support kwargs perfectly depending on implementation, 
             # we will just add a random seed text to the prompt to force variety.
-            prompt += "
-
-Random Seed to ensure variety: " + str(random.randint(1, 100000))
+            prompt += "\n\nRandom Seed to ensure variety: " + str(random.randint(1, 100000))
             
             response = generate_with_fallback(prompt, logger=self.logger)
-            query = response.text.strip().replace('"', '').replace('
-', '')
+            query = response.text.strip().replace('"', '').replace('\n', '')
             self.ui_queue.put((self.on_suggest_complete, (query,)))
         except Exception as e:
             self.logger.error(f"Suggest failed: {e}")
