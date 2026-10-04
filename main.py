@@ -360,10 +360,9 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
 
     def run_pipeline_thread(self, urls, pipeline_type):
         if pipeline_type == "logistics":
-            urls_text = self.log_urls_textbox.get("0.0", "end").strip()
-            self.btn_log_start.configure(state="disabled")
-            self.lbl_log_status.configure(text="Status: Starting pipeline...")
-            self.log_output_textbox.delete("0.0", "end")
+            output_file = "Logistics_Matrix.xlsx"
+            import processor
+            processor.process_logistics_urls(urls, output_file, self.logger)
         elif pipeline_type == "supplier":
             output_file = "Suppliers_Matrix.xlsx"
             run_pipeline(urls, self.logger, output_file=output_file)
@@ -375,10 +374,10 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         
     def on_pipeline_complete(self, output_file, pipeline_type):
         if pipeline_type == "logistics":
-            urls_text = self.log_urls_textbox.get("0.0", "end").strip()
-            self.btn_log_start.configure(state="disabled")
-            self.lbl_log_status.configure(text="Status: Starting pipeline...")
-            self.log_output_textbox.delete("0.0", "end")
+            self.btn_log_start.configure(state="normal")
+            self.lbl_log_status.configure(text="Status: Completed.")
+            self.load_log_db()
+            self.display_matrix_text(output_file, self.log_output_textbox)
         elif pipeline_type == "supplier":
             self.btn_sup_start.configure(state="normal")
             self.lbl_sup_status.configure(text="Status: Completed.")
@@ -536,7 +535,7 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         btn_frame = ctk.CTkFrame(self.tab_logistics, fg_color="transparent")
         btn_frame.grid(row=2, column=0, padx=20, pady=5, sticky="ew")
         
-        self.btn_log_start = ctk.CTkButton(btn_frame, text="Start Extraction", command=lambda: self.start_pipeline("logistics"))
+        self.btn_log_start = ctk.CTkButton(btn_frame, text="Start Extraction", command=lambda: self.start_scraping("logistics"))
         self.btn_log_start.pack(side="left", padx=5)
         
         self.lbl_log_status = ctk.CTkLabel(btn_frame, text="Status: Ready")
