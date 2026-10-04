@@ -52,7 +52,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
         prompt = (
             "Analyze the following text scraped from a PCB manufacturer's website OR a B2B directory page (like IndiaMart). "
             "CRITICAL INSTRUCTION: If the page contains a list of multiple different PCB suppliers/manufacturers, you MUST extract EACH of them as a separate entry in the list! Do NOT name the company 'IndiaMart' or 'JustDial'. "
-            "Extract the information required by the JSON schema for each company found.\n\n"
+            "Extract the information required by the JSON schema for each company found. Pay special attention to suppliers of Home Appliance PCBs (Washing Machine, Refrigerator) and Machine Spare Parts.\n\n"
             f"Website Text:\n{text[:30000]}"
         )
         from llm_fallback import generate_with_fallback
@@ -95,7 +95,7 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
     prompt = f'''
     You are an expert B2B lead generation analyst.
     Analyze the following scraped text from a company's website.
-    We are looking for OEM (Original Equipment Manufacturer) companies, hardware startups, or medical/automotive brands that BUILD physical electronic products and thus require Printed Circuit Boards (PCBs).
+    We are looking for OEM (Original Equipment Manufacturer) companies, hardware startups, home appliance manufacturers (e.g. Refrigerators, Washing Machines, HVAC), or medical/automotive brands that BUILD physical electronic products and thus require Printed Circuit Boards (PCBs).
     CRITICAL INSTRUCTION: You must aggressively scan the text (especially footers/headers) to find ANY email addresses (e.g. sales@, info@) and phone numbers. If the company name is missing, infer it from the domain or copyright text.
     CRITICAL INSTRUCTION: If this is a directory page containing MULTIPLE companies, you MUST extract EACH company as a separate entry in the list! Do NOT skip a company just because you think they aren't a hardware OEM.
     Extract the following information for EVERY company found, EVEN IF they are not an OEM (if they aren't, just extract whatever products or services they offer in the 'target_products' field):
