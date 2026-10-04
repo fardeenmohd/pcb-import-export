@@ -130,10 +130,10 @@ class App(ctk.CTk):
     def suggest_query_thread(self, strategy, region):
         try:
             if strategy == "Suppliers":
-                target = "Indian PCB manufacturers and suppliers of electronic components, chips, microcontrollers, or home appliance spare parts (refrigerator/washing machine PCBs)."
+                target = "Indian PCB manufacturers and suppliers of electronic components, chips, microcontrollers, home appliance spare parts (refrigerator/washing machine PCBs), or general electrical components (switches, capacitors)."
             else:
                 region_name = region.split(" (")[0]
-                target = f"hardware OEMs, IoT startups, home appliance manufacturers (refrigerators, washing machines), or medical/automotive electronic brands in {region_name} that BUILD physical products."
+                target = f"hardware OEMs, IoT startups, home appliance manufacturers (refrigerators, washing machines), electrical equipment manufacturers, or medical/automotive electronic brands in {region_name} that BUILD physical products."
             
             prompt = "You are a B2B sourcing expert.\nThe user wants to find: " + target + "\n\nGenerate a single, highly specific DuckDuckGo search query to find their actual company websites.\nDo not include any quotes or explanations. Just return the raw query string.\nExample for Buyers: Industrial IoT sensor OEMs Australia\nExample for Suppliers: Rigid-flex PCB manufacturers India"
             
@@ -200,9 +200,9 @@ class App(ctk.CTk):
                 urls: List[str]
                 
             if strategy == "Suppliers":
-                filter_goal = "Indian PCB manufacturers, electronic component suppliers, home appliance spare parts (refrigerator/washing machine PCBs), or microcontrollers distributors. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Indian PCB manufacturers, electronic component suppliers, home appliance spare parts, general electric components (switches, capacitors), or microcontrollers distributors. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
-                filter_goal = "Actual company websites for Hardware OEMs, home appliance manufacturers (refrigerators, washing machines), startups, or brands that build physical products. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                filter_goal = "Actual company websites for Hardware OEMs, home appliance manufacturers, electrical equipment manufacturers, startups, or brands that build physical products. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
             prompt = "You are an expert lead generation AI.\nThe user is searching for: " + filter_goal + "\n\nHere are the raw search results from DuckDuckGo:\n" + search_context + "\n\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
                 
