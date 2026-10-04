@@ -173,11 +173,15 @@ def extract_logistics_info(text: str, logger: logging.Logger) -> Optional[List[L
         """
         response = generate_with_fallback(
             prompt=prompt,
-            logger=logger,
-            response_schema=LogisticsList
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=LogisticsList,
+                temperature=0.0
+            ),
+            logger=logger
         )
-        if response and response.parsed:
-            companies = response.parsed.companies
+        if response and response.text:
+            companies = LogisticsList.model_validate_json(response.text).companies
             # Filter out non-logistics companies
             valid = [c for c in companies if c.is_logistics_provider]
             return valid
