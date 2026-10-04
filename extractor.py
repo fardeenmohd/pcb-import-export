@@ -152,9 +152,9 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
 
 
 def extract_logistics_info(text: str, logger: logging.Logger) -> Optional[List[LogisticsCompany]]:
-    client = genai.Client(api_key=os.environ.get('GEMINI_API_KEY'))
-    if not client.api_key:
-        logger.error("GEMINI_API_KEY not found in environment.")
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key or api_key == "your_api_key_here":
+        logger.error("GEMINI_API_KEY is missing or invalid in environment variables.")
         return None
 
     try:
