@@ -186,8 +186,7 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
             
             from llm_fallback import generate_with_fallback
             response = generate_with_fallback(prompt, logger=self.logger)
-            query = response.text.strip().replace('"', '').replace('
-', '')
+            query = response.text.strip().replace('"', '').replace('\n', '')
             self.ui_queue.put((self.on_suggest_complete, (query,)))
         except Exception as e:
             self.logger.error(f"Suggest failed: {e}")
