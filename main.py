@@ -46,6 +46,8 @@ class App(ctk.CTk):
         self.setup_sup_db_tab()
         self.setup_buyers_tab()
         self.setup_buy_db_tab()
+        self.setup_logistics_tab()
+        self.setup_log_db_tab()
         self.setup_logs_tab()
         
         self.btn_restart = ctk.CTkButton(self, text="Restart App", command=self.restart_app, width=100, fg_color="#b35900", hover_color="#804000")
@@ -79,7 +81,7 @@ class App(ctk.CTk):
         self.strategy_var = ctk.StringVar(value="Buyers")
         self.strategy_dropdown = ctk.CTkOptionMenu(
             control_frame, 
-            values=["Suppliers", "Buyers"],
+            values=["Suppliers", "Buyers", "Logistics"],
             variable=self.strategy_var, width=120,
             command=self.on_strategy_change
         )
@@ -503,6 +505,14 @@ Example: freight forwarders India to {region_name} container shipping
     def clean_local_matrix(self, output_file, tree):
         clean_matrix(output_file, self.logger)
         self.load_matrix(tree, output_file)
+
+    def setup_log_db_tab(self):
+        self.log_tree = self.create_database_tab_ui(
+            self.tab_log_db, 
+            self.load_log_db, 
+            self.clean_log_db, 
+            self.delete_all_log_db
+        )
 
     def setup_logs_tab(self):
         self.tab_logs.grid_columnconfigure(0, weight=1)
