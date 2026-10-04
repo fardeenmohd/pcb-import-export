@@ -95,7 +95,8 @@ class App(ctk.CTk):
         )
         self.region_dropdown.pack(side="left", padx=5)
         
-        self.query_entry = ctk.CTkEntry(control_frame, placeholder_text="Enter base query", width=250)
+        self.query_entry = ctk.CTkTextbox(control_frame, width=350, height=60, wrap="word")
+        self.query_entry.insert("0.0", "Enter base query...")
         self.query_entry.pack(side="left", padx=10, pady=10)
         
         self.btn_suggest = ctk.CTkButton(control_frame, text="💡 Suggest", width=70, command=self.suggest_query, fg_color="#4B0082", hover_color="#300050")
@@ -124,11 +125,11 @@ class App(ctk.CTk):
         elif choice == "Logistics":
             self.region_dropdown.configure(state="normal")
             self.btn_suggest.configure(state="disabled")
-            self.query_entry.delete(0, "end")
+            self.query_entry.delete("0.0", "end")
             dest = self.region_var.get().split(" (")[0]
             if "Worldwide" in dest or "Global" in dest:
                 dest = "worldwide"
-            self.query_entry.insert(0, f"freight forwarders India to {dest} container shipping")
+            self.query_entry.insert("0.0", f"freight forwarders India to {dest} container shipping")
         else:
             self.region_dropdown.configure(state="normal")
             self.btn_suggest.configure(state="normal")
@@ -137,8 +138,8 @@ class App(ctk.CTk):
         strategy = self.strategy_var.get()
         region = self.region_var.get()
         self.btn_suggest.configure(state="disabled")
-        self.query_entry.delete(0, "end")
-        self.query_entry.insert(0, "Generating AI suggestion...")
+        self.query_entry.delete("0.0", "end")
+        self.query_entry.insert("0.0", "Generating AI suggestion...")
         threading.Thread(target=self.suggest_query_thread, args=(strategy, region), daemon=True).start()
 
     def suggest_query_thread(self, strategy, region):
@@ -193,12 +194,14 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
             self.ui_queue.put((self.on_suggest_complete, ("Error generating query",)))
             
     def on_suggest_complete(self, query):
-        self.query_entry.delete(0, "end")
-        self.query_entry.insert(0, query)
+        self.query_entry.delete("0.0", "end")
+        self.query_entry.insert("0.0", query)
         self.btn_suggest.configure(state="normal")
 
     def start_discovery(self):
-        query = self.query_entry.get().strip()
+        query = self.query_entry.get("0.0", "end").strip()
+        if query == "Enter base query...":
+            query = ""
         if not query:
             return
             
