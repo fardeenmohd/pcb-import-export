@@ -130,10 +130,10 @@ class App(ctk.CTk):
     def suggest_query_thread(self, strategy, region):
         try:
             if strategy == "Suppliers":
-                target = "Indian manufacturers and suppliers of Power Electronics, Battery Packs, Electrical Cabling, Material Testing Instruments, and Commercial Appliances."
+                target = "Indian manufacturers of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, and Testing Equipment."
             else:
                 region_name = region.split(" (")[0]
-                target = f"B2B buyers, distributors, or OEMs in {region_name} specializing in Power Electronics, Advanced Batteries, Electrical Wiring, Material Testing Instruments, or Electro-Thermic Appliances."
+                target = f"B2B buyers or OEMs in {region_name} specializing in Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment."
             
             prompt = "You are a B2B sourcing expert.\nThe user wants to find: " + target + "\n\nGenerate a single, highly specific DuckDuckGo search query to find their actual company websites.\nDo not include any quotes or explanations. Just return the raw query string.\nExample for Buyers: Industrial IoT sensor OEMs Australia\nExample for Suppliers: Rigid-flex PCB manufacturers India"
             
@@ -200,9 +200,9 @@ class App(ctk.CTk):
                 urls: List[str]
                 
             if strategy == "Suppliers":
-                filter_goal = "Indian manufacturers of Power Electronics, Batteries, Cabling, Testing Instruments, or Appliances. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Indian manufacturers of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
-                filter_goal = "Actual company websites for buyers/OEMs of Power Electronics, Batteries, Cabling, Testing Instruments, or Appliances. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                filter_goal = "Actual company websites for buyers/OEMs of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
             prompt = "You are an expert lead generation AI.\nThe user is searching for: " + filter_goal + "\n\nHere are the raw search results from DuckDuckGo:\n" + search_context + "\n\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
                 

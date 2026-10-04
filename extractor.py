@@ -52,7 +52,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
         prompt = (
             "Analyze the following text scraped from a PCB manufacturer's website OR a B2B directory page (like IndiaMart). "
             "CRITICAL INSTRUCTION: If the page contains a list of multiple different PCB suppliers/manufacturers, you MUST extract EACH of them as a separate entry in the list! Do NOT name the company 'IndiaMart' or 'JustDial'. "
-            "Extract the information required by the JSON schema for each company found. Pay special attention to suppliers of Power Electronics, Battery Packs, Electrical Cabling, Testing Instruments, Electro-Thermic Appliances, and related PCB assemblies.\n\n"
+            "Extract the information required by the JSON schema for each company found. Pay special attention to suppliers across the 9 core niches: Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, and Testing Equipment.\n\n"
             f"Website Text:\n{text[:30000]}"
         )
         from llm_fallback import generate_with_fallback
@@ -95,12 +95,16 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
     prompt = f'''
     You are an expert B2B lead generation analyst.
     Analyze the following scraped text from a company's website.
-    We are looking for B2B buyers, distributors, and OEMs across 5 core industrial niches:
-    1. Metrology & Material Testing Instruments (Hardness testers, Rheometers, Multimeters)
-    2. Power Electronics & Industrial Automation (VFDs, PLCs, MCC Panels)
-    3. Advanced Batteries & Energy Storage (Li-Ion, ESS, Primary Cells)
-    4. Electrical Wiring & Smart Connections (Power cables, IP67 Plugs, Smart sockets)
-    5. Commercial & Domestic Electro-Thermic Appliances (Juicers, Kettles, Blenders)
+    We are looking for B2B buyers, distributors, and OEMs across 9 core industrial niches:
+    1. Electrical Components & Sockets (Glands, Lugs, Terminal Blocks, Switches)
+    2. Wires & Cables (LV/MV/HV Power, XLPE, Submersible, Reels)
+    3. Switchgear & Control Panels (ACB, MCCB, MCB, VCB, Relays, MCC Panels)
+    4. Industrial HVAC & Compressors (Fans, Scroll Compressors, Pumps, Refrigeration Parts)
+    5. Batteries & Energy Storage (LiFePO4, Marine IP67, Home ESS, Primary Cells)
+    6. Industrial Generators (Cummins Diesel, Gas Gensets, Wind Gen)
+    7. LED Lighting & Smart Home (Streetlights, Corax Poultry LED, WiFi Sockets)
+    8. Electric Appliances (Commercial Juicers, Vacuums, Kettles, Espresso Machines)
+    9. Sensors & Testing Equipment (PIR Sensors, Multimeters, Rheometers, Hardness Testers)
     If they fall into these categories, they are highly qualified buyers.
     CRITICAL INSTRUCTION: You must aggressively scan the text (especially footers/headers) to find ANY email addresses (e.g. sales@, info@) and phone numbers. If the company name is missing, infer it from the domain or copyright text.
     CRITICAL INSTRUCTION: If this is a directory page containing MULTIPLE companies, you MUST extract EACH company as a separate entry in the list! Do NOT skip a company just because you think they aren't a hardware OEM.
