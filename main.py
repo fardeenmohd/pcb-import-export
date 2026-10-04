@@ -73,7 +73,7 @@ class App(ctk.CTk):
 
     def setup_discovery_tab(self):
         self.tab_discovery.grid_columnconfigure(0, weight=1)
-        self.tab_discovery.grid_rowconfigure(2, weight=1)
+        self.tab_discovery.grid_rowconfigure(3, weight=1)
         
         control_frame = ctk.CTkFrame(self.tab_discovery)
         control_frame.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
@@ -112,11 +112,23 @@ class App(ctk.CTk):
         self.lbl_disc_status = ctk.CTkLabel(control_frame, text="Status: Idle", text_color="gray")
         self.lbl_disc_status.pack(side="left", padx=10)
         
+        self.spec_frame = ctk.CTkFrame(self.tab_discovery)
+        self.spec_frame.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
+        
+        lbl_spec = ctk.CTkLabel(self.spec_frame, text="Or paste raw Buyer/Supplier Requirement Spec:")
+        lbl_spec.pack(side="left", padx=10, pady=5)
+        
+        self.spec_textbox = ctk.CTkTextbox(self.spec_frame, height=40, width=400, wrap="word")
+        self.spec_textbox.pack(side="left", fill="x", expand=True, padx=10, pady=5)
+        
+        self.btn_spec_gen = ctk.CTkButton(self.spec_frame, text="Generate Query", width=120, command=self.generate_from_spec)
+        self.btn_spec_gen.pack(side="left", padx=10, pady=5)
+        
         lbl = ctk.CTkLabel(self.tab_discovery, text="Discovered URLs will appear below. Copy them into the respective Scraper tab.", text_color="gray")
-        lbl.grid(row=1, column=0, padx=10, sticky="w")
+        lbl.grid(row=2, column=0, padx=10, sticky="w")
         
         self.discovery_textbox = ctk.CTkTextbox(self.tab_discovery, wrap="none")
-        self.discovery_textbox.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+        self.discovery_textbox.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
 
     def on_strategy_change(self, choice):
         if choice == "Suppliers":
@@ -134,6 +146,58 @@ class App(ctk.CTk):
             self.region_dropdown.configure(state="normal")
             self.btn_suggest.configure(state="normal")
 
+    def generate_from_spec(self):
+        spec_text = self.spec_textbox.get("0.0", "end").strip()
+        if not spec_text:
+            return
+            
+        strategy = self.strategy_var.get()
+        region = self.region_var.get()
+        
+        self.btn_spec_gen.configure(state="disabled")
+        self.query_entry.delete("0.0", "end")
+        self.query_entry.insert("0.0", "Generating AI query from spec...")
+        
+        import threading
+        threading.Thread(target=self.generate_from_spec_thread, args=(spec_text, strategy, region), daemon=True).start()
+
+    def generate_from_spec_thread(self, spec_text, strategy, region):
+        try:
+            if strategy == "Suppliers":
+                target_desc = "MANUFACTURERS and FACTORIES across ALL of India"
+            elif strategy == "Logistics":
+                dest = region.split(" (")[0]
+                if "Worldwide" in dest or "Global" in dest:
+                    dest = "worldwide"
+                target_desc = f"freight forwarders or shipping lines from India to {dest}"
+            else:
+                region_name = region.split(" (")[0]
+                if "Worldwide" in region_name or "Global" in region_name:
+                    target_desc = "B2B BUYERS, DISTRIBUTORS, or OEMs globally"
+                else:
+                    target_desc = f"B2B BUYERS, DISTRIBUTORS, or OEMs in {region_name}"
+            
+            prompt = f"""You are an elite B2B sourcing expert.
+The user has provided the following raw requirement specification / RFQ message:
+
+{spec_text}
+
+Analyze the requirements and generate a single, highly specific DuckDuckGo search query to find {target_desc} that match this requirement.
+Do not include quotes, explanations, or markdown. Return ONLY the raw query string.
+"""
+            from llm_fallback import generate_with_fallback
+            response = generate_with_fallback(prompt, logger=self.logger)
+            query = response.text.strip().replace('"', '').replace('\n', '')
+            self.ui_queue.put((self.on_spec_complete, (query,)))
+        except Exception as e:
+            self.logger.error(f"Spec gen failed: {e}")
+            self.ui_queue.put((self.on_spec_complete, ("Error generating query",)))
+            
+    def on_spec_complete(self, query):
+        self.query_entry.delete("0.0", "end")
+        self.query_entry.insert("0.0", query)
+        self.btn_spec_gen.configure(state="normal")
+        
     def suggest_query(self):
         strategy = self.strategy_var.get()
         region = self.region_var.get()
