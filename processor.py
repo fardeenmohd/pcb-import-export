@@ -4,7 +4,7 @@ import pandas as pd
 import concurrent.futures
 from typing import List, Dict
 from scraper import scrape_url
-from extractor import extract_supplier_info
+from extractor import extract_supplier_info, extract_buyer_info, extract_logistics_info
 
 def process_single_url(url: str, logger: logging.Logger) -> List[Dict]:
     logger.info(f"Processing {url}...")
@@ -186,3 +186,64 @@ def run_buyer_pipeline(urls: List[str], logger: logging.Logger, output_file: str
         logger.info(f"Successfully saved buyer results to {output_file}")
     except Exception as e:
         logger.error(f"Failed to save buyer Excel file: {e}")
+
+
+def process_single_logistics_url(url: str, logger: logging.Logger) -> List[Dict]:
+    logger.info(f"Processing Logistics {url}...")
+    text = scrape_url(url, logger)
+    if not text:
+        return [{"url": url, "error": "Failed to scrape"}]
+        
+    extracted_data_list = extract_logistics_info(text, logger)
+    if not extracted_data_list:
+        return [{"url": url, "error": "Failed to extract data or no logistics company found"}]
+        
+    flat_data_list = []
+    for extracted_data in extracted_data_list:
+        flat_data = {
+            "url": url,
+            "company_name": extracted_data.company_name,
+            "contact_emails": ", ".join(extracted_data.contact_emails),
+            "phone_numbers": ", ".join(extracted_data.phone_numbers),
+            "locations_hq": ", ".join(extracted_data.locations_hq),
+            "shipping_routes": ", ".join(extracted_data.shipping_routes),
+            "services_offered": ", ".join(extracted_data.services_offered),
+            "container_types": ", ".join(extracted_data.container_types)
+        }
+        flat_data_list.append(flat_data)
+        
+    return flat_data_list
+
+def process_logistics_urls(urls: List[str], output_excel: str, logger: logging.Logger):
+    results = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        futures = {executor.submit(process_single_logistics_url, url, logger): url for url in urls}
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                data_list = future.result()
+                results.extend(data_list)
+            except Exception as e:
+                logger.error(f"Failed to process {futures[future]}: {e}")
+                results.append({"url": futures[future], "error": str(e)})
+                
+    if results:
+        df = pd.DataFrame(results)
+        
+        # Define preferred column order
+        cols = ["company_name", "url", "contact_emails", "phone_numbers", 
+                "locations_hq", "shipping_routes", "services_offered", "container_types", "error"]
+                
+        existing_cols = [c for c in cols if c in df.columns]
+        other_cols = [c for c in df.columns if c not in cols]
+        df = df[existing_cols + other_cols]
+        
+        # Append if exists
+        if os.path.exists(output_excel):
+            try:
+                existing_df = pd.read_excel(output_excel)
+                df = pd.concat([existing_df, df], ignore_index=True)
+            except Exception as e:
+                logger.error(f"Error appending to {output_excel}: {e}")
+        
+        df.to_excel(output_excel, index=False)
+        logger.info(f"Logistics data saved to {output_excel}")

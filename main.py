@@ -37,6 +37,8 @@ class App(ctk.CTk):
         self.tab_sup_db = self.tabview.add("Suppliers Database")
         self.tab_buyers = self.tabview.add("Buyers Scraper")
         self.tab_buy_db = self.tabview.add("Buyers Database")
+        self.tab_logistics = self.tabview.add("Logistics Scraper")
+        self.tab_log_db = self.tabview.add("Logistics Database")
         self.tab_logs = self.tabview.add("Agent Logs")
         
         self.setup_discovery_tab()
@@ -130,7 +132,18 @@ class App(ctk.CTk):
     def suggest_query_thread(self, strategy, region):
         try:
             import random
-            if strategy == "Suppliers":
+            if strategy == "Logistics":
+                region_name = region.split(" (")[0]
+                if "Worldwide" in region_name or "Global" in region_name:
+                    dest = "worldwide"
+                else:
+                    dest = f"to {region_name}"
+                prompt = f"""You are an elite B2B sourcing expert.
+Generate a single, highly specific DuckDuckGo search query to find Indian freight forwarders, shipping lines, or logistics companies that provide container transport solutions {dest}.
+Do not include any quotes, markdown, or explanations. Return ONLY the raw query string.
+Example: freight forwarders India to {region_name} container shipping
+"""
+            elif strategy == "Suppliers":
                 try:
                     with open("vision_context_suppliers.md", "r", encoding="utf-8") as f:
                         vision_text = f.read()
@@ -245,7 +258,18 @@ Example: Variable Frequency Drives industrial distributors {region_name}
             class FilteredURLs(BaseModel):
                 urls: List[str]
                 
-            if strategy == "Suppliers":
+            if strategy == "Logistics":
+                region_name = region.split(" (")[0]
+                if "Worldwide" in region_name or "Global" in region_name:
+                    dest = "worldwide"
+                else:
+                    dest = f"to {region_name}"
+                prompt = f"""You are an elite B2B sourcing expert.
+Generate a single, highly specific DuckDuckGo search query to find Indian freight forwarders, shipping lines, or logistics companies that provide container transport solutions {dest}.
+Do not include any quotes, markdown, or explanations. Return ONLY the raw query string.
+Example: freight forwarders India to {region_name} container shipping
+"""
+            elif strategy == "Suppliers":
                 filter_goal = "Manufacturers across all of India (nationwide) of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
                 filter_goal = "Actual company websites for buyers/OEMs of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
@@ -331,7 +355,12 @@ Example: Variable Frequency Drives industrial distributors {region_name}
         self.buy_output_textbox.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
 
     def start_scraping(self, pipeline_type):
-        if pipeline_type == "supplier":
+        if pipeline_type == "logistics":
+            urls_text = self.log_urls_textbox.get("0.0", "end").strip()
+            self.btn_log_start.configure(state="disabled")
+            self.lbl_log_status.configure(text="Status: Starting pipeline...")
+            self.log_output_textbox.delete("0.0", "end")
+        elif pipeline_type == "supplier":
             urls_text = self.sup_urls_textbox.get("0.0", "end").strip()
             self.btn_sup_start.configure(state="disabled")
             self.lbl_sup_status.configure(text="Status: Starting pipeline...")
@@ -349,7 +378,12 @@ Example: Variable Frequency Drives industrial distributors {region_name}
         threading.Thread(target=self.run_pipeline_thread, args=(urls, pipeline_type), daemon=True).start()
 
     def run_pipeline_thread(self, urls, pipeline_type):
-        if pipeline_type == "supplier":
+        if pipeline_type == "logistics":
+            urls_text = self.log_urls_textbox.get("0.0", "end").strip()
+            self.btn_log_start.configure(state="disabled")
+            self.lbl_log_status.configure(text="Status: Starting pipeline...")
+            self.log_output_textbox.delete("0.0", "end")
+        elif pipeline_type == "supplier":
             output_file = "Suppliers_Matrix.xlsx"
             run_pipeline(urls, self.logger, output_file=output_file)
         else:
@@ -359,7 +393,12 @@ Example: Variable Frequency Drives industrial distributors {region_name}
         self.ui_queue.put((self.on_pipeline_complete, (output_file, pipeline_type)))
         
     def on_pipeline_complete(self, output_file, pipeline_type):
-        if pipeline_type == "supplier":
+        if pipeline_type == "logistics":
+            urls_text = self.log_urls_textbox.get("0.0", "end").strip()
+            self.btn_log_start.configure(state="disabled")
+            self.lbl_log_status.configure(text="Status: Starting pipeline...")
+            self.log_output_textbox.delete("0.0", "end")
+        elif pipeline_type == "supplier":
             self.btn_sup_start.configure(state="normal")
             self.lbl_sup_status.configure(text="Status: Completed.")
             self.load_matrix(self.sup_tree, "Suppliers_Matrix.xlsx")
@@ -488,6 +527,8 @@ Example: Variable Frequency Drives industrial distributors {region_name}
             self.lbl_sup_status.configure(text=f"Status: {message[:50]}...")
         elif active_tab == "Buyers Scraper":
             self.lbl_buy_status.configure(text=f"Status: {message[:50]}...")
+        elif active_tab == "Logistics Scraper":
+            self.lbl_log_status.configure(text=f"Status: {message[:50]}...")
         elif active_tab == "URL Discovery":
             self.lbl_disc_status.configure(text=f"Status: {message[:50]}...")
 
@@ -496,3 +537,36 @@ if __name__ == "__main__":
     ctk.set_default_color_theme("blue")
     app = App()
     app.mainloop()
+
+    def setup_logistics_tab(self):
+        self.tab_logistics.grid_columnconfigure(0, weight=1)
+        self.tab_logistics.grid_rowconfigure(3, weight=1)
+        
+        criteria_text = "Logistics Context: Extracting Routes, Container Types, Services, Contact Details."
+        lbl_info = ctk.CTkLabel(self.tab_logistics, text=criteria_text, font=("Arial", 12, "italic"))
+        lbl_info.grid(row=0, column=0, pady=(10,0), sticky="w", padx=20)
+        
+        self.log_urls_textbox = ctk.CTkTextbox(self.tab_logistics, height=150)
+        self.log_urls_textbox.grid(row=1, column=0, padx=20, pady=10, sticky="ew")
+        self.log_urls_textbox.insert("0.0", "Paste Logistics URLs here (one per line)...\n")
+        
+        btn_frame = ctk.CTkFrame(self.tab_logistics, fg_color="transparent")
+        btn_frame.grid(row=2, column=0, padx=20, pady=5, sticky="ew")
+        
+        self.btn_log_start = ctk.CTkButton(btn_frame, text="Start Extraction", command=lambda: self.start_pipeline("logistics"))
+        self.btn_log_start.pack(side="left", padx=5)
+        
+        self.lbl_log_status = ctk.CTkLabel(btn_frame, text="Status: Ready")
+        self.lbl_log_status.pack(side="left", padx=20)
+        
+        self.log_output_textbox = ctk.CTkTextbox(self.tab_logistics)
+        self.log_output_textbox.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
+
+    def load_log_db(self):
+        self.load_matrix(self.tab_log_db.winfo_children()[1].winfo_children()[0], "Logistics_Matrix.xlsx")
+    
+    def clean_log_db(self):
+        self.clean_matrix("Logistics_Matrix.xlsx", self.tab_log_db.winfo_children()[1].winfo_children()[0])
+        
+    def delete_all_log_db(self):
+        self.delete_all_matrix("Logistics_Matrix.xlsx", self.tab_log_db.winfo_children()[1].winfo_children()[0])

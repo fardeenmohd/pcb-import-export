@@ -31,6 +31,20 @@ class SupplierCapabilities(BaseModel):
     lead_time_days: Optional[str] = Field(description="Expected turnaround or lead time")
     advanced_capabilities: AdvancedCapabilities = Field(default_factory=AdvancedCapabilities, description="Advanced manufacturing capabilities")
 
+class LogisticsList(BaseModel):
+    companies: List['LogisticsCompany']
+
+class LogisticsCompany(BaseModel):
+    company_name: Optional[str] = Field(description="Name of the logistics company or freight forwarder")
+    contact_emails: List[str] = Field(default_factory=list, description="List of extracted email addresses")
+    phone_numbers: List[str] = Field(default_factory=list, description="List of extracted phone numbers")
+    locations_hq: List[str] = Field(default_factory=list, description="Headquarters or branch locations in India/globally")
+    shipping_routes: List[str] = Field(default_factory=list, description="Regions or countries they ship to (e.g., Worldwide, Europe, USA, Middle East)")
+    services_offered: List[str] = Field(default_factory=list, description="Services like FCL, LCL, Air Freight, Customs Clearance, Warehousing")
+    container_types: List[str] = Field(default_factory=list, description="Types of containers handled (e.g., 20ft, 40ft, Reefer, Flat Rack)")
+    is_logistics_provider: bool = Field(description="True if this is a freight forwarder, shipping line, or logistics company capable of sending containers")
+LogisticsList.model_rebuild()
+
 def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[List[SupplierCapabilities]]:
     """
     Uses Gemini API to extract structured supplier data from plain text.
@@ -134,4 +148,40 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
         return BuyerList.model_validate_json(response.text).buyers
     except Exception as e:
         logger.error(f"Gemini API extraction failed: {e}")
+        return None
+
+
+def extract_logistics_info(text: str, logger: logging.Logger) -> Optional[List[LogisticsCompany]]:
+    client = genai.Client(api_key=os.environ.get('GEMINI_API_KEY'))
+    if not client.api_key:
+        logger.error("GEMINI_API_KEY not found in environment.")
+        return None
+
+    try:
+        from llm_fallback import generate_with_fallback
+        prompt = f"""
+            You are a B2B extraction AI. Extract the logistics company details from the following raw text.
+            We are looking for freight forwarders, shipping lines, and logistics companies based in India or globally that provide container transport solutions (FCL, LCL, Ocean Freight, Air Freight).
+            
+            Look closely for contact emails and phones.
+            If the page is a directory (like IndiaMart, JustDial, etc.), it may list MULTIPLE logistics companies.
+            Extract EVERY single relevant logistics company on the page into a list.
+            If the page only contains one company, extract just that one in a list.
+            
+            TEXT:
+            {text[:40000]}
+        """
+        response = generate_with_fallback(
+            prompt=prompt,
+            logger=logger,
+            response_schema=LogisticsList
+        )
+        if response and response.parsed:
+            companies = response.parsed.companies
+            # Filter out non-logistics companies
+            valid = [c for c in companies if c.is_logistics_provider]
+            return valid
+        return None
+    except Exception as e:
+        logger.error(f"Error in extract_logistics_info: {e}")
         return None
