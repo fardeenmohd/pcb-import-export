@@ -120,8 +120,18 @@ class App(ctk.CTk):
     def on_strategy_change(self, choice):
         if choice == "Suppliers":
             self.region_dropdown.configure(state="disabled")
+            self.btn_suggest.configure(state="normal")
+        elif choice == "Logistics":
+            self.region_dropdown.configure(state="normal")
+            self.btn_suggest.configure(state="disabled")
+            self.query_entry.delete(0, "end")
+            dest = self.region_var.get().split(" (")[0]
+            if "Worldwide" in dest or "Global" in dest:
+                dest = "worldwide"
+            self.query_entry.insert(0, f"freight forwarders India to {dest} container shipping")
         else:
             self.region_dropdown.configure(state="normal")
+            self.btn_suggest.configure(state="normal")
 
     def suggest_query(self):
         strategy = self.strategy_var.get()
@@ -135,16 +145,7 @@ class App(ctk.CTk):
         try:
             import random
             if strategy == "Logistics":
-                region_name = region.split(" (")[0]
-                if "Worldwide" in region_name or "Global" in region_name:
-                    dest = "worldwide"
-                else:
-                    dest = f"to {region_name}"
-                prompt = f"""You are an elite B2B sourcing expert.
-Generate a single, highly specific DuckDuckGo search query to find Indian freight forwarders, shipping lines, or logistics companies that provide container transport solutions {dest}.
-Do not include any quotes, markdown, or explanations. Return ONLY the raw query string.
-Example: freight forwarders India to {region_name} container shipping
-"""
+                filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
             elif strategy == "Suppliers":
                 try:
                     with open("vision_context_suppliers.md", "r", encoding="utf-8") as f:
@@ -220,6 +221,8 @@ Example: Variable Frequency Drives industrial distributors {region_name}
         if strategy == "Suppliers":
             query += " (site:indiamart.com OR site:tradeindia.com OR site:justdial.com OR site:exportersindia.com)"
             region_code = "in-en"
+        elif strategy == "Logistics":
+            region_code = "in-en"
         else:
             query += " -\"PCB manufacturer\" -\"PCB assembly\" -\"printed circuit board\""
             region_code = self.region_var.get().split(" (")[1].replace(")", "")
@@ -261,16 +264,7 @@ Example: Variable Frequency Drives industrial distributors {region_name}
                 urls: List[str]
                 
             if strategy == "Logistics":
-                region_name = region.split(" (")[0]
-                if "Worldwide" in region_name or "Global" in region_name:
-                    dest = "worldwide"
-                else:
-                    dest = f"to {region_name}"
-                prompt = f"""You are an elite B2B sourcing expert.
-Generate a single, highly specific DuckDuckGo search query to find Indian freight forwarders, shipping lines, or logistics companies that provide container transport solutions {dest}.
-Do not include any quotes, markdown, or explanations. Return ONLY the raw query string.
-Example: freight forwarders India to {region_name} container shipping
-"""
+                filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
             elif strategy == "Suppliers":
                 filter_goal = "Manufacturers across all of India (nationwide) of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
