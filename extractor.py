@@ -5,15 +5,6 @@ from pydantic import BaseModel, Field
 from google import genai
 from google.genai import types
 
-class Services(BaseModel):
-    bare_pcb_manufacturing: bool = False
-    pcb_assembly_smt_dip: bool = False
-
-class AdvancedCapabilities(BaseModel):
-    hdi: bool = False
-    blind_buried_vias: bool = False
-    bga_assembly: bool = False
-
 class SupplierList(BaseModel):
     suppliers: List['SupplierCapabilities']
 
@@ -22,14 +13,13 @@ class SupplierCapabilities(BaseModel):
     contact_emails: List[str] = Field(default_factory=list, description="List of extracted email addresses")
     phone_numbers: List[str] = Field(default_factory=list, description="List of extracted phone numbers")
     locations: List[str] = Field(default_factory=list, description="Manufacturing facilities or office locations")
-    services: Services = Field(default_factory=Services, description="Core services offered")
-    max_layer_count: Optional[int] = Field(description="Maximum number of PCB layers they can manufacture")
-    materials: List[str] = Field(default_factory=list, description="List of materials used (e.g., FR4, Rogers, Aluminum)")
-    surface_finishes: List[str] = Field(default_factory=list, description="List of surface finishes (e.g., HASL, ENIG, OSP)")
-    certifications: List[str] = Field(default_factory=list, description="List of certifications (e.g., ISO 9001, RoHS)")
+    product_categories: List[str] = Field(default_factory=list, description="Core product categories (e.g., Batteries, Switchgear, PCBs, Appliances, Cables)")
+    specific_products: List[str] = Field(default_factory=list, description="Specific items manufactured (e.g., LiFePO4 packs, Molded Case Circuit Breakers, FR4 PCBs)")
+    materials: List[str] = Field(default_factory=list, description="List of materials used or handled (e.g., Copper, Lithium, Stainless Steel)")
+    certifications: List[str] = Field(default_factory=list, description="List of certifications (e.g., ISO 9001, RoHS, CE, UN38.3)")
     minimum_order_quantity: Optional[str] = Field(description="MOQ constraints if any")
-    lead_time_days: Optional[str] = Field(description="Expected turnaround or lead time")
-    advanced_capabilities: AdvancedCapabilities = Field(default_factory=AdvancedCapabilities, description="Advanced manufacturing capabilities")
+    production_capacity: Optional[str] = Field(description="Production capacity details if explicitly mentioned")
+    is_manufacturer: bool = Field(description="True if they are an actual factory/manufacturer. False if they are just a trading company/broker.")
 
 class LogisticsList(BaseModel):
     companies: List['LogisticsCompany']

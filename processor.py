@@ -21,20 +21,16 @@ def process_single_url(url: str, logger: logging.Logger) -> List[Dict]:
         flat_data = {
             "url": url,
             "company_name": extracted_data.company_name,
+            "is_manufacturer": extracted_data.is_manufacturer,
+            "product_categories": ", ".join(extracted_data.product_categories),
+            "specific_products": ", ".join(extracted_data.specific_products),
+            "materials": ", ".join(extracted_data.materials),
+            "certifications": ", ".join(extracted_data.certifications),
+            "production_capacity": extracted_data.production_capacity,
+            "minimum_order_quantity": extracted_data.minimum_order_quantity,
             "contact_emails": ", ".join(extracted_data.contact_emails),
             "phone_numbers": ", ".join(extracted_data.phone_numbers),
-            "locations": ", ".join(extracted_data.locations),
-            "bare_pcb_manufacturing": extracted_data.services.bare_pcb_manufacturing,
-            "pcb_assembly_smt_dip": extracted_data.services.pcb_assembly_smt_dip,
-            "max_layer_count": extracted_data.max_layer_count,
-            "materials": ", ".join(extracted_data.materials),
-            "surface_finishes": ", ".join(extracted_data.surface_finishes),
-            "certifications": ", ".join(extracted_data.certifications),
-            "minimum_order_quantity": extracted_data.minimum_order_quantity,
-            "lead_time_days": extracted_data.lead_time_days,
-            "hdi": extracted_data.advanced_capabilities.hdi,
-            "blind_buried_vias": extracted_data.advanced_capabilities.blind_buried_vias,
-            "bga_assembly": extracted_data.advanced_capabilities.bga_assembly
+            "locations": ", ".join(extracted_data.locations)
         }
         flat_data_list.append(flat_data)
         
