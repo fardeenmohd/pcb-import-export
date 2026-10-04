@@ -144,64 +144,50 @@ class App(ctk.CTk):
     def suggest_query_thread(self, strategy, region):
         try:
             import random
-            if strategy == "Logistics":
-                filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
-            elif strategy == "Suppliers":
-                try:
-                    with open("vision_context_suppliers.md", "r", encoding="utf-8") as f:
-                        vision_text = f.read()
-                except:
-                    vision_text = "Target: Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, and Testing Equipment."
-                
+            
+            # True randomization: Read the context file, extract all product bullet points, pick ONE randomly.
+            product_niche = "Electrical Components"
+            try:
+                with open("vision_context_v2.md", "r", encoding="utf-8") as f:
+                    lines = f.readlines()
+                    # Grab product description lines
+                    product_lines = [line.strip() for line in lines if line.startswith("* **") and ":" in line]
+                    # Cut off the list before the 'Compliance' section begins
+                    product_lines = product_lines[:22] 
+                    if product_lines:
+                        product_niche = random.choice(product_lines)
+            except Exception as e:
+                self.logger.error(f"Failed to read context for randomization: {e}")
+
+            if strategy == "Suppliers":
                 prompt = f"""You are an elite B2B sourcing expert.
-Below is our Business Vision Context detailing the exact products and niches we are targeting.
+Generate a single, highly specific DuckDuckGo search query to find MANUFACTURERS and FACTORIES across ALL of India for the following specific product niche:
 
-{vision_text}
+{product_niche}
 
-Your task:
-1. Randomly pick ONE highly specific product, component, or technical keyword from the context above (e.g., 'LiFePO4 battery pack', 'Corax Poultry LED', 'double-compression brass cable gland', 'Phoenix Contact UT-4', 'VFDs', etc.). Pick a different one each time you are called to ensure diversity!
-2. Generate a single, highly specific DuckDuckGo search query to find MANUFACTURERS and SUPPLIERS of that exact product.
-3. The query MUST target ALL of India (e.g. include terms like "manufacturer India", and avoid strictly locking into Delhi NCR).
-
+Include terms like "manufacturer India" or "factory India". Do not restrict to Delhi NCR.
 Do not include any quotes, markdown, or explanations. Return ONLY the raw query string.
-Example: LiFePO4 battery pack OEM manufacturers India
 """
             else:
                 region_name = region.split(" (")[0]
                 if "Worldwide" in region_name or "Global" in region_name:
-                    region_target = "globally or in major industrial hubs"
+                    region_target = "globally"
                 else:
                     region_target = f"in {region_name}"
                     
-                try:
-                    with open("vision_context_v2.md", "r", encoding="utf-8") as f:
-                        vision_text = f.read()
-                except:
-                    vision_text = "Target: Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment."
-
                 prompt = f"""You are an elite B2B sourcing expert.
-Below is our Business Vision Context detailing the exact products and niches we are targeting.
+Generate a single, highly specific DuckDuckGo search query to find actual B2B BUYERS, DISTRIBUTORS, or OEMs for the following specific product niche {region_target}:
 
-{vision_text}
+{product_niche}
 
-Your task:
-1. Randomly pick ONE highly specific product, component, or technical keyword from the context above (e.g., 'LiFePO4 battery pack', 'Corax Poultry LED', 'double-compression brass cable gland', 'Phoenix Contact UT-4', 'VFDs', etc.). Pick a different one each time you are called to ensure diversity!
-2. Generate a single, highly specific DuckDuckGo search query to find actual B2B BUYERS, DISTRIBUTORS, or OEMs for that exact product {region_target}.
-3. The query should look for companies that buy or distribute this, not companies that manufacture it (unless they are OEMs using it as parts).
-
+The query should look for companies that buy, import, or distribute this product (e.g. "distributors", "importers", "buyers").
 Do not include any quotes, markdown, or explanations. Return ONLY the raw query string.
-Example: Variable Frequency Drives industrial distributors {region_name}
 """
             
             from llm_fallback import generate_with_fallback
-            
-            # Use temperature=0.9 to ensure we get different niches each time the user clicks suggest!
-            # Since generate_with_fallback might not support kwargs perfectly depending on implementation, 
-            # we will just add a random seed text to the prompt to force variety.
-            prompt += "\n\nRandom Seed to ensure variety: " + str(random.randint(1, 100000))
-            
             response = generate_with_fallback(prompt, logger=self.logger)
-            query = response.text.strip().replace('"', '').replace('\n', '')
+            query = response.text.strip().replace('"', '').replace('
+', '')
             self.ui_queue.put((self.on_suggest_complete, (query,)))
         except Exception as e:
             self.logger.error(f"Suggest failed: {e}")
