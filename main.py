@@ -129,17 +129,66 @@ class App(ctk.CTk):
 
     def suggest_query_thread(self, strategy, region):
         try:
+            import random
             if strategy == "Suppliers":
-                target = "manufacturers across ALL of India (including Mumbai, Bangalore, Pune, Gujarat, Chennai, etc. - do not restrict to just Delhi NCR) of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, and Testing Equipment."
+                try:
+                    with open("vision_context_suppliers.md", "r", encoding="utf-8") as f:
+                        vision_text = f.read()
+                except:
+                    vision_text = "Target: Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, and Testing Equipment."
+                
+                prompt = f"""You are an elite B2B sourcing expert.
+Below is our Business Vision Context detailing the exact products and niches we are targeting.
+
+{vision_text}
+
+Your task:
+1. Randomly pick ONE highly specific product, component, or technical keyword from the context above (e.g., 'LiFePO4 battery pack', 'Corax Poultry LED', 'double-compression brass cable gland', 'Phoenix Contact UT-4', 'VFDs', etc.). Pick a different one each time you are called to ensure diversity!
+2. Generate a single, highly specific DuckDuckGo search query to find MANUFACTURERS and SUPPLIERS of that exact product.
+3. The query MUST target ALL of India (e.g. include terms like "manufacturer India", and avoid strictly locking into Delhi NCR).
+
+Do not include any quotes, markdown, or explanations. Return ONLY the raw query string.
+Example: LiFePO4 battery pack OEM manufacturers India
+"""
             else:
                 region_name = region.split(" (")[0]
-                target = f"B2B buyers or OEMs in {region_name} specializing in Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment."
-            
-            prompt = "You are a B2B sourcing expert.\nThe user wants to find: " + target + "\n\nGenerate a single, highly specific DuckDuckGo search query to find their actual company websites.\nDo not include any quotes or explanations. Just return the raw query string.\nExample for Buyers: Industrial IoT sensor OEMs Australia\nExample for Suppliers: Rigid-flex PCB manufacturers India"
+                if "Worldwide" in region_name or "Global" in region_name:
+                    region_target = "globally or in major industrial hubs"
+                else:
+                    region_target = f"in {region_name}"
+                    
+                try:
+                    with open("vision_context_v2.md", "r", encoding="utf-8") as f:
+                        vision_text = f.read()
+                except:
+                    vision_text = "Target: Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment."
+
+                prompt = f"""You are an elite B2B sourcing expert.
+Below is our Business Vision Context detailing the exact products and niches we are targeting.
+
+{vision_text}
+
+Your task:
+1. Randomly pick ONE highly specific product, component, or technical keyword from the context above (e.g., 'LiFePO4 battery pack', 'Corax Poultry LED', 'double-compression brass cable gland', 'Phoenix Contact UT-4', 'VFDs', etc.). Pick a different one each time you are called to ensure diversity!
+2. Generate a single, highly specific DuckDuckGo search query to find actual B2B BUYERS, DISTRIBUTORS, or OEMs for that exact product {region_target}.
+3. The query should look for companies that buy or distribute this, not companies that manufacture it (unless they are OEMs using it as parts).
+
+Do not include any quotes, markdown, or explanations. Return ONLY the raw query string.
+Example: Variable Frequency Drives industrial distributors {region_name}
+"""
             
             from llm_fallback import generate_with_fallback
+            
+            # Use temperature=0.9 to ensure we get different niches each time the user clicks suggest!
+            # Since generate_with_fallback might not support kwargs perfectly depending on implementation, 
+            # we will just add a random seed text to the prompt to force variety.
+            prompt += "
+
+Random Seed to ensure variety: " + str(random.randint(1, 100000))
+            
             response = generate_with_fallback(prompt, logger=self.logger)
-            query = response.text.strip().replace('"', '').replace('\\n', '')
+            query = response.text.strip().replace('"', '').replace('
+', '')
             self.ui_queue.put((self.on_suggest_complete, (query,)))
         except Exception as e:
             self.logger.error(f"Suggest failed: {e}")
