@@ -86,7 +86,7 @@ class App(ctk.CTk):
         self.region_var = ctk.StringVar(value="Global (wt-wt)")
         self.region_dropdown = ctk.CTkOptionMenu(
             control_frame, 
-            values=["Global (wt-wt)", "Australia (au-en)", "Poland (pl-pl)", "Netherlands (nl-nl)", "Malaysia (my-en)", "USA (us-en)"],
+            values=['Worldwide (wt-wt)', 'Australia (au-en)', 'Poland (pl-pl)', 'Netherlands (nl-nl)', 'Malaysia (my-en)', 'USA (us-en)', 'Canada (ca-en)', 'Germany (de-de)', 'France (fr-fr)', 'United Kingdom (uk-en)', 'UAE (ae-en)', 'Saudi Arabia (sa-ar)', 'Qatar (qa-en)', 'Kuwait (kw-en)', 'Oman (om-en)', 'Bahrain (bh-en)', 'Singapore (sg-en)', 'Vietnam (vn-en)', 'Indonesia (id-en)', 'Philippines (ph-en)', 'Thailand (th-en)', 'South Korea (kr-kr)', 'China (cn-zh)', 'India (in-en)', 'South Africa (za-en)', 'Romania (ro-ro)', 'Finland (fi-fi)', 'Albania (al-al)', 'Moldova (md-ro)'],
             variable=self.region_var, width=120
         )
         self.region_dropdown.pack(side="left", padx=5)
