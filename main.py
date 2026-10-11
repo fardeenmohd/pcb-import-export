@@ -153,6 +153,9 @@ class App(ctk.CTk):
         self.btn_search = ctk.CTkButton(control_frame, text="Discover URLs", command=self.start_discovery)
         self.btn_search.pack(side="left", padx=10)
         
+        self.btn_disc_prop = ctk.CTkButton(control_frame, text="🌐 Quick URL Proposal", command=self.open_url_proposal_window, fg_color="#005b96", hover_color="#003f66")
+        self.btn_disc_prop.pack(side="left", padx=10)
+        
         self.lbl_disc_status = ctk.CTkLabel(control_frame, text="Status: Idle", text_color="gray")
         self.lbl_disc_status.pack(side="left", padx=10)
         
@@ -193,11 +196,40 @@ class App(ctk.CTk):
         self.raw_urls_textbox.grid(row=1, column=1, padx=(5, 5), pady=0, sticky="nsew")
         
         # Column 2: High-Quality Filtered URLs
-        self.lbl_hq_urls = ctk.CTkLabel(results_container, text="⭐ High-Quality URLs (AI Filtered):", font=("Arial", 12, "bold"))
-        self.lbl_hq_urls.grid(row=0, column=2, padx=(5, 0), pady=(0, 5), sticky="w")
+        hq_header_frame = ctk.CTkFrame(results_container, fg_color="transparent")
+        hq_header_frame.grid(row=0, column=2, padx=(5, 0), pady=(0, 5), sticky="ew")
         
-        self.discovery_textbox = ctk.CTkTextbox(results_container, wrap="none")
-        self.discovery_textbox.grid(row=1, column=2, padx=(5, 0), pady=0, sticky="nsew")
+        self.lbl_hq_urls = ctk.CTkLabel(hq_header_frame, text="⭐ High-Quality URLs (AI Filtered):", font=("Arial", 12, "bold"))
+        self.lbl_hq_urls.pack(side="left")
+        
+        self.btn_copy_all_hq = ctk.CTkButton(
+            hq_header_frame, 
+            text="📋 Copy All", 
+            width=70, 
+            height=22, 
+            font=("Arial", 10), 
+            command=self.copy_all_hq_urls, 
+            fg_color="#3a3a3a", 
+            hover_color="#2b2b2b"
+        )
+        self.btn_copy_all_hq.pack(side="right")
+
+        self.btn_send_to_scraper = ctk.CTkButton(
+            hq_header_frame, 
+            text="➔ Send to Scraper", 
+            width=105, 
+            height=22, 
+            font=("Arial", 10), 
+            command=self.send_hq_urls_to_scraper, 
+            fg_color="#005b96", 
+            hover_color="#003f66"
+        )
+        self.btn_send_to_scraper.pack(side="right", padx=(0, 6))
+
+        self.discovery_urls_frame = ctk.CTkScrollableFrame(results_container)
+        self.discovery_urls_frame.grid(row=1, column=2, padx=(5, 0), pady=0, sticky="nsew")
+        self.current_hq_urls = []
+        self.populate_hq_urls([])
 
         # Initial starter queries
         starter_queries = [
@@ -263,6 +295,102 @@ class App(ctk.CTk):
         self.query_entry.insert("0.0", query)
         preview = query[:30] + "..." if len(query) > 30 else query
         self.lbl_disc_status.configure(text=f"Selected: {preview}")
+
+    def populate_hq_urls(self, urls):
+        self.current_hq_urls = list(urls) if urls else []
+        for widget in self.discovery_urls_frame.winfo_children():
+            widget.destroy()
+            
+        if not urls:
+            lbl_empty = ctk.CTkLabel(
+                self.discovery_urls_frame, 
+                text="No high-quality URLs discovered yet.\nRun 'Discover URLs' above to search and filter leads.", 
+                text_color="gray", 
+                font=("Arial", 11, "italic"),
+                justify="center"
+            )
+            lbl_empty.pack(pady=30, padx=10)
+            return
+
+        for u in urls:
+            url_str = u.strip()
+            if not url_str:
+                continue
+                
+            row_frame = ctk.CTkFrame(self.discovery_urls_frame, fg_color=("#EAEAEA", "#2B2B2B"), corner_radius=6)
+            row_frame.pack(fill="x", padx=4, pady=3)
+            
+            # Action button: 📝 Create Proposal
+            btn_prop = ctk.CTkButton(
+                row_frame, 
+                text="📝 Create Proposal", 
+                width=125, 
+                height=28, 
+                font=("Arial", 11, "bold"),
+                fg_color="#1f7a1f", 
+                hover_color="#145214",
+                command=lambda target=url_str: self.open_url_proposal_window(target, auto_generate=True)
+            )
+            btn_prop.pack(side="right", padx=(4, 6), pady=4)
+            
+            # Action button: 📋 Copy single URL
+            btn_copy = ctk.CTkButton(
+                row_frame,
+                text="📋",
+                width=30,
+                height=28,
+                font=("Arial", 11),
+                fg_color="#3a3a3a",
+                hover_color="#2b2b2b",
+                command=lambda target=url_str: self.copy_single_url(target)
+            )
+            btn_copy.pack(side="right", padx=(2, 2), pady=4)
+            
+            # URL text label
+            lbl_url = ctk.CTkLabel(
+                row_frame, 
+                text=url_str, 
+                anchor="w", 
+                justify="left", 
+                wraplength=270,
+                font=("Arial", 11)
+            )
+            lbl_url.pack(side="left", fill="x", expand=True, padx=(8, 4), pady=4)
+
+    def copy_single_url(self, url_str):
+        self.clipboard_clear()
+        self.clipboard_append(url_str)
+        preview = url_str[:30] + "..." if len(url_str) > 30 else url_str
+        self.lbl_disc_status.configure(text=f"Copied: {preview}")
+
+    def copy_all_hq_urls(self):
+        if hasattr(self, 'current_hq_urls') and self.current_hq_urls:
+            self.clipboard_clear()
+            self.clipboard_append("\n".join(self.current_hq_urls))
+            self.btn_copy_all_hq.configure(text="Copied! ✅")
+            self.lbl_disc_status.configure(text=f"Copied {len(self.current_hq_urls)} URLs to clipboard")
+            self.after(1500, lambda: self.btn_copy_all_hq.configure(text="📋 Copy All"))
+
+    def send_hq_urls_to_scraper(self):
+        if not hasattr(self, 'current_hq_urls') or not self.current_hq_urls:
+            return
+        strategy = self.strategy_var.get()
+        urls_joined = "\n".join(self.current_hq_urls) + "\n"
+        if strategy == "Suppliers":
+            self.sup_urls_textbox.delete("0.0", "end")
+            self.sup_urls_textbox.insert("0.0", urls_joined)
+            self.tabview.set("Suppliers Scraper")
+            self.lbl_sup_status.configure(text=f"Loaded {len(self.current_hq_urls)} URLs from Discovery")
+        elif strategy == "Logistics":
+            self.log_urls_textbox.delete("0.0", "end")
+            self.log_urls_textbox.insert("0.0", urls_joined)
+            self.tabview.set("Logistics Scraper")
+            self.lbl_log_status.configure(text=f"Loaded {len(self.current_hq_urls)} URLs from Discovery")
+        else:
+            self.buy_urls_textbox.delete("0.0", "end")
+            self.buy_urls_textbox.insert("0.0", urls_joined)
+            self.tabview.set("Buyers Scraper")
+            self.lbl_buy_status.configure(text=f"Loaded {len(self.current_hq_urls)} URLs from Discovery")
 
     def on_region_change(self, choice):
         strategy = self.strategy_var.get()
@@ -623,7 +751,15 @@ RULES:
         self.btn_search.configure(state="disabled")
         self.lbl_disc_status.configure(text="Status: Searching...")
         self.raw_urls_textbox.delete("0.0", "end")
-        self.discovery_textbox.delete("0.0", "end")
+        for widget in self.discovery_urls_frame.winfo_children():
+            widget.destroy()
+        lbl_loading = ctk.CTkLabel(
+            self.discovery_urls_frame, 
+            text="⏳ Searching DuckDuckGo and vetting leads with Gemini AI...", 
+            font=("Arial", 11, "italic"), 
+            text_color="gray"
+        )
+        lbl_loading.pack(pady=30, padx=10)
         self.lbl_raw_urls.configure(text="🌐 Raw Search Results (DuckDuckGo):")
         self.lbl_hq_urls.configure(text="⭐ High-Quality URLs (AI Filtered):")
         
@@ -701,7 +837,15 @@ RULES:
         self.btn_search.configure(state="normal")
         if error:
             self.lbl_disc_status.configure(text="Status: Error")
-            self.discovery_textbox.insert("end", f"Error: {error}\n")
+            for widget in self.discovery_urls_frame.winfo_children():
+                widget.destroy()
+            lbl_err = ctk.CTkLabel(
+                self.discovery_urls_frame, 
+                text=f"Error: {error}", 
+                font=("Arial", 11), 
+                text_color="#ff5555"
+            )
+            lbl_err.pack(pady=20, padx=10)
         else:
             self.lbl_disc_status.configure(text=f"Status: Found {len(urls)} High-Quality ({len(raw_urls)} Raw)")
             self.raw_urls_textbox.delete("0.0", "end")
@@ -709,9 +853,7 @@ RULES:
                 self.raw_urls_textbox.insert("end", "\n".join(raw_urls) + "\n")
             self.lbl_raw_urls.configure(text=f"🌐 Raw Search Results ({len(raw_urls)}):")
             
-            self.discovery_textbox.delete("0.0", "end")
-            if urls:
-                self.discovery_textbox.insert("end", "\n".join(urls) + "\n")
+            self.populate_hq_urls(urls)
             self.lbl_hq_urls.configure(text=f"⭐ High-Quality URLs ({len(urls)}):")
 
     def setup_suppliers_tab(self):
@@ -1114,7 +1256,7 @@ SinoMagan Indus Global Trade LLP
 
         start_generation()
 
-    def open_url_proposal_window(self, initial_url=""):
+    def open_url_proposal_window(self, initial_url="", auto_generate=False):
         win = ctk.CTkToplevel(self)
         win.title("Instant B2B Trade Proposal Generator")
         win.geometry("820x760")
@@ -1370,6 +1512,9 @@ SinoMagan Indus Global Trade LLP
 
         btn_generate.configure(command=start_url_generation)
         url_entry.bind("<Return>", lambda event: start_url_generation())
+        
+        if initial_url and auto_generate:
+            win.after(150, start_url_generation)
 
     def delete_all_entries(self, output_file, tree):
         import tkinter.messagebox as messagebox
