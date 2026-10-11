@@ -28,6 +28,8 @@ def process_single_url(url: str, logger: logging.Logger) -> List[Dict]:
             "certifications": ", ".join(extracted_data.certifications),
             "production_capacity": extracted_data.production_capacity,
             "minimum_order_quantity": extracted_data.minimum_order_quantity,
+            "export_markets": ", ".join(extracted_data.export_markets),
+            "oem_odm_service": "Yes" if extracted_data.oem_odm_service else "No",
             "contact_emails": ", ".join(extracted_data.contact_emails),
             "phone_numbers": ", ".join(extracted_data.phone_numbers),
             "locations": ", ".join(extracted_data.locations)

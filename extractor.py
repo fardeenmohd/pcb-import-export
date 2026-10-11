@@ -9,17 +9,20 @@ class SupplierList(BaseModel):
     suppliers: List['SupplierCapabilities']
 
 class SupplierCapabilities(BaseModel):
-    company_name: Optional[str] = Field(description="Name of the company")
+    company_name: Optional[str] = Field(description="Name of the manufacturing company")
     contact_emails: List[str] = Field(default_factory=list, description="List of extracted email addresses")
-    phone_numbers: List[str] = Field(default_factory=list, description="List of extracted phone numbers")
-    locations: List[str] = Field(default_factory=list, description="Manufacturing facilities or office locations")
-    product_categories: List[str] = Field(default_factory=list, description="Core product categories (e.g., Batteries, Switchgear, PCBs, Appliances, Cables)")
-    specific_products: List[str] = Field(default_factory=list, description="Specific items manufactured (e.g., LiFePO4 packs, Molded Case Circuit Breakers, FR4 PCBs)")
-    materials: List[str] = Field(default_factory=list, description="List of materials used or handled (e.g., Copper, Lithium, Stainless Steel)")
-    certifications: List[str] = Field(default_factory=list, description="List of certifications (e.g., ISO 9001, RoHS, CE, UN38.3)")
+    phone_numbers: List[str] = Field(default_factory=list, description="List of extracted phone numbers and WhatsApp numbers")
+    locations: List[str] = Field(default_factory=list, description="Manufacturing facilities, industrial estates, or office locations in India or globally")
+    product_categories: List[str] = Field(default_factory=list, description="Core product categories manufactured (e.g., Switchgear, Cables, Batteries, Transformers, HVAC Parts, Lighting, Electrical Components)")
+    specific_products: List[str] = Field(default_factory=list, description="Specific items or models manufactured (e.g., LiFePO4 packs, Molded Case Circuit Breakers, XLPE power cables, Cable Glands)")
+    materials: List[str] = Field(default_factory=list, description="List of materials handled (e.g., Copper, Lithium, Brass, Stainless Steel, Aluminum)")
+    certifications: List[str] = Field(default_factory=list, description="List of certifications (e.g., ISO 9001, RoHS, CE, BIS, UN38.3, UL)")
     minimum_order_quantity: Optional[str] = Field(description="MOQ constraints if any")
     production_capacity: Optional[str] = Field(description="Production capacity details if explicitly mentioned")
-    is_manufacturer: bool = Field(description="True if they are an actual factory/manufacturer. False if they are just a trading company/broker.")
+    export_markets: List[str] = Field(default_factory=list, description="Export countries or regions supplied (e.g., GCC/Middle East, Europe, USA, Africa, Domestic)")
+    oem_odm_service: bool = Field(default=False, description="True if they offer OEM, ODM, private label or custom contract manufacturing")
+    is_manufacturer: bool = Field(description="True if they are an actual factory/manufacturer with production facilities. False if they are only a trading company/broker.")
+SupplierList.model_rebuild()
 
 class LogisticsList(BaseModel):
     companies: List['LogisticsCompany']
@@ -51,12 +54,27 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
         logger.warning("Empty text provided to extractor. Skipping.")
         return None
 
-    logger.info("Sending text to Gemini for extraction...")
+    logger.info("Sending text to Gemini for supplier extraction...")
     try:
         prompt = (
-            "Analyze the following text scraped from a PCB manufacturer's website OR a B2B directory page (like IndiaMart). "
-            "CRITICAL INSTRUCTION: If the page contains a list of multiple different PCB suppliers/manufacturers, you MUST extract EACH of them as a separate entry in the list! Do NOT name the company 'IndiaMart' or 'JustDial'. "
-            "Extract the information required by the JSON schema for each company found. Pay special attention to suppliers across the 9 core niches: Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, and Testing Equipment.\n\n"
+            "You are an elite B2B industrial sourcing specialist for international trade.\n"
+            "Analyze the following text scraped from a manufacturer's website OR a B2B directory page (like IndiaMart, TradeIndia, JustDial, etc.).\n\n"
+            "We are sourcing from direct MANUFACTURERS, FACTORIES, and OEM MAKERS across 9 core industrial niches:\n"
+            "1. Electrical Components & Sockets (Cable Glands, Crimping Lugs, Terminal Blocks, Rocker/Push Switches, EV plugs)\n"
+            "2. Wires & Cables (LV/MV/HV Power, Armored XLPE, Submersible, Binding Wires, Reeling systems, Hoses)\n"
+            "3. Switchgear & Control Panels (ACB, MCCB, MCB, VCB, Relays, Contactors, PCC/MCC Panels)\n"
+            "4. Industrial HVAC, Fans & Pumps (Axial/Centrifugal Fans, Scroll/Screw Compressors, Submersible Pumps, Refrigeration Parts)\n"
+            "5. Batteries & Energy Storage (LiFePO4 battery packs, Home ESS, Marine IP67, GaN Chargers, Solar Inverters)\n"
+            "6. Industrial Generators (Cummins Diesel, Gas Gensets, Silent Generators, Wind Turbines)\n"
+            "7. LED Lighting & Luminaires (Streetlights, High-Bay LED, Corax Poultry Lighting, Smart WiFi Sockets)\n"
+            "8. Electric Home & Commercial Appliances (Industrial Dehumidifiers, Floor Scrubbers, Commercial Laundry & Kitchen Equipment)\n"
+            "9. Sensors & Testing Equipment (PIR Sensors, Level Float Switches, Transformer Test Benches, Multimeters)\n\n"
+            "CRITICAL INSTRUCTIONS:\n"
+            "1. MULTI-COMPANY DIRECTORIES: If the page contains a list of multiple different suppliers or factories, you MUST extract EACH of them as a separate entry in the list! Do NOT name the company 'IndiaMart' or 'TradeIndia'.\n"
+            "2. CONTACT DETAILS: Aggressively search headers, footers, sidebars, and body text to extract ALL email addresses (sales@, info@, export@), phone numbers, and WhatsApp numbers.\n"
+            "3. FACTORY LOCATION: Extract the specific industrial city, state, or manufacturing estate in India or internationally (e.g. Jamnagar, Rajkot, Ahmedabad, Peenya Bangalore, Pune, Noida, Coimbatore, etc.).\n"
+            "4. MANUFACTURER VS TRADER: Set is_manufacturer=True if they produce, assemble, or fabricate goods; False if they are purely a middleman or trading company.\n"
+            "5. CAPABILITIES & SERVICES: Extract export markets served and whether they support OEM/ODM or private label manufacturing.\n\n"
             f"Website Text:\n{text[:30000]}"
         )
         from llm_fallback import generate_with_fallback
@@ -72,7 +90,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
         
         # Parse the JSON response into our Pydantic model
         if response.text:
-            logger.info("Successfully extracted data via Gemini.")
+            logger.info("Successfully extracted supplier data via Gemini.")
             return SupplierList.model_validate_json(response.text).suppliers
         else:
             logger.error("Gemini returned empty response.")

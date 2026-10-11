@@ -153,7 +153,13 @@ class App(ctk.CTk):
         self.btn_search = ctk.CTkButton(control_frame, text="Discover URLs", command=self.start_discovery)
         self.btn_search.pack(side="left", padx=10)
         
-        self.btn_disc_prop = ctk.CTkButton(control_frame, text="🌐 Quick URL Proposal", command=self.open_url_proposal_window, fg_color="#005b96", hover_color="#003f66")
+        self.btn_disc_prop = ctk.CTkButton(
+            control_frame, 
+            text="🌐 Quick URL Proposal", 
+            command=lambda: self.open_url_proposal_window(is_supplier=(self.strategy_var.get() == "Suppliers")), 
+            fg_color="#005b96", 
+            hover_color="#003f66"
+        )
         self.btn_disc_prop.pack(side="left", padx=10)
         
         self.lbl_disc_status = ctk.CTkLabel(control_frame, text="Status: Idle", text_color="gray")
@@ -312,6 +318,9 @@ class App(ctk.CTk):
             lbl_empty.pack(pady=30, padx=10)
             return
 
+        is_supplier = (self.strategy_var.get() == "Suppliers")
+        prop_btn_text = "📝 Sourcing RFQ" if is_supplier else "📝 Create Proposal"
+
         for u in urls:
             url_str = u.strip()
             if not url_str:
@@ -320,16 +329,16 @@ class App(ctk.CTk):
             row_frame = ctk.CTkFrame(self.discovery_urls_frame, fg_color=("#EAEAEA", "#2B2B2B"), corner_radius=6)
             row_frame.pack(fill="x", padx=4, pady=3)
             
-            # Action button: 📝 Create Proposal
+            # Action button: 📝 Sourcing RFQ / 📝 Create Proposal
             btn_prop = ctk.CTkButton(
                 row_frame, 
-                text="📝 Create Proposal", 
+                text=prop_btn_text, 
                 width=125, 
                 height=28, 
                 font=("Arial", 11, "bold"),
                 fg_color="#1f7a1f", 
                 hover_color="#145214",
-                command=lambda target=url_str: self.open_url_proposal_window(target, auto_generate=True)
+                command=lambda target=url_str, sup=is_supplier: self.open_url_proposal_window(target, auto_generate=True, is_supplier=sup)
             )
             btn_prop.pack(side="right", padx=(4, 6), pady=4)
             
@@ -420,6 +429,7 @@ class App(ctk.CTk):
 
     def on_strategy_change(self, choice):
         if choice == "Suppliers":
+            self.btn_disc_prop.configure(text="🌐 Quick URL Inquiry")
             self.region_dropdown.configure(state="disabled")
             self.btn_suggest.configure(state="normal")
             queries = [
@@ -433,6 +443,7 @@ class App(ctk.CTk):
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
         elif choice == "Logistics":
+            self.btn_disc_prop.configure(text="🌐 Quick URL Proposal")
             self.region_dropdown.configure(state="normal")
             self.btn_suggest.configure(state="disabled")
             dest = self.region_var.get().split(" (")[0]
@@ -447,6 +458,7 @@ class App(ctk.CTk):
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
         else:
+            self.btn_disc_prop.configure(text="🌐 Quick URL Proposal")
             self.region_dropdown.configure(state="normal")
             self.btn_suggest.configure(state="normal")
             dest = self.region_var.get().split(" (")[0]
@@ -462,6 +474,9 @@ class App(ctk.CTk):
             ]
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
+
+        if hasattr(self, 'current_hq_urls') and self.current_hq_urls:
+            self.populate_hq_urls(self.current_hq_urls)
 
     def generate_from_spec(self):
         spec_text = self.spec_textbox.get("0.0", "end").strip()
@@ -860,13 +875,13 @@ RULES:
         self.tab_suppliers.grid_columnconfigure(0, weight=1)
         self.tab_suppliers.grid_rowconfigure(3, weight=1)
         
-        criteria_text = "Supplier Context: Extracting PCB Manufacturing Services, Layers, Finishes, Certifications."
+        criteria_text = "Supplier Context: Extracting Manufacturers, Factories, Capabilities, MOQs, & Certifications across all 9 Industrial Niches (Electrical, Cables, Switchgear, Batteries, HVAC, etc.)."
         lbl_criteria = ctk.CTkLabel(self.tab_suppliers, text=criteria_text, font=("Arial", 12, "bold"))
         lbl_criteria.grid(row=0, column=0, padx=10, pady=10, sticky="w")
         
         self.sup_urls_textbox = ctk.CTkTextbox(self.tab_suppliers, height=80)
         self.sup_urls_textbox.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
-        self.sup_urls_textbox.insert("0.0", "https://www.sahasraelectronics.com\n")
+        self.sup_urls_textbox.insert("0.0", "https://www.sahasraelectronics.com\nhttps://www.polycab.com\nhttps://www.havells.com\n")
         
         control_frame = ctk.CTkFrame(self.tab_suppliers)
         control_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
@@ -874,6 +889,9 @@ RULES:
         self.btn_sup_start = ctk.CTkButton(control_frame, text="Start Supplier Scraping", command=lambda: self.start_scraping("supplier"))
         self.btn_sup_start.pack(side="left", padx=10)
         
+        self.btn_sup_prop = ctk.CTkButton(control_frame, text="🌐 Quick URL Inquiry", command=lambda: self.open_url_proposal_window(is_supplier=True), fg_color="#005b96", hover_color="#003f66")
+        self.btn_sup_prop.pack(side="left", padx=10)
+
         self.lbl_sup_status = ctk.CTkLabel(control_frame, text="Status: Idle", text_color="gray")
         self.lbl_sup_status.pack(side="left", padx=10)
         
@@ -970,7 +988,7 @@ RULES:
         else:
             textbox.insert("0.0", "Output file not found. Scraper may have failed.")
 
-    def create_database_tab_ui(self, tab, sync_cmd, clean_cmd, delete_all_cmd, proposal_cmd=None):
+    def create_database_tab_ui(self, tab, sync_cmd, clean_cmd, delete_all_cmd, proposal_cmd=None, is_supplier=False):
         tab.grid_columnconfigure(0, weight=1)
         tab.grid_rowconfigure(1, weight=1)
         
@@ -981,10 +999,13 @@ RULES:
         btn_sync.pack(side="left", padx=(0, 10))
         
         if proposal_cmd:
-            btn_prop = ctk.CTkButton(btn_frame, text="📝 Create Proposal", command=proposal_cmd, fg_color="#1f7a1f", hover_color="#145214")
+            btn_prop_text = "📝 Create Sourcing Inquiry" if is_supplier else "📝 Create Proposal"
+            btn_prop = ctk.CTkButton(btn_frame, text=btn_prop_text, command=proposal_cmd, fg_color="#1f7a1f", hover_color="#145214")
             btn_prop.pack(side="left", padx=(0, 10))
 
-            btn_url_prop = ctk.CTkButton(btn_frame, text="🌐 Proposal from URL", command=self.open_url_proposal_window, fg_color="#005b96", hover_color="#003f66")
+            btn_url_prop_text = "🌐 Inquiry from URL" if is_supplier else "🌐 Proposal from URL"
+            url_cmd = (lambda: self.open_url_proposal_window(is_supplier=True)) if is_supplier else self.open_url_proposal_window
+            btn_url_prop = ctk.CTkButton(btn_frame, text=btn_url_prop_text, command=url_cmd, fg_color="#005b96", hover_color="#003f66")
             btn_url_prop.pack(side="left", padx=(0, 10))
 
         btn_clean = ctk.CTkButton(btn_frame, text="Clean Matrix", command=clean_cmd, fg_color="#b30000", hover_color="#800000")
@@ -1034,7 +1055,9 @@ RULES:
             self.tab_sup_db, 
             lambda: self.load_matrix(self.sup_tree, "Suppliers_Matrix.xlsx"),
             lambda: self.clean_local_matrix("Suppliers_Matrix.xlsx", self.sup_tree),
-            lambda: self.delete_all_entries("Suppliers_Matrix.xlsx", self.sup_tree)
+            lambda: self.delete_all_entries("Suppliers_Matrix.xlsx", self.sup_tree),
+            proposal_cmd=self.open_supplier_inquiry_window,
+            is_supplier=True
         )
         
     def setup_buy_db_tab(self):
@@ -1043,7 +1066,8 @@ RULES:
             lambda: self.load_matrix(self.buy_tree, "Buyers_Matrix.xlsx"),
             lambda: self.clean_local_matrix("Buyers_Matrix.xlsx", self.buy_tree),
             lambda: self.delete_all_entries("Buyers_Matrix.xlsx", self.buy_tree),
-            proposal_cmd=self.open_proposal_window
+            proposal_cmd=self.open_proposal_window,
+            is_supplier=False
         )
 
     def open_proposal_window(self):
@@ -1256,9 +1280,245 @@ SinoMagan Indus Global Trade LLP
 
         start_generation()
 
-    def open_url_proposal_window(self, initial_url="", auto_generate=False):
+    def open_supplier_inquiry_window(self):
+        selected_items = self.sup_tree.selection()
+        if not selected_items:
+            import tkinter.messagebox as messagebox
+            messagebox.showinfo("Select Supplier", "Please select a supplier from the table to generate a sourcing inquiry.")
+            return
+
+        selected_item = selected_items[0]
+        row_values = self.sup_tree.item(selected_item)["values"]
+        cols = list(self.sup_tree["columns"])
+        data = dict(zip(cols, row_values))
+
+        company_name = str(data.get("company_name", "Valued Supplier")).strip()
+        product_categories = str(data.get("product_categories", "")).strip()
+        specific_products = str(data.get("specific_products", "Industrial Products")).strip()
+        materials = str(data.get("materials", "")).strip()
+        certifications = str(data.get("certifications", "")).strip()
+        production_capacity = str(data.get("production_capacity", "")).strip()
+        moq = str(data.get("minimum_order_quantity", "")).strip()
+        export_markets = str(data.get("export_markets", "")).strip()
+        oem_odm_service = str(data.get("oem_odm_service", "")).strip()
+        locations = str(data.get("locations", "")).strip()
+        url = str(data.get("url", "")).strip()
+        contact_emails = str(data.get("contact_emails", "")).strip()
+
         win = ctk.CTkToplevel(self)
-        win.title("Instant B2B Trade Proposal Generator")
+        win.title(f"Sourcing Inquiry / RFQ - {company_name}")
+        win.geometry("820x720")
+        win.attributes("-topmost", True)
+        win.focus_set()
+
+        header_frame = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
+        header_frame.pack(fill="x", padx=15, pady=(15, 8))
+
+        lbl_title = ctk.CTkLabel(
+            header_frame, 
+            text=f"B2B Sourcing RFQ & Vendor Partnership for {company_name}", 
+            font=("Arial", 16, "bold"),
+            text_color="#ffffff"
+        )
+        lbl_title.pack(anchor="w", padx=15, pady=(10, 2))
+
+        sub_desc = f"Products: {specific_products or product_categories}  |  Location: {locations or 'India'}  |  OEM/ODM: {oem_odm_service or 'N/A'}"
+        lbl_sub = ctk.CTkLabel(
+            header_frame, 
+            text=sub_desc, 
+            font=("Arial", 11),
+            text_color="#a0a0a0"
+        )
+        lbl_sub.pack(anchor="w", padx=15, pady=(0, 10))
+
+        # To Row
+        to_frame = ctk.CTkFrame(win, fg_color="transparent")
+        to_frame.pack(fill="x", padx=15, pady=(4, 3))
+        lbl_to = ctk.CTkLabel(to_frame, text="To:", width=65, anchor="w", font=("Arial", 12, "bold"))
+        lbl_to.pack(side="left")
+        entry_to = ctk.CTkEntry(to_frame, font=("Arial", 12), height=32)
+        entry_to.pack(side="left", fill="x", expand=True, padx=(0, 8))
+        if contact_emails:
+            entry_to.insert(0, contact_emails)
+        btn_copy_to = ctk.CTkButton(to_frame, text="📋 Copy", width=75, height=32)
+        btn_copy_to.pack(side="right")
+
+        # Subject Row
+        subj_frame = ctk.CTkFrame(win, fg_color="transparent")
+        subj_frame.pack(fill="x", padx=15, pady=(3, 5))
+        lbl_subj = ctk.CTkLabel(subj_frame, text="Subject:", width=65, anchor="w", font=("Arial", 12, "bold"))
+        lbl_subj.pack(side="left")
+        entry_subj = ctk.CTkEntry(subj_frame, font=("Arial", 12), height=32)
+        entry_subj.pack(side="left", fill="x", expand=True, padx=(0, 8))
+        entry_subj.insert(0, "Generating Subject line...")
+        btn_copy_subj = ctk.CTkButton(subj_frame, text="📋 Copy", width=75, height=32)
+        btn_copy_subj.pack(side="right")
+
+        # Body Header Row
+        body_hdr = ctk.CTkFrame(win, fg_color="transparent")
+        body_hdr.pack(fill="x", padx=15, pady=(4, 2))
+        lbl_body = ctk.CTkLabel(body_hdr, text="Email Body (Gmail Ready):", font=("Arial", 12, "bold"))
+        lbl_body.pack(side="left")
+        btn_copy_body = ctk.CTkButton(body_hdr, text="📋 Copy Body", width=105, height=28, fg_color="#1f7a1f", hover_color="#145214")
+        btn_copy_body.pack(side="right")
+
+        # Body Textbox
+        txt_body = ctk.CTkTextbox(win, wrap="word", font=("Arial", 12))
+        txt_body.pack(fill="both", expand=True, padx=15, pady=(2, 8))
+        txt_body.insert("0.0", "⏳ Generating tailored Sourcing RFQ / vendor inquiry using Gemini AI...\nPlease wait a few seconds.")
+
+        # Copy handlers
+        def copy_widget_text(widget, btn, default_txt):
+            if isinstance(widget, ctk.CTkTextbox):
+                val = widget.get("0.0", "end").strip()
+            else:
+                val = widget.get().strip()
+            if val and not val.startswith("⏳"):
+                self.clipboard_clear()
+                self.clipboard_append(val)
+                btn.configure(text="Copied! ✅")
+                win.after(1500, lambda: btn.configure(text=default_txt))
+
+        btn_copy_to.configure(command=lambda: copy_widget_text(entry_to, btn_copy_to, "📋 Copy"))
+        btn_copy_subj.configure(command=lambda: copy_widget_text(entry_subj, btn_copy_subj, "📋 Copy"))
+        btn_copy_body.configure(command=lambda: copy_widget_text(txt_body, btn_copy_body, "📋 Copy Body"))
+
+        # Bottom Bar
+        btn_bar = ctk.CTkFrame(win, fg_color="transparent")
+        btn_bar.pack(fill="x", padx=15, pady=(5, 12))
+
+        def copy_all():
+            s = entry_subj.get().strip()
+            b = txt_body.get("0.0", "end").strip()
+            if b and not b.startswith("⏳"):
+                self.clipboard_clear()
+                self.clipboard_append(f"Subject: {s}\n\n{b}")
+                btn_copy_all.configure(text="All Copied! ✅")
+                win.after(1500, lambda: btn_copy_all.configure(text="📋 Copy Subject + Body"))
+
+        btn_copy_all = ctk.CTkButton(btn_bar, text="📋 Copy Subject + Body", command=copy_all, width=170, fg_color="#005b96", hover_color="#003f66")
+        btn_copy_all.pack(side="left", padx=5)
+
+        def start_generation():
+            entry_subj.delete(0, "end")
+            entry_subj.insert(0, "Generating Subject line...")
+            txt_body.delete("0.0", "end")
+            txt_body.insert("0.0", "⏳ Generating tailored Sourcing RFQ / vendor inquiry using Gemini AI...\nPlease wait a few seconds.")
+            btn_regen.configure(state="disabled")
+
+            def generate_worker():
+                try:
+                    from google.genai import types
+                    from pydantic import BaseModel, Field
+                    from llm_fallback import generate_with_fallback
+
+                    class EmailProposal(BaseModel):
+                        to_email: str = Field(default="", description="Recipient contact email if found in context, otherwise empty string")
+                        subject: str = Field(description="Clean, compelling email subject line without any markdown or quotes")
+                        body: str = Field(description="Full clean email body ready to paste directly into Gmail composer. Do NOT include markdown bold/italics (no asterisks). Use simple bullet points with • if listing technical specifications.")
+
+                    prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing an official B2B Sourcing RFQ / vendor partnership inquiry to an industrial manufacturer / supplier.
+
+Supplier Profile:
+- Company Name: {company_name}
+- Specific Products Manufactured: {specific_products}
+- Product Categories: {product_categories}
+- Materials / Capabilities: {materials}
+- Certifications Held: {certifications}
+- Production Capacity: {production_capacity}
+- Minimum Order Quantity (MOQ): {moq}
+- Export Experience / Markets: {export_markets}
+- OEM / ODM Capability: {oem_odm_service}
+- Factory / Facility Location: {locations}
+- Website: {url}
+- Contact Email: {contact_emails}
+
+Your Company:
+- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management)
+- Authorized Signatory: Fardin Mohammed, Partner
+
+PURPOSE OF THIS EMAIL:
+You represent active international commercial buyer and infrastructure project demands (across GCC/Middle East, Europe, North America) seeking reliable factory suppliers for ongoing export orders. You are reaching out to establish a direct B2B vendor partnership with {company_name}.
+
+CRITICAL INSTRUCTIONS FOR GMAIL-READY PLAIN TEXT:
+1. SUBJECT LINE:
+   - Provide a concise, highly professional B2B inquiry Subject line referencing RFQ / Export Sourcing / Vendor Partnership for {company_name} and their specific products ({specific_products or product_categories}). No quotes or markdown.
+2. RECIPIENT EMAIL:
+   - If an email is listed in Contact Email or context, provide it. Otherwise leave empty string.
+3. EMAIL BODY (STRICT GMAIL PLAIN TEXT FORMAT):
+   - The body MUST be 100% ready to paste directly into the Gmail composer.
+   - ABSOLUTELY NO MARKDOWN FORMATTING:
+     * NEVER use asterisks for bold or italic (NO **word** or *word*).
+     * NEVER use markdown headings (# or ##).
+     * NEVER use markdown horizontal rules (---).
+     * NEVER use markdown links [text](url).
+   - INQUIRY SPECIFICATIONS:
+     * State our overseas client project requirements clearly and ask for:
+       • Product catalog / technical data sheets (TDS)
+       • Export pricing & commercial terms (FOB Indian port / CIF)
+       • Minimum Order Quantities (MOQ) and production lead times
+       • OEM / private-label custom branding options
+       • Compliance test reports & international certifications ({certifications or 'ISO / CE / RoHS / UL'})
+       • Sample dispatch procedure for overseas client inspection
+     * Format these bullet points cleanly with '• '.
+   - HUMAN TONE:
+     * Sound like an authentic, seasoned B2B partner (Fardin Mohammed).
+     * BANNED PHRASES: "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect".
+     * Open directly by introducing SinoMagan Indus Global Trade LLP and highlighting specific interest in {company_name}'s manufacturing capabilities.
+   - COMMERCIAL & LOGISTICS REALISM:
+     * Mention full container load (FCL) export potential, regular monthly off-take for qualified vendors, pre-shipment third-party inspections, and standard international trade terms.
+   - SIGN-OFF:
+     The sign-off MUST strictly be formatted as:
+
+Warm regards,
+
+Fardin Mohammed
+Partner
+SinoMagan Indus Global Trade LLP
+"""
+                    response = generate_with_fallback(
+                        prompt=prompt,
+                        config=types.GenerateContentConfig(
+                            response_mime_type="application/json",
+                            response_schema=EmailProposal,
+                        ),
+                        logger=self.logger
+                    )
+                    to_val, subj_val, body_val = parse_email_response(response.text, default_to=contact_emails)
+
+                    def on_done():
+                        if to_val:
+                            entry_to.delete(0, "end")
+                            entry_to.insert(0, to_val)
+                        entry_subj.delete(0, "end")
+                        entry_subj.insert(0, subj_val)
+                        txt_body.delete("0.0", "end")
+                        txt_body.insert("0.0", body_val)
+                        btn_regen.configure(state="normal")
+                    win.after(0, on_done)
+                except Exception as e:
+                    def on_err():
+                        txt_body.delete("0.0", "end")
+                        txt_body.insert("0.0", f"Error generating inquiry: {e}")
+                        btn_regen.configure(state="normal")
+                    win.after(0, on_err)
+
+            threading.Thread(target=generate_worker, daemon=True).start()
+
+        btn_regen = ctk.CTkButton(btn_bar, text="🔄 Regenerate", command=start_generation, width=120, fg_color="#3a3a3a", hover_color="#2b2b2b")
+        btn_regen.pack(side="left", padx=5)
+
+        btn_close = ctk.CTkButton(btn_bar, text="Close", command=win.destroy, width=90, fg_color="#555555", hover_color="#444444")
+        btn_close.pack(side="right", padx=5)
+
+        start_generation()
+
+    def open_url_proposal_window(self, initial_url="", auto_generate=False, is_supplier=False):
+        win = ctk.CTkToplevel(self)
+        if is_supplier:
+            win.title("Instant Supplier Sourcing Inquiry Generator")
+        else:
+            win.title("Instant B2B Trade Proposal Generator")
         win.geometry("820x760")
         win.attributes("-topmost", True)
         win.focus_set()
@@ -1267,9 +1527,20 @@ SinoMagan Indus Global Trade LLP
         header_frame = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
         header_frame.pack(fill="x", padx=15, pady=(15, 8))
 
+        if is_supplier:
+            lbl_title_text = "🏭 Instant Sourcing RFQ from Supplier Website"
+            lbl_sub_text = "Enter supplier website to scrape manufacturing capabilities and generate an official Sourcing RFQ from SinoMagan Indus Global Trade LLP."
+            btn_gen_text = "⚡ Generate Sourcing RFQ"
+            default_placeholder = "Your generated sourcing inquiry will appear here..."
+        else:
+            lbl_title_text = "🌐 Instant B2B Proposal from Website URL"
+            lbl_sub_text = "Enter any company website to scrape their products and generate a tailored proposal from SinoMagan Indus Global Trade LLP."
+            btn_gen_text = "⚡ Generate Proposal"
+            default_placeholder = "Your generated commercial proposal will appear here..."
+
         lbl_title = ctk.CTkLabel(
             header_frame, 
-            text="🌐 Instant B2B Proposal from Website URL", 
+            text=lbl_title_text, 
             font=("Arial", 16, "bold"),
             text_color="#ffffff"
         )
@@ -1277,7 +1548,7 @@ SinoMagan Indus Global Trade LLP
 
         lbl_sub = ctk.CTkLabel(
             header_frame, 
-            text="Enter any company website to scrape their products and generate a tailored proposal from SinoMagan Indus Global Trade LLP.", 
+            text=lbl_sub_text, 
             font=("Arial", 11),
             text_color="#a0a0a0"
         )
@@ -1299,8 +1570,8 @@ SinoMagan Indus Global Trade LLP
 
         btn_generate = ctk.CTkButton(
             url_frame, 
-            text="⚡ Generate Proposal", 
-            width=160, 
+            text=btn_gen_text, 
+            width=175 if is_supplier else 160, 
             height=36,
             fg_color="#1f7a1f", 
             hover_color="#145214",
@@ -1343,7 +1614,7 @@ SinoMagan Indus Global Trade LLP
         # Body Textbox
         txt_body = ctk.CTkTextbox(win, wrap="word", font=("Arial", 12))
         txt_body.pack(fill="both", expand=True, padx=15, pady=(2, 8))
-        txt_body.insert("0.0", "Your generated commercial proposal will appear here...")
+        txt_body.insert("0.0", default_placeholder)
 
         # Copy handlers
         def copy_widget_text(widget, btn, default_txt):
@@ -1351,7 +1622,7 @@ SinoMagan Indus Global Trade LLP
                 val = widget.get("0.0", "end").strip()
             else:
                 val = widget.get().strip()
-            if val and not val.startswith("⏳") and val != "Your generated commercial proposal will appear here...":
+            if val and not val.startswith("⏳") and val != default_placeholder and val != "Your generated commercial proposal will appear here...":
                 self.clipboard_clear()
                 self.clipboard_append(val)
                 btn.configure(text="Copied! ✅")
@@ -1368,7 +1639,7 @@ SinoMagan Indus Global Trade LLP
         def copy_all():
             s = entry_subj.get().strip()
             b = txt_body.get("0.0", "end").strip()
-            if b and not b.startswith("⏳") and b != "Your generated commercial proposal will appear here...":
+            if b and not b.startswith("⏳") and b != default_placeholder and b != "Your generated commercial proposal will appear here...":
                 self.clipboard_clear()
                 self.clipboard_append(f"Subject: {s}\n\n{b}")
                 btn_copy_all.configure(text="All Copied! ✅")
@@ -1406,7 +1677,8 @@ SinoMagan Indus Global Trade LLP
             entry_subj.delete(0, "end")
             entry_subj.insert(0, "Generating Subject line...")
             txt_body.delete("0.0", "end")
-            txt_body.insert("0.0", f"⏳ Step 1: Scraping website content from {target_url}...\n⏳ Step 2: Analyzing product portfolio with Gemini AI...\n\nPlease wait a moment.")
+            action_step = "manufacturing capabilities" if is_supplier else "product portfolio"
+            txt_body.insert("0.0", f"⏳ Step 1: Scraping website content from {target_url}...\n⏳ Step 2: Analyzing {action_step} with Gemini AI...\n\nPlease wait a moment.")
 
             def worker():
                 try:
@@ -1422,7 +1694,8 @@ SinoMagan Indus Global Trade LLP
                             scraped_email = valid_emails[0]
 
                     def update_status_ai():
-                        lbl_status.configure(text="Status: Website scraped. Generating proposal with Gemini AI...")
+                        target_type = "sourcing inquiry" if is_supplier else "proposal"
+                        lbl_status.configure(text=f"Status: Website scraped. Generating {target_type} with Gemini AI...")
                     win.after(0, update_status_ai)
 
                     from google.genai import types
@@ -1437,9 +1710,62 @@ SinoMagan Indus Global Trade LLP
                     if scraped_text and len(scraped_text.strip()) > 100:
                         content_block = f"Scraped Website Content of the Target Company:\n\"\"\"\n{scraped_text[:25000]}\n\"\"\""
                     else:
-                        content_block = f"Note: Website text was minimal or protected. Tailor proposal to the company domain/URL: {target_url}."
+                        content_block = f"Note: Website text was minimal or protected. Tailor communication to the company domain/URL: {target_url}."
 
-                    prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing a personalized, direct B2B commercial export proposal to a prospective client.
+                    if is_supplier:
+                        prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing an official B2B Sourcing RFQ / vendor partnership inquiry to an industrial manufacturer / supplier.
+
+Target Supplier Website: {target_url}
+Known Scraped Email: {scraped_email}
+
+{content_block}
+
+Your Company:
+- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management)
+- Authorized Signatory: Fardin Mohammed, Partner
+
+PURPOSE OF THIS EMAIL:
+You represent active international commercial buyer and infrastructure project demands (across GCC/Middle East, Europe, North America) seeking reliable factory suppliers for ongoing export orders. You are reaching out to establish a direct B2B vendor partnership based on the products found on their website.
+
+CRITICAL INSTRUCTIONS FOR GMAIL-READY PLAIN TEXT:
+1. SUBJECT LINE:
+   - Provide a concise, highly professional B2B inquiry Subject line referencing RFQ / Export Sourcing / Vendor Partnership tailored to their manufactured products. No quotes or markdown.
+2. RECIPIENT EMAIL:
+   - If a contact email is found in the scraped content or Known Scraped Email, provide it. Otherwise leave empty string.
+3. EMAIL BODY (STRICT GMAIL PLAIN TEXT FORMAT):
+   - The body MUST be 100% ready to paste directly into the Gmail composer.
+   - ABSOLUTELY NO MARKDOWN FORMATTING:
+     * NEVER use asterisks for bold or italic (NO **word** or *word*).
+     * NEVER use markdown headings (# or ##).
+     * NEVER use markdown horizontal rules (---).
+     * NEVER use markdown links [text](url).
+   - INQUIRY SPECIFICATIONS:
+     * Reference specific products, components, or industrial equipment identified from their website.
+     * Inquire regarding:
+       • Product catalog and technical data sheets (TDS)
+       • Export price list (FOB Indian port / CIF)
+       • Minimum Order Quantities (MOQ) and production lead times
+       • OEM / private-label custom branding options
+       • Compliance certifications and quality test reports
+       • Sample dispatch procedure for client inspection
+     * Format these bullet points cleanly with '• '.
+   - HUMAN TONE:
+     * Sound like an authentic, seasoned B2B partner (Fardin Mohammed).
+     * BANNED PHRASES: "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect".
+     * Open directly by introducing SinoMagan Indus Global Trade LLP and highlighting specific interest in their manufacturing capabilities.
+   - COMMERCIAL & LOGISTICS REALISM:
+     * Mention full container load (FCL) export potential, regular monthly off-take, pre-shipment inspections, and standard international trade terms.
+   - SIGN-OFF:
+     The sign-off MUST strictly be formatted as:
+
+Warm regards,
+
+Fardin Mohammed
+Partner
+SinoMagan Indus Global Trade LLP
+"""
+                    else:
+                        prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing a personalized, direct B2B commercial export proposal to a prospective client.
 
 Target Client Website: {target_url}
 Known Scraped Email: {scraped_email}
@@ -1497,13 +1823,14 @@ SinoMagan Indus Global Trade LLP
                         entry_subj.insert(0, subj_val)
                         txt_body.delete("0.0", "end")
                         txt_body.insert("0.0", body_val)
-                        lbl_status.configure(text="Status: Proposal generated successfully! ✅")
+                        status_msg = "Status: Sourcing RFQ generated successfully! ✅" if is_supplier else "Status: Proposal generated successfully! ✅"
+                        lbl_status.configure(text=status_msg)
                         btn_generate.configure(state="normal")
                     win.after(0, on_done)
                 except Exception as e:
                     def on_err():
                         txt_body.delete("0.0", "end")
-                        txt_body.insert("0.0", f"Error generating proposal: {e}")
+                        txt_body.insert("0.0", f"Error generating: {e}")
                         lbl_status.configure(text="Status: Error during generation.")
                         btn_generate.configure(state="normal")
                     win.after(0, on_err)
@@ -1532,22 +1859,23 @@ SinoMagan Indus Global Trade LLP
                 df = pd.read_excel(output_file)
                 tree.delete(*tree.get_children())
                 
-                is_buyers = (output_file == "Buyers_Matrix.xlsx")
+                has_action_col = (output_file in ["Buyers_Matrix.xlsx", "Suppliers_Matrix.xlsx"])
+                action_col_name = "Inquiry" if output_file == "Suppliers_Matrix.xlsx" else "Proposal"
                 cols = list(df.columns)
-                if is_buyers:
-                    cols = ["Proposal"] + cols
+                if has_action_col:
+                    cols = [action_col_name] + cols
                     
                 tree["columns"] = cols
                 for col in cols:
                     tree.heading(col, text=col)
-                    if col == "Proposal":
+                    if col in ["Proposal", "Inquiry"]:
                         tree.column(col, width=120, minwidth=100, anchor="center")
                     else:
                         tree.column(col, width=150, minwidth=100)
                         
                 for _, row in df.iterrows():
                     values = list(row)
-                    if is_buyers:
+                    if has_action_col:
                         values = ["📝 Create"] + values
                     tree.insert("", "end", values=values)
                     
