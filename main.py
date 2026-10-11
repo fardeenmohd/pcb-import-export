@@ -124,11 +124,28 @@ class App(ctk.CTk):
         self.btn_spec_gen = ctk.CTkButton(self.spec_frame, text="Generate Query", width=120, command=self.generate_from_spec)
         self.btn_spec_gen.pack(side="left", padx=10, pady=5)
         
-        lbl = ctk.CTkLabel(self.tab_discovery, text="Discovered URLs will appear below. Copy them into the respective Scraper tab.", text_color="gray")
+        lbl = ctk.CTkLabel(self.tab_discovery, text="Compare raw search engine results with AI-vetted high-quality URLs side-by-side:", text_color="gray")
         lbl.grid(row=2, column=0, padx=10, sticky="w")
         
-        self.discovery_textbox = ctk.CTkTextbox(self.tab_discovery, wrap="none")
-        self.discovery_textbox.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
+        results_container = ctk.CTkFrame(self.tab_discovery, fg_color="transparent")
+        results_container.grid(row=3, column=0, padx=10, pady=(0, 10), sticky="nsew")
+        results_container.grid_columnconfigure(0, weight=1)
+        results_container.grid_columnconfigure(1, weight=1)
+        results_container.grid_rowconfigure(1, weight=1)
+        
+        # Left column: Raw Search Results
+        self.lbl_raw_urls = ctk.CTkLabel(results_container, text="🌐 Raw Search Results (DuckDuckGo):", font=("Arial", 12, "bold"))
+        self.lbl_raw_urls.grid(row=0, column=0, padx=(0, 5), pady=(0, 5), sticky="w")
+        
+        self.raw_urls_textbox = ctk.CTkTextbox(results_container, wrap="none")
+        self.raw_urls_textbox.grid(row=1, column=0, padx=(0, 5), pady=0, sticky="nsew")
+        
+        # Right column: High-Quality Filtered URLs
+        self.lbl_hq_urls = ctk.CTkLabel(results_container, text="⭐ High-Quality URLs (AI Filtered):", font=("Arial", 12, "bold"))
+        self.lbl_hq_urls.grid(row=0, column=1, padx=(5, 0), pady=(0, 5), sticky="w")
+        
+        self.discovery_textbox = ctk.CTkTextbox(results_container, wrap="none")
+        self.discovery_textbox.grid(row=1, column=1, padx=(5, 0), pady=0, sticky="nsew")
 
     def on_strategy_change(self, choice):
         if choice == "Suppliers":
@@ -283,7 +300,10 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         
         self.btn_search.configure(state="disabled")
         self.lbl_disc_status.configure(text="Status: Searching...")
+        self.raw_urls_textbox.delete("0.0", "end")
         self.discovery_textbox.delete("0.0", "end")
+        self.lbl_raw_urls.configure(text="🌐 Raw Search Results (DuckDuckGo):")
+        self.lbl_hq_urls.configure(text="⭐ High-Quality URLs (AI Filtered):")
         
         threading.Thread(target=self.discover_urls_thread, args=(query, max_results, region_code), daemon=True).start()
 
@@ -294,9 +314,12 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
                 results = list(ddgs.text(query, region=region_code, max_results=max_results))
             
             if not results:
-                self.ui_queue.put((self.on_discovery_complete, ([], None)))
+                self.ui_queue.put((self.on_discovery_complete, ([], [], None)))
                 return
                 
+            raw_urls = [r.get('href') for r in results if r.get('href')]
+            self.ui_queue.put((self.update_raw_discovery_results, (raw_urls,)))
+            
             self.logger.info("Sending results to Gemini for smart filtering...")
             self.ui_queue.put((self.update_discovery_status, ("Status: AI Filtering...",)))
             
@@ -338,22 +361,36 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
             urls = filtered_data.urls
             
             self.logger.info(f"AI filtered {len(results)} raw results down to {len(urls)} high-quality URLs.")
-            self.ui_queue.put((self.on_discovery_complete, (urls, None)))
+            self.ui_queue.put((self.on_discovery_complete, (raw_urls, urls, None)))
         except Exception as e:
             self.logger.error(f"Search/Filter failed: {e}")
-            self.ui_queue.put((self.on_discovery_complete, ([], str(e))))
+            self.ui_queue.put((self.on_discovery_complete, ([], [], str(e))))
             
+    def update_raw_discovery_results(self, raw_urls):
+        self.raw_urls_textbox.delete("0.0", "end")
+        if raw_urls:
+            self.raw_urls_textbox.insert("end", "\n".join(raw_urls) + "\n")
+        self.lbl_raw_urls.configure(text=f"🌐 Raw Search Results ({len(raw_urls)} Found):")
+
     def update_discovery_status(self, text):
         self.lbl_disc_status.configure(text=text)
 
-    def on_discovery_complete(self, urls, error):
+    def on_discovery_complete(self, raw_urls, urls, error):
         self.btn_search.configure(state="normal")
         if error:
             self.lbl_disc_status.configure(text="Status: Error")
-            self.discovery_textbox.insert("end", f"Error: {error}")
+            self.discovery_textbox.insert("end", f"Error: {error}\n")
         else:
-            self.lbl_disc_status.configure(text=f"Status: Found {len(urls)} URLs")
-            self.discovery_textbox.insert("end", "\n".join(urls) + "\n")
+            self.lbl_disc_status.configure(text=f"Status: Found {len(urls)} High-Quality ({len(raw_urls)} Raw)")
+            self.raw_urls_textbox.delete("0.0", "end")
+            if raw_urls:
+                self.raw_urls_textbox.insert("end", "\n".join(raw_urls) + "\n")
+            self.lbl_raw_urls.configure(text=f"🌐 Raw Search Results ({len(raw_urls)}):")
+            
+            self.discovery_textbox.delete("0.0", "end")
+            if urls:
+                self.discovery_textbox.insert("end", "\n".join(urls) + "\n")
+            self.lbl_hq_urls.configure(text=f"⭐ High-Quality URLs ({len(urls)}):")
 
     def setup_suppliers_tab(self):
         self.tab_suppliers.grid_columnconfigure(0, weight=1)
