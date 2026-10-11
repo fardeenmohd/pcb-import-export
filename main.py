@@ -582,6 +582,49 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
             proposal_cmd=self.open_proposal_window
         )
 
+def sanitize_email_body(text: str) -> str:
+    import re
+    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
+    text = re.sub(r'\*(.*?)\*', r'\1', text)
+    text = re.sub(r'__(.*?)__', r'\1', text)
+    text = re.sub(r'_(.*?)_', r'\1', text)
+    text = re.sub(r'^\s*#{1,6}\s*', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^\s*[-*_]{3,}\s*$', '', text, flags=re.MULTILINE)
+    text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'\1 (\2)', text)
+    text = re.sub(r'^\s*[\*\-]\s+', '• ', text, flags=re.MULTILINE)
+    return text.strip()
+
+def parse_email_response(raw_text: str, default_to: str = ""):
+    import json
+    import re
+    try:
+        clean_json = raw_text.strip()
+        if clean_json.startswith("```"):
+            clean_json = re.sub(r'^```(?:json)?\s*', '', clean_json)
+            clean_json = re.sub(r'\s*```$', '', clean_json)
+        data = json.loads(clean_json)
+        to_val = data.get("to_email", "") or default_to
+        subj_val = data.get("subject", "").strip()
+        body_val = data.get("body", "").strip()
+        return to_val, subj_val, sanitize_email_body(body_val)
+    except Exception:
+        to_val = default_to
+        subj_val = ""
+        body_val = raw_text
+        
+        match_subj = re.search(r'^(?:Subject|Re):\s*(.+)$', raw_text, flags=re.MULTILINE | re.IGNORECASE)
+        if match_subj:
+            subj_val = match_subj.group(1).strip()
+            body_val = re.sub(r'^(?:Subject|Re):\s*.+$\n?', '', body_val, flags=re.MULTILINE | re.IGNORECASE).strip()
+            
+        match_to = re.search(r'^(?:To):\s*(.+)$', body_val, flags=re.MULTILINE | re.IGNORECASE)
+        if match_to:
+            if not to_val:
+                to_val = match_to.group(1).strip()
+            body_val = re.sub(r'^(?:To):\s*.+$\n?', '', body_val, flags=re.MULTILINE | re.IGNORECASE).strip()
+            
+        return to_val, subj_val, sanitize_email_body(body_val)
+
     def open_proposal_window(self):
         selected_items = self.buy_tree.selection()
         if not selected_items:
@@ -599,15 +642,16 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         industry = str(data.get("industry", "")).strip()
         locations = str(data.get("locations", "")).strip()
         url = str(data.get("url", "")).strip()
+        contact_emails = str(data.get("contact_emails", "")).strip()
 
         win = ctk.CTkToplevel(self)
         win.title(f"Trade Proposal - {company_name}")
-        win.geometry("760x640")
+        win.geometry("820x720")
         win.attributes("-topmost", True)
         win.focus_set()
 
         header_frame = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
-        header_frame.pack(fill="x", padx=15, pady=(15, 5))
+        header_frame.pack(fill="x", padx=15, pady=(15, 8))
 
         lbl_title = ctk.CTkLabel(
             header_frame, 
@@ -625,29 +669,92 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         )
         lbl_sub.pack(anchor="w", padx=15, pady=(0, 10))
 
-        txt_proposal = ctk.CTkTextbox(win, wrap="word", font=("Arial", 12))
-        txt_proposal.pack(fill="both", expand=True, padx=15, pady=10)
+        # To Row
+        to_frame = ctk.CTkFrame(win, fg_color="transparent")
+        to_frame.pack(fill="x", padx=15, pady=(4, 3))
+        lbl_to = ctk.CTkLabel(to_frame, text="To:", width=65, anchor="w", font=("Arial", 12, "bold"))
+        lbl_to.pack(side="left")
+        entry_to = ctk.CTkEntry(to_frame, font=("Arial", 12), height=32)
+        entry_to.pack(side="left", fill="x", expand=True, padx=(0, 8))
+        if contact_emails:
+            entry_to.insert(0, contact_emails)
+        btn_copy_to = ctk.CTkButton(to_frame, text="📋 Copy", width=75, height=32)
+        btn_copy_to.pack(side="right")
 
+        # Subject Row
+        subj_frame = ctk.CTkFrame(win, fg_color="transparent")
+        subj_frame.pack(fill="x", padx=15, pady=(3, 5))
+        lbl_subj = ctk.CTkLabel(subj_frame, text="Subject:", width=65, anchor="w", font=("Arial", 12, "bold"))
+        lbl_subj.pack(side="left")
+        entry_subj = ctk.CTkEntry(subj_frame, font=("Arial", 12), height=32)
+        entry_subj.pack(side="left", fill="x", expand=True, padx=(0, 8))
+        entry_subj.insert(0, "Generating Subject line...")
+        btn_copy_subj = ctk.CTkButton(subj_frame, text="📋 Copy", width=75, height=32)
+        btn_copy_subj.pack(side="right")
+
+        # Body Header Row
+        body_hdr = ctk.CTkFrame(win, fg_color="transparent")
+        body_hdr.pack(fill="x", padx=15, pady=(4, 2))
+        lbl_body = ctk.CTkLabel(body_hdr, text="Email Body (Gmail Ready):", font=("Arial", 12, "bold"))
+        lbl_body.pack(side="left")
+        btn_copy_body = ctk.CTkButton(body_hdr, text="📋 Copy Body", width=105, height=28, fg_color="#1f7a1f", hover_color="#145214")
+        btn_copy_body.pack(side="right")
+
+        # Body Textbox
+        txt_body = ctk.CTkTextbox(win, wrap="word", font=("Arial", 12))
+        txt_body.pack(fill="both", expand=True, padx=15, pady=(2, 8))
+        txt_body.insert("0.0", "⏳ Generating personalized commercial proposal using Gemini AI...\nPlease wait a few seconds.")
+
+        # Copy handlers
+        def copy_widget_text(widget, btn, default_txt):
+            if isinstance(widget, ctk.CTkTextbox):
+                val = widget.get("0.0", "end").strip()
+            else:
+                val = widget.get().strip()
+            if val and not val.startswith("⏳"):
+                self.clipboard_clear()
+                self.clipboard_append(val)
+                btn.configure(text="Copied! ✅")
+                win.after(1500, lambda: btn.configure(text=default_txt))
+
+        btn_copy_to.configure(command=lambda: copy_widget_text(entry_to, btn_copy_to, "📋 Copy"))
+        btn_copy_subj.configure(command=lambda: copy_widget_text(entry_subj, btn_copy_subj, "📋 Copy"))
+        btn_copy_body.configure(command=lambda: copy_widget_text(txt_body, btn_copy_body, "📋 Copy Body"))
+
+        # Bottom Bar
         btn_bar = ctk.CTkFrame(win, fg_color="transparent")
-        btn_bar.pack(fill="x", padx=15, pady=(5, 15))
+        btn_bar.pack(fill="x", padx=15, pady=(5, 12))
 
-        def copy_proposal():
-            self.clipboard_clear()
-            self.clipboard_append(txt_proposal.get("0.0", "end").strip())
-            btn_copy.configure(text="Copied! ✅")
-            win.after(2000, lambda: btn_copy.configure(text="📋 Copy Proposal"))
+        def copy_all():
+            s = entry_subj.get().strip()
+            b = txt_body.get("0.0", "end").strip()
+            if b and not b.startswith("⏳"):
+                self.clipboard_clear()
+                self.clipboard_append(f"Subject: {s}\n\n{b}")
+                btn_copy_all.configure(text="All Copied! ✅")
+                win.after(1500, lambda: btn_copy_all.configure(text="📋 Copy Subject + Body"))
 
-        btn_copy = ctk.CTkButton(btn_bar, text="📋 Copy Proposal", command=copy_proposal, width=140, fg_color="#1f7a1f", hover_color="#145214")
-        btn_copy.pack(side="left", padx=5)
+        btn_copy_all = ctk.CTkButton(btn_bar, text="📋 Copy Subject + Body", command=copy_all, width=170, fg_color="#005b96", hover_color="#003f66")
+        btn_copy_all.pack(side="left", padx=5)
 
         def start_generation():
-            txt_proposal.delete("0.0", "end")
-            txt_proposal.insert("0.0", "⏳ Generating personalized commercial proposal using Gemini AI...\nPlease wait a few seconds.")
+            entry_subj.delete(0, "end")
+            entry_subj.insert(0, "Generating Subject line...")
+            txt_body.delete("0.0", "end")
+            txt_body.insert("0.0", "⏳ Generating personalized commercial proposal using Gemini AI...\nPlease wait a few seconds.")
             btn_regen.configure(state="disabled")
 
             def generate_worker():
                 try:
+                    from google.genai import types
+                    from pydantic import BaseModel, Field
                     from llm_fallback import generate_with_fallback
+
+                    class EmailProposal(BaseModel):
+                        to_email: str = Field(default="", description="Recipient contact email if found in context, otherwise empty string")
+                        subject: str = Field(description="Clean, compelling email subject line without any markdown or quotes")
+                        body: str = Field(description="Full clean email body ready to paste directly into Gmail composer. Do NOT include markdown bold/italics (no asterisks). Use simple bullet points with • if listing technical specifications.")
+
                     prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing a personalized, direct B2B commercial export proposal to a prospective client.
 
 Target Client Details:
@@ -656,23 +763,34 @@ Target Client Details:
 - Products Demanded / Target Products: {target_products}
 - Client Location: {locations}
 - Client Website: {url}
+- Known Contact Emails: {contact_emails}
 
 Your Company:
 - SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management)
 - Authorized Signatory: Fardin Mohammed, Partner
 
-CRITICAL INSTRUCTIONS FOR HUMANIZED WRITING STYLE:
-1. SOUND LIKE A REAL HUMAN EXECUTIVE:
-   - Write in a natural, confident, one-to-one professional voice.
-   - STRICTLY AVOID robotic AI clichés: DO NOT say "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect", or generic marketing fluff.
-   - Start immediately with a sharp, relevant Subject line (e.g. Subject: Supply Partnership: [Product] for {company_name}) followed by a direct, respectful opening addressing {company_name}.
-2. PRESERVE MAXIMUM TECHNICAL & COMMERCIAL SPECIFICITY:
-   - Specifically name and discuss their product demand: {target_products}.
-   - Address engineering and manufacturing realities: production tolerances, raw materials, certifications (ISO 9001, CE, RoHS, UL), quality control (factory audits, pre-shipment inspections).
-   - Address commercial trade logistics: full container load (FCL 20ft/40ft) or consolidated LCL shipments, Incoterms (FOB, CIF, CFR), sample evaluation before full production, and flexible payment terms.
-3. CONVERSATIONAL & LOW-PRESSURE CALL TO ACTION:
-   - Invite them to share an active BOM (Bill of Materials) or technical drawing/spec sheet for an initial cost and lead-time benchmark comparison.
-4. SIGN-OFF MUST STRICTLY BE FORMATTED AS:
+CRITICAL INSTRUCTIONS FOR GMAIL-READY PLAIN TEXT:
+1. SUBJECT LINE:
+   - Provide a concise, highly relevant email Subject line tailored to {company_name} and {target_products}. No quotes or markdown.
+2. RECIPIENT EMAIL:
+   - If an email is listed in Known Contact Emails or context, provide it. Otherwise leave empty string.
+3. EMAIL BODY (STRICT GMAIL PLAIN TEXT FORMAT):
+   - The body MUST be 100% ready to paste directly into the Gmail composer.
+   - ABSOLUTELY NO MARKDOWN FORMATTING:
+     * NEVER use asterisks for bold or italic (NO **word** or *word*).
+     * NEVER use markdown headings (# or ##).
+     * NEVER use markdown horizontal rules (---).
+     * NEVER use markdown links [text](url).
+   - TECHNICAL SPECIFICATIONS:
+     * When listing technical parameters, components, certifications, or tolerances, format them using clean bullet points starting with '• ' (e.g. '• Technical Standard: ISO 9001, CE, RoHS', '• Production Tolerances: Precision Grade').
+   - HUMAN TONE:
+     * Sound like a real senior partner (Fardin Mohammed).
+     * BANNED PHRASES: "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect".
+     * Open directly by addressing {company_name} and their specific product/component demands.
+   - COMMERCIAL & LOGISTICS REALISM:
+     * Mention direct factory sourcing, container logistics (20ft/40ft FCL & LCL), Incoterms (FOB, CIF, CFR), sample dispatch for testing, and pre-shipment quality inspection.
+   - SIGN-OFF:
+     The sign-off MUST strictly be formatted as:
 
 Warm regards,
 
@@ -680,17 +798,30 @@ Fardin Mohammed
 Partner
 SinoMagan Indus Global Trade LLP
 """
-                    response = generate_with_fallback(prompt, logger=self.logger)
-                    proposal_text = response.text.strip()
+                    response = generate_with_fallback(
+                        prompt=prompt,
+                        config=types.GenerateContentConfig(
+                            response_mime_type="application/json",
+                            response_schema=EmailProposal,
+                        ),
+                        logger=self.logger
+                    )
+                    to_val, subj_val, body_val = parse_email_response(response.text, default_to=contact_emails)
+
                     def on_done():
-                        txt_proposal.delete("0.0", "end")
-                        txt_proposal.insert("0.0", proposal_text)
+                        if to_val:
+                            entry_to.delete(0, "end")
+                            entry_to.insert(0, to_val)
+                        entry_subj.delete(0, "end")
+                        entry_subj.insert(0, subj_val)
+                        txt_body.delete("0.0", "end")
+                        txt_body.insert("0.0", body_val)
                         btn_regen.configure(state="normal")
                     win.after(0, on_done)
                 except Exception as e:
                     def on_err():
-                        txt_proposal.delete("0.0", "end")
-                        txt_proposal.insert("0.0", f"Error generating proposal: {e}")
+                        txt_body.delete("0.0", "end")
+                        txt_body.insert("0.0", f"Error generating proposal: {e}")
                         btn_regen.configure(state="normal")
                     win.after(0, on_err)
 
@@ -707,13 +838,13 @@ SinoMagan Indus Global Trade LLP
     def open_url_proposal_window(self, initial_url=""):
         win = ctk.CTkToplevel(self)
         win.title("Instant B2B Trade Proposal Generator")
-        win.geometry("820x690")
+        win.geometry("820x760")
         win.attributes("-topmost", True)
         win.focus_set()
 
         # Top Header Banner
         header_frame = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
-        header_frame.pack(fill="x", padx=15, pady=(15, 10))
+        header_frame.pack(fill="x", padx=15, pady=(15, 8))
 
         lbl_title = ctk.CTkLabel(
             header_frame, 
@@ -733,15 +864,15 @@ SinoMagan Indus Global Trade LLP
 
         # URL Input Bar
         url_frame = ctk.CTkFrame(win, fg_color="transparent")
-        url_frame.pack(fill="x", padx=15, pady=(0, 5))
+        url_frame.pack(fill="x", padx=15, pady=(0, 3))
 
         url_entry = ctk.CTkEntry(
             url_frame, 
             placeholder_text="Enter website URL (e.g. https://www.example.com)...", 
             font=("Arial", 12),
-            height=38
+            height=36
         )
-        url_entry.pack(side="left", fill="x", expand=True, padx=(0, 10))
+        url_entry.pack(side="left", fill="x", expand=True, padx=(0, 8))
         if initial_url:
             url_entry.insert(0, initial_url)
 
@@ -749,7 +880,7 @@ SinoMagan Indus Global Trade LLP
             url_frame, 
             text="⚡ Generate Proposal", 
             width=160, 
-            height=38,
+            height=36,
             fg_color="#1f7a1f", 
             hover_color="#145214",
             font=("Arial", 12, "bold")
@@ -758,37 +889,84 @@ SinoMagan Indus Global Trade LLP
 
         # Status Label
         lbl_status = ctk.CTkLabel(win, text="Status: Ready. Paste a URL and click Generate.", text_color="#a0a0a0", font=("Arial", 11))
-        lbl_status.pack(anchor="w", padx=18, pady=(0, 5))
+        lbl_status.pack(anchor="w", padx=18, pady=(0, 4))
 
-        # Proposal Textbox (Directly under the URL field)
-        txt_proposal = ctk.CTkTextbox(win, wrap="word", font=("Arial", 12))
-        txt_proposal.pack(fill="both", expand=True, padx=15, pady=5)
-        txt_proposal.insert("0.0", "Your generated commercial proposal will appear here...")
+        # To Row
+        to_frame = ctk.CTkFrame(win, fg_color="transparent")
+        to_frame.pack(fill="x", padx=15, pady=(3, 3))
+        lbl_to = ctk.CTkLabel(to_frame, text="To:", width=65, anchor="w", font=("Arial", 12, "bold"))
+        lbl_to.pack(side="left")
+        entry_to = ctk.CTkEntry(to_frame, font=("Arial", 12), height=32)
+        entry_to.pack(side="left", fill="x", expand=True, padx=(0, 8))
+        btn_copy_to = ctk.CTkButton(to_frame, text="📋 Copy", width=75, height=32)
+        btn_copy_to.pack(side="right")
+
+        # Subject Row
+        subj_frame = ctk.CTkFrame(win, fg_color="transparent")
+        subj_frame.pack(fill="x", padx=15, pady=(3, 5))
+        lbl_subj = ctk.CTkLabel(subj_frame, text="Subject:", width=65, anchor="w", font=("Arial", 12, "bold"))
+        lbl_subj.pack(side="left")
+        entry_subj = ctk.CTkEntry(subj_frame, font=("Arial", 12), height=32)
+        entry_subj.pack(side="left", fill="x", expand=True, padx=(0, 8))
+        btn_copy_subj = ctk.CTkButton(subj_frame, text="📋 Copy", width=75, height=32)
+        btn_copy_subj.pack(side="right")
+
+        # Body Header Row
+        body_hdr = ctk.CTkFrame(win, fg_color="transparent")
+        body_hdr.pack(fill="x", padx=15, pady=(4, 2))
+        lbl_body = ctk.CTkLabel(body_hdr, text="Email Body (Gmail Ready):", font=("Arial", 12, "bold"))
+        lbl_body.pack(side="left")
+        btn_copy_body = ctk.CTkButton(body_hdr, text="📋 Copy Body", width=105, height=28, fg_color="#1f7a1f", hover_color="#145214")
+        btn_copy_body.pack(side="right")
+
+        # Body Textbox
+        txt_body = ctk.CTkTextbox(win, wrap="word", font=("Arial", 12))
+        txt_body.pack(fill="both", expand=True, padx=15, pady=(2, 8))
+        txt_body.insert("0.0", "Your generated commercial proposal will appear here...")
+
+        # Copy handlers
+        def copy_widget_text(widget, btn, default_txt):
+            if isinstance(widget, ctk.CTkTextbox):
+                val = widget.get("0.0", "end").strip()
+            else:
+                val = widget.get().strip()
+            if val and not val.startswith("⏳") and val != "Your generated commercial proposal will appear here...":
+                self.clipboard_clear()
+                self.clipboard_append(val)
+                btn.configure(text="Copied! ✅")
+                win.after(1500, lambda: btn.configure(text=default_txt))
+
+        btn_copy_to.configure(command=lambda: copy_widget_text(entry_to, btn_copy_to, "📋 Copy"))
+        btn_copy_subj.configure(command=lambda: copy_widget_text(entry_subj, btn_copy_subj, "📋 Copy"))
+        btn_copy_body.configure(command=lambda: copy_widget_text(txt_body, btn_copy_body, "📋 Copy Body"))
 
         # Bottom Action Bar
         btn_bar = ctk.CTkFrame(win, fg_color="transparent")
-        btn_bar.pack(fill="x", padx=15, pady=(10, 15))
+        btn_bar.pack(fill="x", padx=15, pady=(5, 12))
 
-        def copy_proposal():
-            text = txt_proposal.get("0.0", "end").strip()
-            if text and text != "Your generated commercial proposal will appear here...":
+        def copy_all():
+            s = entry_subj.get().strip()
+            b = txt_body.get("0.0", "end").strip()
+            if b and not b.startswith("⏳") and b != "Your generated commercial proposal will appear here...":
                 self.clipboard_clear()
-                self.clipboard_append(text)
-                btn_copy.configure(text="Copied! ✅")
-                win.after(2000, lambda: btn_copy.configure(text="📋 Copy Proposal"))
+                self.clipboard_append(f"Subject: {s}\n\n{b}")
+                btn_copy_all.configure(text="All Copied! ✅")
+                win.after(1500, lambda: btn_copy_all.configure(text="📋 Copy Subject + Body"))
 
-        btn_copy = ctk.CTkButton(btn_bar, text="📋 Copy Proposal", command=copy_proposal, width=140, fg_color="#1f7a1f", hover_color="#145214")
-        btn_copy.pack(side="left", padx=5)
+        btn_copy_all = ctk.CTkButton(btn_bar, text="📋 Copy Subject + Body", command=copy_all, width=170, fg_color="#005b96", hover_color="#003f66")
+        btn_copy_all.pack(side="left", padx=5)
 
         def clear_fields():
             url_entry.delete(0, "end")
-            txt_proposal.delete("0.0", "end")
+            entry_to.delete(0, "end")
+            entry_subj.delete(0, "end")
+            txt_body.delete("0.0", "end")
             lbl_status.configure(text="Status: Ready.")
 
-        btn_clear = ctk.CTkButton(btn_bar, text="Clear", command=clear_fields, width=90, fg_color="#3a3a3a", hover_color="#2b2b2b")
+        btn_clear = ctk.CTkButton(btn_bar, text="Clear", command=clear_fields, width=80, fg_color="#3a3a3a", hover_color="#2b2b2b")
         btn_clear.pack(side="left", padx=5)
 
-        btn_close = ctk.CTkButton(btn_bar, text="Close", command=win.destroy, width=90, fg_color="#555555", hover_color="#444444")
+        btn_close = ctk.CTkButton(btn_bar, text="Close", command=win.destroy, width=80, fg_color="#555555", hover_color="#444444")
         btn_close.pack(side="right", padx=5)
 
         def start_url_generation():
@@ -804,20 +982,37 @@ SinoMagan Indus Global Trade LLP
 
             btn_generate.configure(state="disabled")
             lbl_status.configure(text=f"Status: Scraping {target_url}...")
-            txt_proposal.delete("0.0", "end")
-            txt_proposal.insert("0.0", f"⏳ Step 1: Scraping website content from {target_url}...\n⏳ Step 2: Analyzing product portfolio with Gemini AI...\n\nPlease wait a moment.")
+            entry_subj.delete(0, "end")
+            entry_subj.insert(0, "Generating Subject line...")
+            txt_body.delete("0.0", "end")
+            txt_body.insert("0.0", f"⏳ Step 1: Scraping website content from {target_url}...\n⏳ Step 2: Analyzing product portfolio with Gemini AI...\n\nPlease wait a moment.")
 
             def worker():
                 try:
+                    import re
                     from scraper import scrape_url
                     scraped_text = scrape_url(target_url, self.logger)
                     
+                    scraped_email = ""
+                    if scraped_text:
+                        found_emails = re.findall(r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', scraped_text)
+                        valid_emails = [e for e in found_emails if not any(e.lower().endswith(ext) for ext in ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.css', '.js'])]
+                        if valid_emails:
+                            scraped_email = valid_emails[0]
+
                     def update_status_ai():
                         lbl_status.configure(text="Status: Website scraped. Generating proposal with Gemini AI...")
                     win.after(0, update_status_ai)
 
+                    from google.genai import types
+                    from pydantic import BaseModel, Field
                     from llm_fallback import generate_with_fallback
-                    
+
+                    class EmailProposal(BaseModel):
+                        to_email: str = Field(default="", description="Recipient contact email if found in context, otherwise empty string")
+                        subject: str = Field(description="Clean, compelling email subject line without any markdown or quotes")
+                        body: str = Field(description="Full clean email body ready to paste directly into Gmail composer. Do NOT include markdown bold/italics (no asterisks). Use simple bullet points with • if listing technical specifications.")
+
                     if scraped_text and len(scraped_text.strip()) > 100:
                         content_block = f"Scraped Website Content of the Target Company:\n\"\"\"\n{scraped_text[:25000]}\n\"\"\""
                     else:
@@ -826,6 +1021,7 @@ SinoMagan Indus Global Trade LLP
                     prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing a personalized, direct B2B commercial export proposal to a prospective client.
 
 Target Client Website: {target_url}
+Known Scraped Email: {scraped_email}
 
 {content_block}
 
@@ -833,18 +1029,28 @@ Your Company:
 - SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management)
 - Authorized Signatory: Fardin Mohammed, Partner
 
-CRITICAL INSTRUCTIONS FOR HUMANIZED WRITING STYLE:
-1. SOUND LIKE A REAL HUMAN EXECUTIVE:
-   - Write in a natural, confident, one-to-one professional voice.
-   - STRICTLY AVOID robotic AI clichés: DO NOT say "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect", or generic marketing fluff.
-   - Start with a sharp, relevant email Subject line and a direct, respectful opening that demonstrates genuine familiarity with their specific products, equipment, or components from their website.
-2. PRESERVE MAXIMUM TECHNICAL & COMMERCIAL SPECIFICITY:
-   - Specifically identify and reference the products, components, or assemblies they produce, distribute, or service based on the scraped content.
-   - Offer exact matching manufacturing capabilities, raw materials, engineering tolerances, and compliance standards (ISO 9001, CE, RoHS, UL).
-   - Address real commercial trade realities: factory auditing, pre-dispatch quality checks, container logistics (20ft/40ft FCL or LCL freight), Incoterms (FOB, CIF, CFR), and sample dispatch for validation.
-3. CONVERSATIONAL & LOW-PRESSURE CALL TO ACTION:
-   - Invite them to share their current specs, target pricing, or upcoming RFQ for a direct benchmark comparison.
-4. SIGN-OFF MUST STRICTLY BE FORMATTED AS:
+CRITICAL INSTRUCTIONS FOR GMAIL-READY PLAIN TEXT:
+1. SUBJECT LINE:
+   - Provide a concise, highly relevant email Subject line tailored to their products or industry. No quotes or markdown.
+2. RECIPIENT EMAIL:
+   - If a contact email is found in the scraped content or Known Scraped Email, provide it. Otherwise leave empty string.
+3. EMAIL BODY (STRICT GMAIL PLAIN TEXT FORMAT):
+   - The body MUST be 100% ready to paste directly into the Gmail composer.
+   - ABSOLUTELY NO MARKDOWN FORMATTING:
+     * NEVER use asterisks for bold or italic (NO **word** or *word*).
+     * NEVER use markdown headings (# or ##).
+     * NEVER use markdown horizontal rules (---).
+     * NEVER use markdown links [text](url).
+   - TECHNICAL SPECIFICATIONS:
+     * When listing technical parameters, components, certifications, or tolerances, format them using clean bullet points starting with '• ' (e.g. '• Technical Standard: ISO 9001, CE, RoHS', '• Production Tolerances: Precision Grade').
+   - HUMAN TONE:
+     * Sound like a real senior partner (Fardin Mohammed).
+     * BANNED PHRASES: "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect".
+     * Open directly by demonstrating genuine familiarity with their products, equipment, or components from their website.
+   - COMMERCIAL & LOGISTICS REALISM:
+     * Mention direct factory sourcing, container logistics (20ft/40ft FCL & LCL), Incoterms (FOB, CIF, CFR), sample dispatch for testing, and pre-shipment quality inspection.
+   - SIGN-OFF:
+     The sign-off MUST strictly be formatted as:
 
 Warm regards,
 
@@ -852,19 +1058,31 @@ Fardin Mohammed
 Partner
 SinoMagan Indus Global Trade LLP
 """
-                    response = generate_with_fallback(prompt, logger=self.logger)
-                    proposal_text = response.text.strip()
+                    response = generate_with_fallback(
+                        prompt=prompt,
+                        config=types.GenerateContentConfig(
+                            response_mime_type="application/json",
+                            response_schema=EmailProposal,
+                        ),
+                        logger=self.logger
+                    )
+                    to_val, subj_val, body_val = parse_email_response(response.text, default_to=scraped_email)
 
                     def on_done():
-                        txt_proposal.delete("0.0", "end")
-                        txt_proposal.insert("0.0", proposal_text)
+                        entry_to.delete(0, "end")
+                        if to_val:
+                            entry_to.insert(0, to_val)
+                        entry_subj.delete(0, "end")
+                        entry_subj.insert(0, subj_val)
+                        txt_body.delete("0.0", "end")
+                        txt_body.insert("0.0", body_val)
                         lbl_status.configure(text="Status: Proposal generated successfully! ✅")
                         btn_generate.configure(state="normal")
                     win.after(0, on_done)
                 except Exception as e:
                     def on_err():
-                        txt_proposal.delete("0.0", "end")
-                        txt_proposal.insert("0.0", f"Error generating proposal: {e}")
+                        txt_body.delete("0.0", "end")
+                        txt_body.insert("0.0", f"Error generating proposal: {e}")
                         lbl_status.configure(text="Status: Error during generation.")
                         btn_generate.configure(state="normal")
                     win.after(0, on_err)
