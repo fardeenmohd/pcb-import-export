@@ -134,7 +134,8 @@ class App(ctk.CTk):
         self.region_dropdown = ctk.CTkOptionMenu(
             control_frame, 
             values=['Worldwide (wt-wt)', 'Australia (au-en)', 'Poland (pl-pl)', 'Netherlands (nl-nl)', 'Malaysia (my-en)', 'USA (us-en)', 'Canada (ca-en)', 'Germany (de-de)', 'France (fr-fr)', 'United Kingdom (uk-en)', 'UAE (ae-en)', 'Saudi Arabia (sa-ar)', 'Qatar (qa-en)', 'Kuwait (kw-en)', 'Oman (om-en)', 'Bahrain (bh-en)', 'Singapore (sg-en)', 'Vietnam (vn-en)', 'Indonesia (id-en)', 'Philippines (ph-en)', 'Thailand (th-en)', 'South Korea (kr-kr)', 'China (cn-zh)', 'India (in-en)', 'South Africa (za-en)', 'Romania (ro-ro)', 'Finland (fi-fi)', 'Albania (al-al)', 'Moldova (md-ro)'],
-            variable=self.region_var, width=120
+            variable=self.region_var, width=120,
+            command=self.on_region_change
         )
         self.region_dropdown.pack(side="left", padx=5)
         
@@ -167,44 +168,172 @@ class App(ctk.CTk):
         self.btn_spec_gen = ctk.CTkButton(self.spec_frame, text="Generate Query", width=120, command=self.generate_from_spec)
         self.btn_spec_gen.pack(side="left", padx=10, pady=5)
         
-        lbl = ctk.CTkLabel(self.tab_discovery, text="Compare raw search engine results with AI-vetted high-quality URLs side-by-side:", text_color="gray")
+        lbl = ctk.CTkLabel(self.tab_discovery, text="Select a suggested query from the left or discover URLs to view raw & vetted results side-by-side:", text_color="gray")
         lbl.grid(row=2, column=0, padx=10, sticky="w")
         
         results_container = ctk.CTkFrame(self.tab_discovery, fg_color="transparent")
         results_container.grid(row=3, column=0, padx=10, pady=(0, 10), sticky="nsew")
-        results_container.grid_columnconfigure(0, weight=1)
+        results_container.grid_columnconfigure(0, weight=0, minsize=290)
         results_container.grid_columnconfigure(1, weight=1)
+        results_container.grid_columnconfigure(2, weight=1)
         results_container.grid_rowconfigure(1, weight=1)
         
-        # Left column: Raw Search Results
+        # Column 0: Suggested Queries Panel (Left Side)
+        self.lbl_suggested_queries = ctk.CTkLabel(results_container, text="💡 Suggested Queries:", font=("Arial", 12, "bold"))
+        self.lbl_suggested_queries.grid(row=0, column=0, padx=(0, 5), pady=(0, 5), sticky="w")
+        
+        self.queries_list_frame = ctk.CTkScrollableFrame(results_container, width=280)
+        self.queries_list_frame.grid(row=1, column=0, padx=(0, 5), pady=0, sticky="nsew")
+        
+        # Column 1: Raw Search Results
         self.lbl_raw_urls = ctk.CTkLabel(results_container, text="🌐 Raw Search Results (DuckDuckGo):", font=("Arial", 12, "bold"))
-        self.lbl_raw_urls.grid(row=0, column=0, padx=(0, 5), pady=(0, 5), sticky="w")
+        self.lbl_raw_urls.grid(row=0, column=1, padx=(5, 5), pady=(0, 5), sticky="w")
         
         self.raw_urls_textbox = ctk.CTkTextbox(results_container, wrap="none")
-        self.raw_urls_textbox.grid(row=1, column=0, padx=(0, 5), pady=0, sticky="nsew")
+        self.raw_urls_textbox.grid(row=1, column=1, padx=(5, 5), pady=0, sticky="nsew")
         
-        # Right column: High-Quality Filtered URLs
+        # Column 2: High-Quality Filtered URLs
         self.lbl_hq_urls = ctk.CTkLabel(results_container, text="⭐ High-Quality URLs (AI Filtered):", font=("Arial", 12, "bold"))
-        self.lbl_hq_urls.grid(row=0, column=1, padx=(5, 0), pady=(0, 5), sticky="w")
+        self.lbl_hq_urls.grid(row=0, column=2, padx=(5, 0), pady=(0, 5), sticky="w")
         
         self.discovery_textbox = ctk.CTkTextbox(results_container, wrap="none")
-        self.discovery_textbox.grid(row=1, column=1, padx=(5, 0), pady=0, sticky="nsew")
+        self.discovery_textbox.grid(row=1, column=2, padx=(5, 0), pady=0, sticky="nsew")
+
+        # Initial starter queries
+        starter_queries = [
+            "switchgear panel distributors USA",
+            "commercial lighting importers UAE",
+            "industrial wire cable wholesalers Germany",
+            "lithium battery pack distributors UK",
+            "HVAC equipment wholesalers Australia",
+            "solar inverter distributors Canada"
+        ]
+        self.populate_suggested_queries(starter_queries)
+        self.select_suggested_query(starter_queries[0])
+
+    def populate_suggested_queries(self, queries):
+        for widget in self.queries_list_frame.winfo_children():
+            widget.destroy()
+            
+        if not queries:
+            lbl_empty = ctk.CTkLabel(
+                self.queries_list_frame, 
+                text="No suggestions available.", 
+                text_color="gray", 
+                font=("Arial", 11, "italic")
+            )
+            lbl_empty.pack(pady=15, padx=5)
+            return
+
+        for q in queries:
+            q_clean = q.strip()
+            if not q_clean:
+                continue
+                
+            row_frame = ctk.CTkFrame(self.queries_list_frame, fg_color=("#EAEAEA", "#2B2B2B"), corner_radius=6)
+            row_frame.pack(fill="x", padx=4, pady=3)
+            
+            lbl_q = ctk.CTkLabel(
+                row_frame, 
+                text=q_clean, 
+                anchor="w", 
+                justify="left", 
+                wraplength=170,
+                font=("Arial", 11)
+            )
+            lbl_q.pack(side="left", fill="x", expand=True, padx=(8, 4), pady=5)
+            
+            btn_use = ctk.CTkButton(
+                row_frame, 
+                text="Use ➔", 
+                width=46, 
+                height=24, 
+                font=("Arial", 10, "bold"),
+                fg_color="#1f538d", 
+                hover_color="#14375e",
+                command=lambda text=q_clean: self.select_suggested_query(text)
+            )
+            btn_use.pack(side="right", padx=(2, 6), pady=5)
+            
+            row_frame.bind("<Button-1>", lambda e, text=q_clean: self.select_suggested_query(text))
+            lbl_q.bind("<Button-1>", lambda e, text=q_clean: self.select_suggested_query(text))
+
+    def select_suggested_query(self, query):
+        self.query_entry.delete("0.0", "end")
+        self.query_entry.insert("0.0", query)
+        preview = query[:30] + "..." if len(query) > 30 else query
+        self.lbl_disc_status.configure(text=f"Selected: {preview}")
+
+    def on_region_change(self, choice):
+        strategy = self.strategy_var.get()
+        if strategy == "Suppliers":
+            return
+        dest = choice.split(" (")[0]
+        if "Worldwide" in dest or "Global" in dest:
+            dest = "worldwide"
+        if strategy == "Logistics":
+            queries = [
+                f"freight forwarders India to {dest} container shipping",
+                f"sea cargo forwarders Mumbai to {dest}",
+                f"container logistics agents India {dest}",
+                f"FCL shipping lines India {dest}"
+            ]
+        else:
+            queries = [
+                f"switchgear panel distributors {dest}",
+                f"commercial lighting importers {dest}",
+                f"industrial wire cable wholesalers {dest}",
+                f"lithium battery pack distributors {dest}",
+                f"HVAC equipment wholesalers {dest}",
+                f"solar inverter distributors {dest}"
+            ]
+        self.populate_suggested_queries(queries)
+        self.select_suggested_query(queries[0])
 
     def on_strategy_change(self, choice):
         if choice == "Suppliers":
             self.region_dropdown.configure(state="disabled")
             self.btn_suggest.configure(state="normal")
+            queries = [
+                "distribution transformer manufacturers India",
+                "switchgear panel factories Gujarat",
+                "copper wire cable manufacturers India",
+                "lithium battery pack makers Bangalore",
+                "HVAC components suppliers Maharashtra",
+                "circuit breaker factories India"
+            ]
+            self.populate_suggested_queries(queries)
+            self.select_suggested_query(queries[0])
         elif choice == "Logistics":
             self.region_dropdown.configure(state="normal")
             self.btn_suggest.configure(state="disabled")
-            self.query_entry.delete("0.0", "end")
             dest = self.region_var.get().split(" (")[0]
             if "Worldwide" in dest or "Global" in dest:
                 dest = "worldwide"
-            self.query_entry.insert("0.0", f"freight forwarders India to {dest} container shipping")
+            queries = [
+                f"freight forwarders India to {dest} container shipping",
+                f"sea cargo forwarders Mumbai to {dest}",
+                f"container logistics agents India {dest}",
+                f"FCL shipping lines India {dest}"
+            ]
+            self.populate_suggested_queries(queries)
+            self.select_suggested_query(queries[0])
         else:
             self.region_dropdown.configure(state="normal")
             self.btn_suggest.configure(state="normal")
+            dest = self.region_var.get().split(" (")[0]
+            if "Worldwide" in dest or "Global" in dest:
+                dest = "worldwide"
+            queries = [
+                f"switchgear panel distributors {dest}",
+                f"commercial lighting importers {dest}",
+                f"industrial wire cable wholesalers {dest}",
+                f"lithium battery pack distributors {dest}",
+                f"HVAC equipment wholesalers {dest}",
+                f"solar inverter distributors {dest}"
+            ]
+            self.populate_suggested_queries(queries)
+            self.select_suggested_query(queries[0])
 
     def generate_from_spec(self):
         spec_text = self.spec_textbox.get("0.0", "end").strip()
@@ -262,65 +391,215 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
         strategy = self.strategy_var.get()
         region = self.region_var.get()
         self.btn_suggest.configure(state="disabled")
-        self.query_entry.delete("0.0", "end")
-        self.query_entry.insert("0.0", "Generating AI suggestion...")
+        self.lbl_disc_status.configure(text="Status: Generating AI suggestions...")
+        
+        # Show loading indicator in suggested queries list
+        for widget in self.queries_list_frame.winfo_children():
+            widget.destroy()
+        lbl_loading = ctk.CTkLabel(
+            self.queries_list_frame, 
+            text="⏳ Generating 6-8 search queries with Gemini...", 
+            font=("Arial", 11, "italic"), 
+            text_color="gray",
+            wraplength=240
+        )
+        lbl_loading.pack(pady=20, padx=5)
+        
         threading.Thread(target=self.suggest_query_thread, args=(strategy, region), daemon=True).start()
 
     def suggest_query_thread(self, strategy, region):
         try:
-            import random
-            
-            # True randomization: Read the context file, extract all product bullet points, pick ONE randomly.
-            product_niche = "Electrical Components"
-            try:
-                with open("vision_context_v2.md", "r", encoding="utf-8") as f:
-                    lines = f.readlines()
-                    # Grab product description lines
-                    product_lines = [line.strip() for line in lines if line.startswith("* **") and ":" in line]
-                    # Cut off the list before the 'Compliance' section begins
-                    product_lines = product_lines[:22] 
-                    if product_lines:
-                        product_niche = random.choice(product_lines)
-            except Exception as e:
-                self.logger.error(f"Failed to read context for randomization: {e}")
+            from google.genai import types
+            from pydantic import BaseModel
+            from typing import List
+
+            class SuggestedQueriesList(BaseModel):
+                queries: List[str]
 
             if strategy == "Suppliers":
-                prompt = f"""You are an elite B2B sourcing expert.
-Generate a single, highly specific DuckDuckGo search query to find MANUFACTURERS and FACTORIES across ALL of India for the following specific product niche:
+                prompt = """You are an elite B2B sourcing expert for Indian export-import trade.
+Our product catalog includes:
+- Switchgear, circuit breakers, relays, and electrical control panels
+- Power cables, copper wire, armored XLPE cables, and cable glands/lugs
+- Distribution transformers and voltage stabilizers
+- Industrial automation sensors, PLCs, and terminal blocks
+- Lithium battery packs (LiFePO4) and solar inverters
+- Industrial fans, pumps, compressors, and HVAC components
+- Commercial LED lighting and wiring accessories
 
-{product_niche}
+Generate 6 to 8 short, simple, natural DuckDuckGo search queries to find Indian MANUFACTURERS and FACTORIES across India (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu).
 
-Include terms like "manufacturer India" or "factory India". Do not restrict to Delhi NCR.
-Do not include any quotes, markdown, or explanations. Return ONLY the raw query string.
+RULES:
+1. Each query must be short and clean (3 to 6 words only).
+   Examples of good queries:
+   - "distribution transformer manufacturers India"
+   - "switchgear panel factories Gujarat"
+   - "copper wire cable manufacturers India"
+   - "lithium battery pack makers Bangalore"
+   - "brass cable glands manufacturers Jamnagar"
+   - "HVAC components suppliers Maharashtra"
+2. Do NOT use boolean operators (no AND, OR, NOT, site:).
+3. Do NOT use quotation marks or plus/minus signs.
+4. Keep queries realistic, diverse across products, and search-engine friendly.
+"""
+            elif strategy == "Logistics":
+                dest = region.split(" (")[0]
+                if "Worldwide" in dest or "Global" in dest:
+                    dest = "worldwide"
+                prompt = f"""You are an international freight and logistics expert.
+We are shipping electrical and industrial goods from India to {dest}.
+
+Generate 6 to 8 short, simple, natural DuckDuckGo search queries to find freight forwarders, shipping lines, container logistics agents, or customs clearing agents handling cargo from India to {dest}.
+
+RULES:
+1. Each query must be short and clean (3 to 6 words only).
+   Examples of good queries:
+   - "freight forwarders India to {dest} container shipping"
+   - "sea cargo forwarders Mumbai to {dest}"
+   - "customs clearing agents India to {dest}"
+   - "FCL container shipping lines India {dest}"
+   - "air cargo logistics India to {dest}"
+2. Do NOT use boolean operators (no AND, OR, NOT, site:).
+3. Do NOT use quotation marks or plus/minus signs.
 """
             else:
                 region_name = region.split(" (")[0]
                 if "Worldwide" in region_name or "Global" in region_name:
-                    region_target = "globally"
+                    region_target = "global / worldwide"
+                    region_kw = "worldwide"
                 else:
-                    region_target = f"in {region_name}"
-                    
-                prompt = f"""You are an elite B2B sourcing expert.
-Generate a single, highly specific DuckDuckGo search query to find actual B2B BUYERS, DISTRIBUTORS, or OEMs for the following specific product niche {region_target}:
+                    region_target = region_name
+                    region_kw = region_name
 
-{product_niche}
+                prompt = f"""You are an elite B2B export sales director.
+We are an Indian manufacturer and exporter supplying international buyers with:
+- Switchgear panels, circuit breakers, and electrical distribution boards
+- Copper wires, power cables, and cable accessories
+- Distribution transformers and solar inverters
+- Industrial automation components and terminal blocks
+- Lithium battery energy storage packs (LiFePO4)
+- Industrial fans, pumps, compressors, and HVAC spare parts
+- Commercial LED lighting and wiring accessories
 
-The query should look for companies that buy, import, or distribute this product (e.g. "distributors", "importers", "buyers").
-Do not include any quotes, markdown, or explanations. Return ONLY the raw query string.
+Generate 6 to 8 short, simple, natural DuckDuckGo search queries to find real B2B BUYERS, DISTRIBUTORS, IMPORTERS, WHOLESALERS, or CONTRACTORS in {region_target}.
+
+RULES:
+1. Each query must be short and clean (3 to 6 words only).
+   Examples of good queries:
+   - "switchgear panel distributors {region_kw}"
+   - "commercial lighting importers {region_kw}"
+   - "industrial wire cable wholesalers {region_kw}"
+   - "lithium battery pack distributors {region_kw}"
+   - "HVAC equipment wholesalers {region_kw}"
+   - "circuit breaker distributors {region_kw}"
+   - "electrical supplies importers {region_kw}"
+2. Do NOT use boolean operators (no AND, OR, NOT, site:).
+3. Do NOT use quotation marks or plus/minus signs.
+4. Keep queries realistic, diverse across our product catalog, and search-engine friendly.
 """
-            
+
             from llm_fallback import generate_with_fallback
-            response = generate_with_fallback(prompt, logger=self.logger)
-            query = response.text.strip().replace('"', '').replace('\n', '')
-            self.ui_queue.put((self.on_suggest_complete, (query,)))
+            response = generate_with_fallback(
+                prompt=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=SuggestedQueriesList,
+                ),
+                logger=self.logger
+            )
+
+            queries = []
+            try:
+                data = SuggestedQueriesList.model_validate_json(response.text)
+                queries = [q.strip() for q in data.queries if q.strip()]
+            except Exception:
+                import json, re
+                clean_text = response.text.strip()
+                if clean_text.startswith("```"):
+                    clean_text = re.sub(r'^```(?:json)?\s*', '', clean_text)
+                    clean_text = re.sub(r'\s*```$', '', clean_text)
+                try:
+                    parsed = json.loads(clean_text)
+                    if isinstance(parsed, dict) and "queries" in parsed:
+                        queries = [str(q).strip() for q in parsed["queries"] if str(q).strip()]
+                    elif isinstance(parsed, list):
+                        queries = [str(q).strip() for q in parsed if str(q).strip()]
+                except Exception:
+                    queries = [
+                        re.sub(r'^\s*[\d\.\-\*\•]+\s*', '', line).strip().strip('"\'')
+                        for line in response.text.splitlines()
+                        if line.strip() and not line.strip().startswith('{') and not line.strip().startswith('}')
+                    ]
+                    queries = [q for q in queries if q and len(q) > 3]
+
+            if not queries:
+                if strategy == "Suppliers":
+                    queries = [
+                        "distribution transformer manufacturers India",
+                        "switchgear panel factories Gujarat",
+                        "copper wire cable manufacturers India",
+                        "lithium battery pack makers Bangalore",
+                        "HVAC components suppliers Maharashtra",
+                        "circuit breaker factories India"
+                    ]
+                elif strategy == "Logistics":
+                    dest_term = region.split(" (")[0]
+                    queries = [
+                        f"freight forwarders India to {dest_term} container shipping",
+                        f"sea cargo forwarders Mumbai to {dest_term}",
+                        f"container logistics agents India {dest_term}",
+                        f"FCL shipping lines India {dest_term}"
+                    ]
+                else:
+                    dest_term = region.split(" (")[0]
+                    queries = [
+                        f"switchgear panel distributors {dest_term}",
+                        f"commercial lighting importers {dest_term}",
+                        f"industrial wire cable wholesalers {dest_term}",
+                        f"lithium battery pack distributors {dest_term}",
+                        f"HVAC equipment wholesalers {dest_term}",
+                        f"solar inverter distributors {dest_term}"
+                    ]
+
+            self.ui_queue.put((self.on_suggest_complete, (queries,)))
         except Exception as e:
             self.logger.error(f"Suggest failed: {e}")
-            self.ui_queue.put((self.on_suggest_complete, ("Error generating query",)))
-            
-    def on_suggest_complete(self, query):
-        self.query_entry.delete("0.0", "end")
-        self.query_entry.insert("0.0", query)
+            fallback_dest = region.split(" (")[0]
+            if strategy == "Suppliers":
+                fallback_queries = [
+                    "distribution transformer manufacturers India",
+                    "switchgear panel factories Gujarat",
+                    "copper wire cable manufacturers India",
+                    "lithium battery pack makers Bangalore",
+                    "HVAC components suppliers Maharashtra",
+                    "circuit breaker factories India"
+                ]
+            elif strategy == "Logistics":
+                fallback_queries = [
+                    f"freight forwarders India to {fallback_dest} container shipping",
+                    f"sea cargo forwarders Mumbai to {fallback_dest}",
+                    f"container logistics agents India {fallback_dest}",
+                    f"FCL shipping lines India {fallback_dest}"
+                ]
+            else:
+                fallback_queries = [
+                    f"switchgear panel distributors {fallback_dest}",
+                    f"commercial lighting importers {fallback_dest}",
+                    f"industrial wire cable wholesalers {fallback_dest}",
+                    f"lithium battery pack distributors {fallback_dest}",
+                    f"HVAC equipment wholesalers {fallback_dest}",
+                    f"solar inverter distributors {fallback_dest}"
+                ]
+            self.ui_queue.put((self.on_suggest_complete, (fallback_queries,)))
+
+    def on_suggest_complete(self, queries):
         self.btn_suggest.configure(state="normal")
+        if queries:
+            self.populate_suggested_queries(queries)
+            self.select_suggested_query(queries[0])
+            self.lbl_disc_status.configure(text=f"Status: {len(queries)} queries suggested")
+        else:
+            self.lbl_disc_status.configure(text="Status: No suggestions generated")
 
     def start_discovery(self):
         query = self.query_entry.get("0.0", "end").strip()
