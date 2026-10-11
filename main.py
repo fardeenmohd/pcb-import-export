@@ -153,10 +153,18 @@ class App(ctk.CTk):
         self.btn_search = ctk.CTkButton(control_frame, text="Discover URLs", command=self.start_discovery)
         self.btn_search.pack(side="left", padx=10)
         
+        def get_disc_mode():
+            s = self.strategy_var.get()
+            if s == "Suppliers":
+                return "supplier"
+            elif s == "Logistics":
+                return "logistics"
+            return "buyer"
+
         self.btn_disc_prop = ctk.CTkButton(
             control_frame, 
             text="🌐 Quick URL Proposal", 
-            command=lambda: self.open_url_proposal_window(is_supplier=(self.strategy_var.get() == "Suppliers")), 
+            command=lambda: self.open_url_proposal_window(mode=get_disc_mode()), 
             fg_color="#005b96", 
             hover_color="#003f66"
         )
@@ -318,8 +326,16 @@ class App(ctk.CTk):
             lbl_empty.pack(pady=30, padx=10)
             return
 
-        is_supplier = (self.strategy_var.get() == "Suppliers")
-        prop_btn_text = "📝 Sourcing RFQ" if is_supplier else "📝 Create Proposal"
+        strategy = self.strategy_var.get()
+        if strategy == "Suppliers":
+            prop_btn_text = "📝 Sourcing RFQ"
+            current_mode = "supplier"
+        elif strategy == "Logistics":
+            prop_btn_text = "📝 Freight RFQ"
+            current_mode = "logistics"
+        else:
+            prop_btn_text = "📝 Create Proposal"
+            current_mode = "buyer"
 
         for u in urls:
             url_str = u.strip()
@@ -329,7 +345,7 @@ class App(ctk.CTk):
             row_frame = ctk.CTkFrame(self.discovery_urls_frame, fg_color=("#EAEAEA", "#2B2B2B"), corner_radius=6)
             row_frame.pack(fill="x", padx=4, pady=3)
             
-            # Action button: 📝 Sourcing RFQ / 📝 Create Proposal
+            # Action button: 📝 Sourcing RFQ / 📝 Freight RFQ / 📝 Create Proposal
             btn_prop = ctk.CTkButton(
                 row_frame, 
                 text=prop_btn_text, 
@@ -338,7 +354,7 @@ class App(ctk.CTk):
                 font=("Arial", 11, "bold"),
                 fg_color="#1f7a1f", 
                 hover_color="#145214",
-                command=lambda target=url_str, sup=is_supplier: self.open_url_proposal_window(target, auto_generate=True, is_supplier=sup)
+                command=lambda target=url_str, m=current_mode: self.open_url_proposal_window(target, auto_generate=True, mode=m)
             )
             btn_prop.pack(side="right", padx=(4, 6), pady=4)
             
@@ -443,7 +459,7 @@ class App(ctk.CTk):
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
         elif choice == "Logistics":
-            self.btn_disc_prop.configure(text="🌐 Quick URL Proposal")
+            self.btn_disc_prop.configure(text="🌐 Quick Freight RFQ")
             self.region_dropdown.configure(state="normal")
             self.btn_suggest.configure(state="disabled")
             dest = self.region_var.get().split(" (")[0]
@@ -988,10 +1004,13 @@ RULES:
         else:
             textbox.insert("0.0", "Output file not found. Scraper may have failed.")
 
-    def create_database_tab_ui(self, tab, sync_cmd, clean_cmd, delete_all_cmd, proposal_cmd=None, is_supplier=False):
+    def create_database_tab_ui(self, tab, sync_cmd, clean_cmd, delete_all_cmd, proposal_cmd=None, is_supplier=False, mode=None):
         tab.grid_columnconfigure(0, weight=1)
         tab.grid_rowconfigure(1, weight=1)
         
+        if mode is None:
+            mode = "supplier" if is_supplier else "buyer"
+
         btn_frame = ctk.CTkFrame(tab, fg_color="transparent")
         btn_frame.grid(row=0, column=0, pady=10, padx=10, sticky="w")
         
@@ -999,12 +1018,22 @@ RULES:
         btn_sync.pack(side="left", padx=(0, 10))
         
         if proposal_cmd:
-            btn_prop_text = "📝 Create Sourcing Inquiry" if is_supplier else "📝 Create Proposal"
+            if mode == "logistics":
+                btn_prop_text = "📝 Create Freight RFQ"
+                btn_url_prop_text = "🌐 Freight RFQ from URL"
+                url_cmd = lambda: self.open_url_proposal_window(mode="logistics")
+            elif mode == "supplier":
+                btn_prop_text = "📝 Create Sourcing Inquiry"
+                btn_url_prop_text = "🌐 Inquiry from URL"
+                url_cmd = lambda: self.open_url_proposal_window(mode="supplier")
+            else:
+                btn_prop_text = "📝 Create Proposal"
+                btn_url_prop_text = "🌐 Proposal from URL"
+                url_cmd = lambda: self.open_url_proposal_window(mode="buyer")
+
             btn_prop = ctk.CTkButton(btn_frame, text=btn_prop_text, command=proposal_cmd, fg_color="#1f7a1f", hover_color="#145214")
             btn_prop.pack(side="left", padx=(0, 10))
 
-            btn_url_prop_text = "🌐 Inquiry from URL" if is_supplier else "🌐 Proposal from URL"
-            url_cmd = (lambda: self.open_url_proposal_window(is_supplier=True)) if is_supplier else self.open_url_proposal_window
             btn_url_prop = ctk.CTkButton(btn_frame, text=btn_url_prop_text, command=url_cmd, fg_color="#005b96", hover_color="#003f66")
             btn_url_prop.pack(side="left", padx=(0, 10))
 
@@ -1513,9 +1542,241 @@ SinoMagan Indus Global Trade LLP
 
         start_generation()
 
-    def open_url_proposal_window(self, initial_url="", auto_generate=False, is_supplier=False):
+    def open_logistics_inquiry_window(self):
+        selected_items = self.log_tree.selection()
+        if not selected_items:
+            import tkinter.messagebox as messagebox
+            messagebox.showinfo("Select Logistics Provider", "Please select a logistics company from the table to generate a freight inquiry.")
+            return
+
+        selected_item = selected_items[0]
+        row_values = self.log_tree.item(selected_item)["values"]
+        cols = list(self.log_tree["columns"])
+        data = dict(zip(cols, row_values))
+
+        company_name = str(data.get("company_name", "Freight Forwarder / Logistics Provider")).strip()
+        shipping_routes = str(data.get("shipping_routes", "")).strip()
+        services_offered = str(data.get("services_offered", "Ocean & Air Freight")).strip()
+        container_types = str(data.get("container_types", "Standard 20ft/40ft Containers")).strip()
+        locations_hq = str(data.get("locations_hq", "")).strip()
+        url = str(data.get("url", "")).strip()
+        contact_emails = str(data.get("contact_emails", "")).strip()
+        phone_numbers = str(data.get("phone_numbers", "")).strip()
+
         win = ctk.CTkToplevel(self)
-        if is_supplier:
+        win.title(f"Freight & Logistics RFQ - {company_name}")
+        win.geometry("820x720")
+        win.attributes("-topmost", True)
+        win.focus_set()
+
+        header_frame = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
+        header_frame.pack(fill="x", padx=15, pady=(15, 8))
+
+        lbl_title = ctk.CTkLabel(
+            header_frame, 
+            text=f"Freight Cargo & Logistics RFQ for {company_name}", 
+            font=("Arial", 16, "bold"),
+            text_color="#ffffff"
+        )
+        lbl_title.pack(anchor="w", padx=15, pady=(10, 2))
+
+        sub_desc = f"Routes: {shipping_routes or 'Global Trade Lanes'}  |  Services: {services_offered or 'Freight Forwarding'}  |  HQ: {locations_hq or 'India'}"
+        lbl_sub = ctk.CTkLabel(
+            header_frame, 
+            text=sub_desc, 
+            font=("Arial", 11),
+            text_color="#a0a0a0"
+        )
+        lbl_sub.pack(anchor="w", padx=15, pady=(0, 10))
+
+        # To Row
+        to_frame = ctk.CTkFrame(win, fg_color="transparent")
+        to_frame.pack(fill="x", padx=15, pady=(4, 3))
+        lbl_to = ctk.CTkLabel(to_frame, text="To:", width=65, anchor="w", font=("Arial", 12, "bold"))
+        lbl_to.pack(side="left")
+        entry_to = ctk.CTkEntry(to_frame, font=("Arial", 12), height=32)
+        entry_to.pack(side="left", fill="x", expand=True, padx=(0, 8))
+        if contact_emails:
+            entry_to.insert(0, contact_emails)
+        btn_copy_to = ctk.CTkButton(to_frame, text="📋 Copy", width=75, height=32)
+        btn_copy_to.pack(side="right")
+
+        # Subject Row
+        subj_frame = ctk.CTkFrame(win, fg_color="transparent")
+        subj_frame.pack(fill="x", padx=15, pady=(3, 5))
+        lbl_subj = ctk.CTkLabel(subj_frame, text="Subject:", width=65, anchor="w", font=("Arial", 12, "bold"))
+        lbl_subj.pack(side="left")
+        entry_subj = ctk.CTkEntry(subj_frame, font=("Arial", 12), height=32)
+        entry_subj.pack(side="left", fill="x", expand=True, padx=(0, 8))
+        entry_subj.insert(0, "Generating Subject line...")
+        btn_copy_subj = ctk.CTkButton(subj_frame, text="📋 Copy", width=75, height=32)
+        btn_copy_subj.pack(side="right")
+
+        # Body Header Row
+        body_hdr = ctk.CTkFrame(win, fg_color="transparent")
+        body_hdr.pack(fill="x", padx=15, pady=(4, 2))
+        lbl_body = ctk.CTkLabel(body_hdr, text="Email Body (Gmail Ready):", font=("Arial", 12, "bold"))
+        lbl_body.pack(side="left")
+        btn_copy_body = ctk.CTkButton(body_hdr, text="📋 Copy Body", width=105, height=28, fg_color="#1f7a1f", hover_color="#145214")
+        btn_copy_body.pack(side="right")
+
+        # Body Textbox
+        txt_body = ctk.CTkTextbox(win, wrap="word", font=("Arial", 12))
+        txt_body.pack(fill="both", expand=True, padx=15, pady=(2, 8))
+        txt_body.insert("0.0", "⏳ Generating tailored Freight Cargo & Logistics RFQ using Gemini AI...\nPlease wait a few seconds.")
+
+        # Copy handlers
+        def copy_widget_text(widget, btn, default_txt):
+            if isinstance(widget, ctk.CTkTextbox):
+                val = widget.get("0.0", "end").strip()
+            else:
+                val = widget.get().strip()
+            if val and not val.startswith("⏳"):
+                self.clipboard_clear()
+                self.clipboard_append(val)
+                btn.configure(text="Copied! ✅")
+                win.after(1500, lambda: btn.configure(text=default_txt))
+
+        btn_copy_to.configure(command=lambda: copy_widget_text(entry_to, btn_copy_to, "📋 Copy"))
+        btn_copy_subj.configure(command=lambda: copy_widget_text(entry_subj, btn_copy_subj, "📋 Copy"))
+        btn_copy_body.configure(command=lambda: copy_widget_text(txt_body, btn_copy_body, "📋 Copy Body"))
+
+        # Bottom Bar
+        btn_bar = ctk.CTkFrame(win, fg_color="transparent")
+        btn_bar.pack(fill="x", padx=15, pady=(5, 12))
+
+        def copy_all():
+            s = entry_subj.get().strip()
+            b = txt_body.get("0.0", "end").strip()
+            if b and not b.startswith("⏳"):
+                self.clipboard_clear()
+                self.clipboard_append(f"Subject: {s}\n\n{b}")
+                btn_copy_all.configure(text="All Copied! ✅")
+                win.after(1500, lambda: btn_copy_all.configure(text="📋 Copy Subject + Body"))
+
+        btn_copy_all = ctk.CTkButton(btn_bar, text="📋 Copy Subject + Body", command=copy_all, width=170, fg_color="#005b96", hover_color="#003f66")
+        btn_copy_all.pack(side="left", padx=5)
+
+        def start_generation():
+            entry_subj.delete(0, "end")
+            entry_subj.insert(0, "Generating Subject line...")
+            txt_body.delete("0.0", "end")
+            txt_body.insert("0.0", "⏳ Generating tailored Freight Cargo & Logistics RFQ using Gemini AI...\nPlease wait a few seconds.")
+            btn_regen.configure(state="disabled")
+
+            def generate_worker():
+                try:
+                    from google.genai import types
+                    from pydantic import BaseModel, Field
+                    from llm_fallback import generate_with_fallback
+
+                    class EmailProposal(BaseModel):
+                        to_email: str = Field(default="", description="Recipient contact email if found in context, otherwise empty string")
+                        subject: str = Field(description="Clean, compelling email subject line without any markdown or quotes")
+                        body: str = Field(description="Full clean email body ready to paste directly into Gmail composer. Do NOT include markdown bold/italics (no asterisks). Use simple bullet points with • if listing technical specifications.")
+
+                    prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing an official B2B freight cargo RFQ & inquiry to a logistics company / freight forwarder.
+
+Logistics Provider Profile:
+- Company Name: {company_name}
+- Known Shipping Routes / Trade Lanes: {shipping_routes}
+- Services Offered: {services_offered}
+- Container Equipment Handled: {container_types}
+- Headquarters / Port Locations: {locations_hq}
+- Website: {url}
+- Contact Email: {contact_emails}
+
+Your Company:
+- SinoMagan Indus Global Trade LLP (International trade, export sourcing, contract manufacturing, containerized freight operations)
+- Authorized Signatory: Fardin Mohammed, Partner
+
+PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as electrical switchgear, cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+We are reaching out to inquire in detail about:
+1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
+2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
+3. Container equipment availability (standard 20ft GP, 40ft GP / High Cube, special equipment), sailing frequencies, typical transit times, and ocean freight rate structure / tariff quote procedure.
+
+CRITICAL INSTRUCTIONS FOR GMAIL-READY PLAIN TEXT:
+1. SUBJECT LINE:
+   - Provide a concise, professional Subject line referencing Freight Inquiry / Container Shipping RFQ for SinoMagan Indus Global Trade LLP. No quotes or markdown.
+2. RECIPIENT EMAIL:
+   - If an email is listed in Contact Email or context, provide it. Otherwise leave empty string.
+3. EMAIL BODY (STRICT GMAIL PLAIN TEXT FORMAT):
+   - The body MUST be 100% ready to paste directly into the Gmail composer.
+   - ABSOLUTELY NO MARKDOWN FORMATTING:
+     * NEVER use asterisks for bold or italic (NO **word** or *word*).
+     * NEVER use markdown headings (# or ##).
+     * NEVER use markdown horizontal rules (---).
+     * NEVER use markdown links [text](url).
+   - INQUIRY SPECIFICATIONS:
+     * Request specific information on:
+       • Extent of freight forwarding services (Ocean FCL/LCL, Air Freight, CHA Customs House Brokerage, CFS origin handling)
+       • Supported origin ports in India (Nhava Sheva/JNPT, Mundra, Hazira, Chennai) and global destination discharge ports / trade lanes covered
+       • 20ft and 40ft container availability and current ocean freight rates
+       • Transit times, sailing schedules, and shipping line carriers used
+       • Value-added services (cargo insurance, export documentation support, destination clearance)
+     * Format these bullet points cleanly with '• '.
+   - HUMAN TONE:
+     * Sound like an authentic, seasoned commercial trade partner (Fardin Mohammed).
+     * BANNED PHRASES: "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect".
+     * Open directly by introducing SinoMagan Indus Global Trade LLP and stating our requirement for regular export freight handling.
+   - COMMERCIAL & LOGISTICS REALISM:
+     * Mention regular container volume movements, FCL/LCL requirements, prompt documentation, and interest in establishing an ongoing logistics agency relationship.
+   - SIGN-OFF:
+     The sign-off MUST strictly be formatted as:
+
+Warm regards,
+
+Fardin Mohammed
+Partner
+SinoMagan Indus Global Trade LLP
+"""
+                    response = generate_with_fallback(
+                        prompt=prompt,
+                        config=types.GenerateContentConfig(
+                            response_mime_type="application/json",
+                            response_schema=EmailProposal,
+                        ),
+                        logger=self.logger
+                    )
+                    to_val, subj_val, body_val = parse_email_response(response.text, default_to=contact_emails)
+
+                    def on_done():
+                        if to_val:
+                            entry_to.delete(0, "end")
+                            entry_to.insert(0, to_val)
+                        entry_subj.delete(0, "end")
+                        entry_subj.insert(0, subj_val)
+                        txt_body.delete("0.0", "end")
+                        txt_body.insert("0.0", body_val)
+                        btn_regen.configure(state="normal")
+                    win.after(0, on_done)
+                except Exception as e:
+                    def on_err():
+                        txt_body.delete("0.0", "end")
+                        txt_body.insert("0.0", f"Error generating inquiry: {e}")
+                        btn_regen.configure(state="normal")
+                    win.after(0, on_err)
+
+            threading.Thread(target=generate_worker, daemon=True).start()
+
+        btn_regen = ctk.CTkButton(btn_bar, text="🔄 Regenerate", command=start_generation, width=120, fg_color="#3a3a3a", hover_color="#2b2b2b")
+        btn_regen.pack(side="left", padx=5)
+
+        btn_close = ctk.CTkButton(btn_bar, text="Close", command=win.destroy, width=90, fg_color="#555555", hover_color="#444444")
+        btn_close.pack(side="right", padx=5)
+
+        start_generation()
+
+    def open_url_proposal_window(self, initial_url="", auto_generate=False, is_supplier=False, mode=None):
+        if mode is None:
+            mode = "supplier" if is_supplier else "buyer"
+
+        win = ctk.CTkToplevel(self)
+        if mode == "logistics":
+            win.title("Instant Logistics & Freight RFQ Generator")
+        elif mode == "supplier":
             win.title("Instant Supplier Sourcing Inquiry Generator")
         else:
             win.title("Instant B2B Trade Proposal Generator")
@@ -1527,7 +1788,12 @@ SinoMagan Indus Global Trade LLP
         header_frame = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
         header_frame.pack(fill="x", padx=15, pady=(15, 8))
 
-        if is_supplier:
+        if mode == "logistics":
+            lbl_title_text = "🚢 Instant Freight Inquiry from Logistics Website"
+            lbl_sub_text = "Enter logistics or freight forwarder website to analyze shipping routes, container services, and generate an official Freight Cargo RFQ from SinoMagan Indus Global Trade LLP."
+            btn_gen_text = "⚡ Generate Freight RFQ"
+            default_placeholder = "Your generated freight cargo inquiry will appear here..."
+        elif mode == "supplier":
             lbl_title_text = "🏭 Instant Sourcing RFQ from Supplier Website"
             lbl_sub_text = "Enter supplier website to scrape manufacturing capabilities and generate an official Sourcing RFQ from SinoMagan Indus Global Trade LLP."
             btn_gen_text = "⚡ Generate Sourcing RFQ"
@@ -1571,7 +1837,7 @@ SinoMagan Indus Global Trade LLP
         btn_generate = ctk.CTkButton(
             url_frame, 
             text=btn_gen_text, 
-            width=175 if is_supplier else 160, 
+            width=175 if mode in ["supplier", "logistics"] else 160, 
             height=36,
             fg_color="#1f7a1f", 
             hover_color="#145214",
@@ -1622,7 +1888,13 @@ SinoMagan Indus Global Trade LLP
                 val = widget.get("0.0", "end").strip()
             else:
                 val = widget.get().strip()
-            if val and not val.startswith("⏳") and val != default_placeholder and val != "Your generated commercial proposal will appear here...":
+            placeholders = [
+                default_placeholder, 
+                "Your generated commercial proposal will appear here...",
+                "Your generated sourcing inquiry will appear here...",
+                "Your generated freight cargo inquiry will appear here..."
+            ]
+            if val and not val.startswith("⏳") and val not in placeholders:
                 self.clipboard_clear()
                 self.clipboard_append(val)
                 btn.configure(text="Copied! ✅")
@@ -1639,7 +1911,13 @@ SinoMagan Indus Global Trade LLP
         def copy_all():
             s = entry_subj.get().strip()
             b = txt_body.get("0.0", "end").strip()
-            if b and not b.startswith("⏳") and b != default_placeholder and b != "Your generated commercial proposal will appear here...":
+            placeholders = [
+                default_placeholder, 
+                "Your generated commercial proposal will appear here...",
+                "Your generated sourcing inquiry will appear here...",
+                "Your generated freight cargo inquiry will appear here..."
+            ]
+            if b and not b.startswith("⏳") and b not in placeholders:
                 self.clipboard_clear()
                 self.clipboard_append(f"Subject: {s}\n\n{b}")
                 btn_copy_all.configure(text="All Copied! ✅")
@@ -1677,7 +1955,12 @@ SinoMagan Indus Global Trade LLP
             entry_subj.delete(0, "end")
             entry_subj.insert(0, "Generating Subject line...")
             txt_body.delete("0.0", "end")
-            action_step = "manufacturing capabilities" if is_supplier else "product portfolio"
+            if mode == "logistics":
+                action_step = "shipping routes and freight services"
+            elif mode == "supplier":
+                action_step = "manufacturing capabilities"
+            else:
+                action_step = "product portfolio"
             txt_body.insert("0.0", f"⏳ Step 1: Scraping website content from {target_url}...\n⏳ Step 2: Analyzing {action_step} with Gemini AI...\n\nPlease wait a moment.")
 
             def worker():
@@ -1694,7 +1977,12 @@ SinoMagan Indus Global Trade LLP
                             scraped_email = valid_emails[0]
 
                     def update_status_ai():
-                        target_type = "sourcing inquiry" if is_supplier else "proposal"
+                        if mode == "logistics":
+                            target_type = "freight inquiry"
+                        elif mode == "supplier":
+                            target_type = "sourcing inquiry"
+                        else:
+                            target_type = "proposal"
                         lbl_status.configure(text=f"Status: Website scraped. Generating {target_type} with Gemini AI...")
                     win.after(0, update_status_ai)
 
@@ -1712,7 +2000,61 @@ SinoMagan Indus Global Trade LLP
                     else:
                         content_block = f"Note: Website text was minimal or protected. Tailor communication to the company domain/URL: {target_url}."
 
-                    if is_supplier:
+                    if mode == "logistics":
+                        prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing an official B2B freight cargo RFQ & inquiry to a logistics company / freight forwarder.
+
+Target Logistics Provider Website: {target_url}
+Known Scraped Email: {scraped_email}
+
+{content_block}
+
+Your Company:
+- SinoMagan Indus Global Trade LLP (International trade, export sourcing, contract manufacturing, containerized freight operations)
+- Authorized Signatory: Fardin Mohammed, Partner
+
+PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as electrical switchgear, cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+Based on the logistics services and trade lanes shown on their website, we are reaching out to inquire in detail about:
+1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
+2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
+3. Container equipment availability (standard 20ft GP, 40ft GP / High Cube, special equipment), sailing frequencies, typical transit times, and ocean freight rate structure / tariff quote procedure.
+
+CRITICAL INSTRUCTIONS FOR GMAIL-READY PLAIN TEXT:
+1. SUBJECT LINE:
+   - Provide a concise, professional Subject line referencing Freight Inquiry / Container Shipping RFQ for SinoMagan Indus Global Trade LLP. No quotes or markdown.
+2. RECIPIENT EMAIL:
+   - If a contact email is found in the scraped content or Known Scraped Email, provide it. Otherwise leave empty string.
+3. EMAIL BODY (STRICT GMAIL PLAIN TEXT FORMAT):
+   - The body MUST be 100% ready to paste directly into the Gmail composer.
+   - ABSOLUTELY NO MARKDOWN FORMATTING:
+     * NEVER use asterisks for bold or italic (NO **word** or *word*).
+     * NEVER use markdown headings (# or ##).
+     * NEVER use markdown horizontal rules (---).
+     * NEVER use markdown links [text](url).
+   - INQUIRY SPECIFICATIONS:
+     * Request specific information on:
+       • Extent of freight forwarding services (Ocean FCL/LCL, Air Freight, CHA Customs House Brokerage, CFS origin handling)
+       • Supported origin ports in India (Nhava Sheva/JNPT, Mundra, Hazira, Chennai) and global destination discharge ports / trade lanes covered
+       • 20ft and 40ft container availability and current ocean freight rates
+       • Transit times, sailing schedules, and shipping line carriers used
+       • Value-added services (cargo insurance, export documentation support, destination clearance)
+     * Format these bullet points cleanly with '• '.
+   - HUMAN TONE:
+     * Sound like an authentic, seasoned commercial trade partner (Fardin Mohammed).
+     * BANNED PHRASES: "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect".
+     * Open directly by introducing SinoMagan Indus Global Trade LLP and referencing their shipping solutions observed on their website.
+   - COMMERCIAL & LOGISTICS REALISM:
+     * Mention regular container volume movements, FCL/LCL requirements, prompt documentation, and interest in establishing an ongoing logistics agency relationship.
+   - SIGN-OFF:
+     The sign-off MUST strictly be formatted as:
+
+Warm regards,
+
+Fardin Mohammed
+Partner
+SinoMagan Indus Global Trade LLP
+"""
+                    elif mode == "supplier":
                         prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing an official B2B Sourcing RFQ / vendor partnership inquiry to an industrial manufacturer / supplier.
 
 Target Supplier Website: {target_url}
@@ -1823,7 +2165,12 @@ SinoMagan Indus Global Trade LLP
                         entry_subj.insert(0, subj_val)
                         txt_body.delete("0.0", "end")
                         txt_body.insert("0.0", body_val)
-                        status_msg = "Status: Sourcing RFQ generated successfully! ✅" if is_supplier else "Status: Proposal generated successfully! ✅"
+                        if mode == "logistics":
+                            status_msg = "Status: Freight RFQ generated successfully! ✅"
+                        elif mode == "supplier":
+                            status_msg = "Status: Sourcing RFQ generated successfully! ✅"
+                        else:
+                            status_msg = "Status: Proposal generated successfully! ✅"
                         lbl_status.configure(text=status_msg)
                         btn_generate.configure(state="normal")
                     win.after(0, on_done)
@@ -1859,8 +2206,13 @@ SinoMagan Indus Global Trade LLP
                 df = pd.read_excel(output_file)
                 tree.delete(*tree.get_children())
                 
-                has_action_col = (output_file in ["Buyers_Matrix.xlsx", "Suppliers_Matrix.xlsx"])
-                action_col_name = "Inquiry" if output_file == "Suppliers_Matrix.xlsx" else "Proposal"
+                has_action_col = (output_file in ["Buyers_Matrix.xlsx", "Suppliers_Matrix.xlsx", "Logistics_Matrix.xlsx"])
+                if output_file == "Suppliers_Matrix.xlsx":
+                    action_col_name = "Inquiry"
+                elif output_file == "Logistics_Matrix.xlsx":
+                    action_col_name = "Inquiry"
+                else:
+                    action_col_name = "Proposal"
                 cols = list(df.columns)
                 if has_action_col:
                     cols = [action_col_name] + cols
@@ -1894,7 +2246,9 @@ SinoMagan Indus Global Trade LLP
             self.tab_log_db, 
             lambda: self.load_matrix(self.log_tree, "Logistics_Matrix.xlsx"),
             lambda: self.clean_local_matrix("Logistics_Matrix.xlsx", self.log_tree),
-            lambda: self.delete_all_entries("Logistics_Matrix.xlsx", self.log_tree)
+            lambda: self.delete_all_entries("Logistics_Matrix.xlsx", self.log_tree),
+            proposal_cmd=self.open_logistics_inquiry_window,
+            mode="logistics"
         )
 
     def setup_logs_tab(self):
@@ -1942,6 +2296,9 @@ SinoMagan Indus Global Trade LLP
         
         self.btn_log_start = ctk.CTkButton(btn_frame, text="Start Extraction", command=lambda: self.start_scraping("logistics"))
         self.btn_log_start.pack(side="left", padx=5)
+
+        self.btn_log_prop = ctk.CTkButton(btn_frame, text="🌐 Quick Freight RFQ", command=lambda: self.open_url_proposal_window(mode="logistics"), fg_color="#005b96", hover_color="#003f66")
+        self.btn_log_prop.pack(side="left", padx=5)
         
         self.lbl_log_status = ctk.CTkLabel(btn_frame, text="Status: Ready")
         self.lbl_log_status.pack(side="left", padx=20)
