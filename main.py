@@ -503,7 +503,7 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         else:
             textbox.insert("0.0", "Output file not found. Scraper may have failed.")
 
-    def create_database_tab_ui(self, tab, sync_cmd, clean_cmd, delete_all_cmd):
+    def create_database_tab_ui(self, tab, sync_cmd, clean_cmd, delete_all_cmd, proposal_cmd=None):
         tab.grid_columnconfigure(0, weight=1)
         tab.grid_rowconfigure(1, weight=1)
         
@@ -513,6 +513,10 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         btn_sync = ctk.CTkButton(btn_frame, text="Sync / Load Matrix", command=sync_cmd)
         btn_sync.pack(side="left", padx=(0, 10))
         
+        if proposal_cmd:
+            btn_prop = ctk.CTkButton(btn_frame, text="📝 Create Proposal", command=proposal_cmd, fg_color="#1f7a1f", hover_color="#145214")
+            btn_prop.pack(side="left", padx=(0, 10))
+
         btn_clean = ctk.CTkButton(btn_frame, text="Clean Matrix", command=clean_cmd, fg_color="#b30000", hover_color="#800000")
         btn_clean.pack(side="left")
         
@@ -539,6 +543,20 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         tree.grid(row=0, column=0, sticky='nsew')
         vsb.grid(row=0, column=1, sticky='ns')
         hsb.grid(row=1, column=0, sticky='ew')
+
+        if proposal_cmd:
+            def on_tree_click(event):
+                region = tree.identify("region", event.x, event.y)
+                if region == "cell":
+                    col = tree.identify_column(event.x)
+                    if col == "#1":
+                        item = tree.identify_row(event.y)
+                        if item:
+                            tree.selection_set(item)
+                            proposal_cmd()
+            tree.bind("<ButtonRelease-1>", on_tree_click)
+            tree.bind("<Double-1>", lambda event: proposal_cmd())
+
         return tree
 
     def setup_sup_db_tab(self):
@@ -554,12 +572,132 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
             self.tab_buy_db, 
             lambda: self.load_matrix(self.buy_tree, "Buyers_Matrix.xlsx"),
             lambda: self.clean_local_matrix("Buyers_Matrix.xlsx", self.buy_tree),
-            lambda: self.delete_all_entries("Buyers_Matrix.xlsx", self.buy_tree)
+            lambda: self.delete_all_entries("Buyers_Matrix.xlsx", self.buy_tree),
+            proposal_cmd=self.open_proposal_window
         )
+
+    def open_proposal_window(self):
+        selected_items = self.buy_tree.selection()
+        if not selected_items:
+            import tkinter.messagebox as messagebox
+            messagebox.showinfo("Select Buyer", "Please select a buyer from the table to generate a proposal.")
+            return
+
+        selected_item = selected_items[0]
+        row_values = self.buy_tree.item(selected_item)["values"]
+        cols = list(self.buy_tree["columns"])
+        data = dict(zip(cols, row_values))
+
+        company_name = str(data.get("company_name", "Valued Partner")).strip()
+        target_products = str(data.get("target_products", "Industrial Products")).strip()
+        industry = str(data.get("industry", "")).strip()
+        locations = str(data.get("locations", "")).strip()
+        url = str(data.get("url", "")).strip()
+
+        win = ctk.CTkToplevel(self)
+        win.title(f"Trade Proposal - {company_name}")
+        win.geometry("760x640")
+        win.attributes("-topmost", True)
+        win.focus_set()
+
+        header_frame = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
+        header_frame.pack(fill="x", padx=15, pady=(15, 5))
+
+        lbl_title = ctk.CTkLabel(
+            header_frame, 
+            text=f"B2B Commercial Proposal for {company_name}", 
+            font=("Arial", 16, "bold"),
+            text_color="#ffffff"
+        )
+        lbl_title.pack(anchor="w", padx=15, pady=(10, 2))
+
+        lbl_sub = ctk.CTkLabel(
+            header_frame, 
+            text=f"Target: {target_products}  |  Industry: {industry or 'General Trade'}  |  Region: {locations or 'Global'}", 
+            font=("Arial", 11),
+            text_color="#a0a0a0"
+        )
+        lbl_sub.pack(anchor="w", padx=15, pady=(0, 10))
+
+        txt_proposal = ctk.CTkTextbox(win, wrap="word", font=("Arial", 12))
+        txt_proposal.pack(fill="both", expand=True, padx=15, pady=10)
+
+        btn_bar = ctk.CTkFrame(win, fg_color="transparent")
+        btn_bar.pack(fill="x", padx=15, pady=(5, 15))
+
+        def copy_proposal():
+            self.clipboard_clear()
+            self.clipboard_append(txt_proposal.get("0.0", "end").strip())
+            btn_copy.configure(text="Copied! ✅")
+            win.after(2000, lambda: btn_copy.configure(text="📋 Copy Proposal"))
+
+        btn_copy = ctk.CTkButton(btn_bar, text="📋 Copy Proposal", command=copy_proposal, width=140, fg_color="#1f7a1f", hover_color="#145214")
+        btn_copy.pack(side="left", padx=5)
+
+        def start_generation():
+            txt_proposal.delete("0.0", "end")
+            txt_proposal.insert("0.0", "⏳ Generating personalized commercial proposal using Gemini AI...\nPlease wait a few seconds.")
+            btn_regen.configure(state="disabled")
+
+            def generate_worker():
+                try:
+                    from llm_fallback import generate_with_fallback
+                    prompt = f"""You are an elite international trade and export business executive writing a formal B2B commercial export proposal.
+
+Company Details:
+- Exporter / Supplier: SinoMagan Indus Global Trade LLP
+- Authorized Signatory: Fardin Mohammed, Partner
+- Target Buyer / Client: {company_name}
+- Industry: {industry}
+- Products Demanded / Target Products: {target_products}
+- Client Location: {locations}
+- Client Website: {url}
+
+Instructions:
+1. Write a professional, highly compelling B2B export & supply proposal tailored specifically to {company_name} and their demand for {target_products}.
+2. Present SinoMagan Indus Global Trade LLP as a trusted, end-to-end global trade partner with top-tier manufacturing connections, rigid quality control, and international logistics execution.
+3. Highlight key advantages:
+   - Direct factory sourcing & competitive wholesale pricing
+   - Strict ISO/CE/RoHS quality inspection & compliance
+   - Full container load (FCL) & less than container load (LCL) freight solutions
+   - Flexible international trade terms (FOB, CIF, CFR) and reliable turnaround times
+4. Keep the tone executive, persuasive, and partnership-focused.
+5. End with a professional call-to-action to schedule a call or review sample specifications.
+6. The sign-off MUST strictly be formatted as:
+
+Warm regards,
+
+Fardin Mohammed
+Partner
+SinoMagan Indus Global Trade LLP
+"""
+                    response = generate_with_fallback(prompt, logger=self.logger)
+                    proposal_text = response.text.strip()
+                    def on_done():
+                        txt_proposal.delete("0.0", "end")
+                        txt_proposal.insert("0.0", proposal_text)
+                        btn_regen.configure(state="normal")
+                    win.after(0, on_done)
+                except Exception as e:
+                    def on_err():
+                        txt_proposal.delete("0.0", "end")
+                        txt_proposal.insert("0.0", f"Error generating proposal: {e}")
+                        btn_regen.configure(state="normal")
+                    win.after(0, on_err)
+
+            threading.Thread(target=generate_worker, daemon=True).start()
+
+        btn_regen = ctk.CTkButton(btn_bar, text="🔄 Regenerate", command=start_generation, width=120, fg_color="#3a3a3a", hover_color="#2b2b2b")
+        btn_regen.pack(side="left", padx=5)
+
+        btn_close = ctk.CTkButton(btn_bar, text="Close", command=win.destroy, width=90, fg_color="#555555", hover_color="#444444")
+        btn_close.pack(side="right", padx=5)
+
+        start_generation()
 
     def delete_all_entries(self, output_file, tree):
         import tkinter.messagebox as messagebox
-        if messagebox.askyesno("Confirm Delete", f"Are you sure you want to completely delete {output_file}?\nThis action cannot be undone."):
+        if messagebox.askyesno("Confirm Delete", f"Are you sure you want to completely delete {output_file}?\\nThis action cannot be undone."):
             if os.path.exists(output_file):
                 os.remove(output_file)
                 self.logger.info(f"Deleted {output_file}.")
@@ -572,12 +710,26 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
             try:
                 df = pd.read_excel(output_file)
                 tree.delete(*tree.get_children())
-                tree["columns"] = list(df.columns)
-                for col in df.columns:
+                
+                is_buyers = (output_file == "Buyers_Matrix.xlsx")
+                cols = list(df.columns)
+                if is_buyers:
+                    cols = ["Proposal"] + cols
+                    
+                tree["columns"] = cols
+                for col in cols:
                     tree.heading(col, text=col)
-                    tree.column(col, width=150, minwidth=100)
+                    if col == "Proposal":
+                        tree.column(col, width=120, minwidth=100, anchor="center")
+                    else:
+                        tree.column(col, width=150, minwidth=100)
+                        
                 for _, row in df.iterrows():
-                    tree.insert("", "end", values=list(row))
+                    values = list(row)
+                    if is_buyers:
+                        values = ["📝 Create"] + values
+                    tree.insert("", "end", values=values)
+                    
                 self.logger.info(f"Successfully synced {output_file} with UI.")
             except Exception as e:
                 self.logger.error(f"Failed to load matrix: {e}")
