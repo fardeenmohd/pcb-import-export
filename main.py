@@ -433,6 +433,9 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         self.btn_buy_start = ctk.CTkButton(control_frame, text="Start Buyer Scraping", command=lambda: self.start_scraping("buyer"))
         self.btn_buy_start.pack(side="left", padx=10)
         
+        self.btn_buy_prop = ctk.CTkButton(control_frame, text="🌐 Quick URL Proposal", command=self.open_url_proposal_window, fg_color="#005b96", hover_color="#003f66")
+        self.btn_buy_prop.pack(side="left", padx=10)
+        
         self.lbl_buy_status = ctk.CTkLabel(control_frame, text="Status: Idle", text_color="gray")
         self.lbl_buy_status.pack(side="left", padx=10)
         
@@ -516,6 +519,9 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
         if proposal_cmd:
             btn_prop = ctk.CTkButton(btn_frame, text="📝 Create Proposal", command=proposal_cmd, fg_color="#1f7a1f", hover_color="#145214")
             btn_prop.pack(side="left", padx=(0, 10))
+
+            btn_url_prop = ctk.CTkButton(btn_frame, text="🌐 Proposal from URL", command=self.open_url_proposal_window, fg_color="#005b96", hover_color="#003f66")
+            btn_url_prop.pack(side="left", padx=(0, 10))
 
         btn_clean = ctk.CTkButton(btn_frame, text="Clean Matrix", command=clean_cmd, fg_color="#b30000", hover_color="#800000")
         btn_clean.pack(side="left")
@@ -694,6 +700,177 @@ SinoMagan Indus Global Trade LLP
         btn_close.pack(side="right", padx=5)
 
         start_generation()
+
+    def open_url_proposal_window(self, initial_url=""):
+        win = ctk.CTkToplevel(self)
+        win.title("Instant B2B Trade Proposal Generator")
+        win.geometry("820x690")
+        win.attributes("-topmost", True)
+        win.focus_set()
+
+        # Top Header Banner
+        header_frame = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
+        header_frame.pack(fill="x", padx=15, pady=(15, 10))
+
+        lbl_title = ctk.CTkLabel(
+            header_frame, 
+            text="🌐 Instant B2B Proposal from Website URL", 
+            font=("Arial", 16, "bold"),
+            text_color="#ffffff"
+        )
+        lbl_title.pack(anchor="w", padx=15, pady=(10, 2))
+
+        lbl_sub = ctk.CTkLabel(
+            header_frame, 
+            text="Enter any company website to scrape their products and generate a tailored proposal from SinoMagan Indus Global Trade LLP.", 
+            font=("Arial", 11),
+            text_color="#a0a0a0"
+        )
+        lbl_sub.pack(anchor="w", padx=15, pady=(0, 10))
+
+        # URL Input Bar
+        url_frame = ctk.CTkFrame(win, fg_color="transparent")
+        url_frame.pack(fill="x", padx=15, pady=(0, 5))
+
+        url_entry = ctk.CTkEntry(
+            url_frame, 
+            placeholder_text="Enter website URL (e.g. https://www.example.com)...", 
+            font=("Arial", 12),
+            height=38
+        )
+        url_entry.pack(side="left", fill="x", expand=True, padx=(0, 10))
+        if initial_url:
+            url_entry.insert(0, initial_url)
+
+        btn_generate = ctk.CTkButton(
+            url_frame, 
+            text="⚡ Generate Proposal", 
+            width=160, 
+            height=38,
+            fg_color="#1f7a1f", 
+            hover_color="#145214",
+            font=("Arial", 12, "bold")
+        )
+        btn_generate.pack(side="right")
+
+        # Status Label
+        lbl_status = ctk.CTkLabel(win, text="Status: Ready. Paste a URL and click Generate.", text_color="#a0a0a0", font=("Arial", 11))
+        lbl_status.pack(anchor="w", padx=18, pady=(0, 5))
+
+        # Proposal Textbox (Directly under the URL field)
+        txt_proposal = ctk.CTkTextbox(win, wrap="word", font=("Arial", 12))
+        txt_proposal.pack(fill="both", expand=True, padx=15, pady=5)
+        txt_proposal.insert("0.0", "Your generated commercial proposal will appear here...")
+
+        # Bottom Action Bar
+        btn_bar = ctk.CTkFrame(win, fg_color="transparent")
+        btn_bar.pack(fill="x", padx=15, pady=(10, 15))
+
+        def copy_proposal():
+            text = txt_proposal.get("0.0", "end").strip()
+            if text and text != "Your generated commercial proposal will appear here...":
+                self.clipboard_clear()
+                self.clipboard_append(text)
+                btn_copy.configure(text="Copied! ✅")
+                win.after(2000, lambda: btn_copy.configure(text="📋 Copy Proposal"))
+
+        btn_copy = ctk.CTkButton(btn_bar, text="📋 Copy Proposal", command=copy_proposal, width=140, fg_color="#1f7a1f", hover_color="#145214")
+        btn_copy.pack(side="left", padx=5)
+
+        def clear_fields():
+            url_entry.delete(0, "end")
+            txt_proposal.delete("0.0", "end")
+            lbl_status.configure(text="Status: Ready.")
+
+        btn_clear = ctk.CTkButton(btn_bar, text="Clear", command=clear_fields, width=90, fg_color="#3a3a3a", hover_color="#2b2b2b")
+        btn_clear.pack(side="left", padx=5)
+
+        btn_close = ctk.CTkButton(btn_bar, text="Close", command=win.destroy, width=90, fg_color="#555555", hover_color="#444444")
+        btn_close.pack(side="right", padx=5)
+
+        def start_url_generation():
+            raw_url = url_entry.get().strip()
+            if not raw_url:
+                lbl_status.configure(text="Status: Please enter a valid website URL first.")
+                return
+
+            if not raw_url.startswith("http://") and not raw_url.startswith("https://"):
+                target_url = "https://" + raw_url
+            else:
+                target_url = raw_url
+
+            btn_generate.configure(state="disabled")
+            lbl_status.configure(text=f"Status: Scraping {target_url}...")
+            txt_proposal.delete("0.0", "end")
+            txt_proposal.insert("0.0", f"⏳ Step 1: Scraping website content from {target_url}...\n⏳ Step 2: Analyzing product portfolio with Gemini AI...\n\nPlease wait a moment.")
+
+            def worker():
+                try:
+                    from scraper import scrape_url
+                    scraped_text = scrape_url(target_url, self.logger)
+                    
+                    def update_status_ai():
+                        lbl_status.configure(text="Status: Website scraped. Generating proposal with Gemini AI...")
+                    win.after(0, update_status_ai)
+
+                    from llm_fallback import generate_with_fallback
+                    
+                    if scraped_text and len(scraped_text.strip()) > 100:
+                        content_block = f"Scraped Website Content of the Target Company:\n\"\"\"\n{scraped_text[:25000]}\n\"\"\""
+                    else:
+                        content_block = f"Note: Website text was minimal or protected. Tailor proposal to the company domain/URL: {target_url}."
+
+                    prompt = f"""You are an elite international trade and export business executive writing a formal B2B commercial export proposal.
+
+Company Details:
+- Exporter / Supplier: SinoMagan Indus Global Trade LLP
+- Authorized Signatory: Fardin Mohammed, Partner
+- Target Buyer Website: {target_url}
+
+{content_block}
+
+Instructions:
+1. Analyze the website text or domain name to identify:
+   - The company's business name and industry
+   - The specific products, parts, or equipment they produce, distribute, or utilize
+2. Write a professional, highly compelling B2B commercial export proposal specifically offering products, components, or raw materials that match their exact business and product line.
+3. Present SinoMagan Indus Global Trade LLP as a premier global sourcing and manufacturing supply partner with direct factory access, rigorous ISO/CE/RoHS quality control, and full container shipping solutions (FCL/LCL).
+4. Highlight key advantages:
+   - Direct factory sourcing & competitive wholesale pricing
+   - Strict ISO/CE/RoHS quality inspection & compliance
+   - Full container load (FCL) & less than container load (LCL) freight solutions
+   - Flexible international trade terms (FOB, CIF, CFR) and reliable turnaround times
+5. Keep the tone executive, persuasive, and partnership-focused.
+6. End with a professional call-to-action to schedule a call or review catalog specifications.
+7. The sign-off MUST strictly be formatted as:
+
+Warm regards,
+
+Fardin Mohammed
+Partner
+SinoMagan Indus Global Trade LLP
+"""
+                    response = generate_with_fallback(prompt, logger=self.logger)
+                    proposal_text = response.text.strip()
+
+                    def on_done():
+                        txt_proposal.delete("0.0", "end")
+                        txt_proposal.insert("0.0", proposal_text)
+                        lbl_status.configure(text="Status: Proposal generated successfully! ✅")
+                        btn_generate.configure(state="normal")
+                    win.after(0, on_done)
+                except Exception as e:
+                    def on_err():
+                        txt_proposal.delete("0.0", "end")
+                        txt_proposal.insert("0.0", f"Error generating proposal: {e}")
+                        lbl_status.configure(text="Status: Error during generation.")
+                        btn_generate.configure(state="normal")
+                    win.after(0, on_err)
+
+            threading.Thread(target=worker, daemon=True).start()
+
+        btn_generate.configure(command=start_url_generation)
+        url_entry.bind("<Return>", lambda event: start_url_generation())
 
     def delete_all_entries(self, output_file, tree):
         import tkinter.messagebox as messagebox
