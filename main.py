@@ -15,6 +15,49 @@ from processor import run_pipeline, run_buyer_pipeline, clean_matrix
 # Load environment variables
 load_dotenv()
 
+def sanitize_email_body(text: str) -> str:
+    import re
+    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
+    text = re.sub(r'\*(.*?)\*', r'\1', text)
+    text = re.sub(r'__(.*?)__', r'\1', text)
+    text = re.sub(r'_(.*?)_', r'\1', text)
+    text = re.sub(r'^\s*#{1,6}\s*', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^\s*[-*_]{3,}\s*$', '', text, flags=re.MULTILINE)
+    text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'\1 (\2)', text)
+    text = re.sub(r'^\s*[\*\-]\s+', '• ', text, flags=re.MULTILINE)
+    return text.strip()
+
+def parse_email_response(raw_text: str, default_to: str = ""):
+    import json
+    import re
+    try:
+        clean_json = raw_text.strip()
+        if clean_json.startswith("```"):
+            clean_json = re.sub(r'^```(?:json)?\s*', '', clean_json)
+            clean_json = re.sub(r'\s*```$', '', clean_json)
+        data = json.loads(clean_json)
+        to_val = data.get("to_email", "") or default_to
+        subj_val = data.get("subject", "").strip()
+        body_val = data.get("body", "").strip()
+        return to_val, subj_val, sanitize_email_body(body_val)
+    except Exception:
+        to_val = default_to
+        subj_val = ""
+        body_val = raw_text
+        
+        match_subj = re.search(r'^(?:Subject|Re):\s*(.+)$', raw_text, flags=re.MULTILINE | re.IGNORECASE)
+        if match_subj:
+            subj_val = match_subj.group(1).strip()
+            body_val = re.sub(r'^(?:Subject|Re):\s*.+$\n?', '', body_val, flags=re.MULTILINE | re.IGNORECASE).strip()
+            
+        match_to = re.search(r'^(?:To):\s*(.+)$', body_val, flags=re.MULTILINE | re.IGNORECASE)
+        if match_to:
+            if not to_val:
+                to_val = match_to.group(1).strip()
+            body_val = re.sub(r'^(?:To):\s*.+$\n?', '', body_val, flags=re.MULTILINE | re.IGNORECASE).strip()
+            
+        return to_val, subj_val, sanitize_email_body(body_val)
+
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -581,49 +624,6 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
             lambda: self.delete_all_entries("Buyers_Matrix.xlsx", self.buy_tree),
             proposal_cmd=self.open_proposal_window
         )
-
-def sanitize_email_body(text: str) -> str:
-    import re
-    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
-    text = re.sub(r'\*(.*?)\*', r'\1', text)
-    text = re.sub(r'__(.*?)__', r'\1', text)
-    text = re.sub(r'_(.*?)_', r'\1', text)
-    text = re.sub(r'^\s*#{1,6}\s*', '', text, flags=re.MULTILINE)
-    text = re.sub(r'^\s*[-*_]{3,}\s*$', '', text, flags=re.MULTILINE)
-    text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'\1 (\2)', text)
-    text = re.sub(r'^\s*[\*\-]\s+', '• ', text, flags=re.MULTILINE)
-    return text.strip()
-
-def parse_email_response(raw_text: str, default_to: str = ""):
-    import json
-    import re
-    try:
-        clean_json = raw_text.strip()
-        if clean_json.startswith("```"):
-            clean_json = re.sub(r'^```(?:json)?\s*', '', clean_json)
-            clean_json = re.sub(r'\s*```$', '', clean_json)
-        data = json.loads(clean_json)
-        to_val = data.get("to_email", "") or default_to
-        subj_val = data.get("subject", "").strip()
-        body_val = data.get("body", "").strip()
-        return to_val, subj_val, sanitize_email_body(body_val)
-    except Exception:
-        to_val = default_to
-        subj_val = ""
-        body_val = raw_text
-        
-        match_subj = re.search(r'^(?:Subject|Re):\s*(.+)$', raw_text, flags=re.MULTILINE | re.IGNORECASE)
-        if match_subj:
-            subj_val = match_subj.group(1).strip()
-            body_val = re.sub(r'^(?:Subject|Re):\s*.+$\n?', '', body_val, flags=re.MULTILINE | re.IGNORECASE).strip()
-            
-        match_to = re.search(r'^(?:To):\s*(.+)$', body_val, flags=re.MULTILINE | re.IGNORECASE)
-        if match_to:
-            if not to_val:
-                to_val = match_to.group(1).strip()
-            body_val = re.sub(r'^(?:To):\s*.+$\n?', '', body_val, flags=re.MULTILINE | re.IGNORECASE).strip()
-            
-        return to_val, subj_val, sanitize_email_body(body_val)
 
     def open_proposal_window(self):
         selected_items = self.buy_tree.selection()
