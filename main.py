@@ -648,28 +648,31 @@ Do not include any quotes, markdown, or explanations. Return ONLY the raw query 
             def generate_worker():
                 try:
                     from llm_fallback import generate_with_fallback
-                    prompt = f"""You are an elite international trade and export business executive writing a formal B2B commercial export proposal.
+                    prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing a personalized, direct B2B commercial export proposal to a prospective client.
 
-Company Details:
-- Exporter / Supplier: SinoMagan Indus Global Trade LLP
-- Authorized Signatory: Fardin Mohammed, Partner
+Target Client Details:
 - Target Buyer / Client: {company_name}
 - Industry: {industry}
 - Products Demanded / Target Products: {target_products}
 - Client Location: {locations}
 - Client Website: {url}
 
-Instructions:
-1. Write a professional, highly compelling B2B export & supply proposal tailored specifically to {company_name} and their demand for {target_products}.
-2. Present SinoMagan Indus Global Trade LLP as a trusted, end-to-end global trade partner with top-tier manufacturing connections, rigid quality control, and international logistics execution.
-3. Highlight key advantages:
-   - Direct factory sourcing & competitive wholesale pricing
-   - Strict ISO/CE/RoHS quality inspection & compliance
-   - Full container load (FCL) & less than container load (LCL) freight solutions
-   - Flexible international trade terms (FOB, CIF, CFR) and reliable turnaround times
-4. Keep the tone executive, persuasive, and partnership-focused.
-5. End with a professional call-to-action to schedule a call or review sample specifications.
-6. The sign-off MUST strictly be formatted as:
+Your Company:
+- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management)
+- Authorized Signatory: Fardin Mohammed, Partner
+
+CRITICAL INSTRUCTIONS FOR HUMANIZED WRITING STYLE:
+1. SOUND LIKE A REAL HUMAN EXECUTIVE:
+   - Write in a natural, confident, one-to-one professional voice.
+   - STRICTLY AVOID robotic AI clichés: DO NOT say "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect", or generic marketing fluff.
+   - Start immediately with a sharp, relevant Subject line (e.g. Subject: Supply Partnership: [Product] for {company_name}) followed by a direct, respectful opening addressing {company_name}.
+2. PRESERVE MAXIMUM TECHNICAL & COMMERCIAL SPECIFICITY:
+   - Specifically name and discuss their product demand: {target_products}.
+   - Address engineering and manufacturing realities: production tolerances, raw materials, certifications (ISO 9001, CE, RoHS, UL), quality control (factory audits, pre-shipment inspections).
+   - Address commercial trade logistics: full container load (FCL 20ft/40ft) or consolidated LCL shipments, Incoterms (FOB, CIF, CFR), sample evaluation before full production, and flexible payment terms.
+3. CONVERSATIONAL & LOW-PRESSURE CALL TO ACTION:
+   - Invite them to share an active BOM (Bill of Materials) or technical drawing/spec sheet for an initial cost and lead-time benchmark comparison.
+4. SIGN-OFF MUST STRICTLY BE FORMATTED AS:
 
 Warm regards,
 
@@ -820,29 +823,28 @@ SinoMagan Indus Global Trade LLP
                     else:
                         content_block = f"Note: Website text was minimal or protected. Tailor proposal to the company domain/URL: {target_url}."
 
-                    prompt = f"""You are an elite international trade and export business executive writing a formal B2B commercial export proposal.
+                    prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing a personalized, direct B2B commercial export proposal to a prospective client.
 
-Company Details:
-- Exporter / Supplier: SinoMagan Indus Global Trade LLP
-- Authorized Signatory: Fardin Mohammed, Partner
-- Target Buyer Website: {target_url}
+Target Client Website: {target_url}
 
 {content_block}
 
-Instructions:
-1. Analyze the website text or domain name to identify:
-   - The company's business name and industry
-   - The specific products, parts, or equipment they produce, distribute, or utilize
-2. Write a professional, highly compelling B2B commercial export proposal specifically offering products, components, or raw materials that match their exact business and product line.
-3. Present SinoMagan Indus Global Trade LLP as a premier global sourcing and manufacturing supply partner with direct factory access, rigorous ISO/CE/RoHS quality control, and full container shipping solutions (FCL/LCL).
-4. Highlight key advantages:
-   - Direct factory sourcing & competitive wholesale pricing
-   - Strict ISO/CE/RoHS quality inspection & compliance
-   - Full container load (FCL) & less than container load (LCL) freight solutions
-   - Flexible international trade terms (FOB, CIF, CFR) and reliable turnaround times
-5. Keep the tone executive, persuasive, and partnership-focused.
-6. End with a professional call-to-action to schedule a call or review catalog specifications.
-7. The sign-off MUST strictly be formatted as:
+Your Company:
+- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management)
+- Authorized Signatory: Fardin Mohammed, Partner
+
+CRITICAL INSTRUCTIONS FOR HUMANIZED WRITING STYLE:
+1. SOUND LIKE A REAL HUMAN EXECUTIVE:
+   - Write in a natural, confident, one-to-one professional voice.
+   - STRICTLY AVOID robotic AI clichés: DO NOT say "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect", or generic marketing fluff.
+   - Start with a sharp, relevant email Subject line and a direct, respectful opening that demonstrates genuine familiarity with their specific products, equipment, or components from their website.
+2. PRESERVE MAXIMUM TECHNICAL & COMMERCIAL SPECIFICITY:
+   - Specifically identify and reference the products, components, or assemblies they produce, distribute, or service based on the scraped content.
+   - Offer exact matching manufacturing capabilities, raw materials, engineering tolerances, and compliance standards (ISO 9001, CE, RoHS, UL).
+   - Address real commercial trade realities: factory auditing, pre-dispatch quality checks, container logistics (20ft/40ft FCL or LCL freight), Incoterms (FOB, CIF, CFR), and sample dispatch for validation.
+3. CONVERSATIONAL & LOW-PRESSURE CALL TO ACTION:
+   - Invite them to share their current specs, target pricing, or upcoming RFQ for a direct benchmark comparison.
+4. SIGN-OFF MUST STRICTLY BE FORMATTED AS:
 
 Warm regards,
 
