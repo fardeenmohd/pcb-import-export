@@ -1,5 +1,6 @@
 import os
 import logging
+import resource_util
 from google import genai
 
 def generate_with_fallback(prompt, config=None, logger=None):

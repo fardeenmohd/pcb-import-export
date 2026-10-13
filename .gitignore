@@ -3,3 +3,5 @@ venv/
 __pycache__/
 *.xlsx
 workflow_logs.txt
+build/
+dist/

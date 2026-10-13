@@ -9,11 +9,10 @@ from dotenv import load_dotenv
 from ddgs import DDGS
 from tkinter import ttk
 
+import resource_util
+from resource_util import resource_path
 from logger_util import setup_logger
 from processor import run_pipeline, run_buyer_pipeline, clean_matrix
-
-# Load environment variables
-load_dotenv()
 
 def sanitize_email_body(text: str) -> str:
     import re
@@ -62,8 +61,15 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("Global PCB Intelligence Agent")
+        self.title("SinoMagan Global Trade Intelligence")
         self.geometry("1100x800")
+        
+        icon_path = resource_path("app_icon.ico")
+        if os.path.exists(icon_path):
+            try:
+                self.iconbitmap(icon_path)
+            except Exception:
+                pass
         
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
@@ -1907,6 +1913,13 @@ SinoMagan Indus Global Trade LLP
         win.geometry("820x760")
         win.attributes("-topmost", True)
         win.focus_set()
+        
+        icon_path = resource_path("app_icon.ico")
+        if os.path.exists(icon_path):
+            try:
+                win.iconbitmap(icon_path)
+            except Exception:
+                pass
 
         # Top Header Banner
         header_frame = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)

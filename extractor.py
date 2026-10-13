@@ -1,5 +1,6 @@
 import os
 import logging
+import resource_util
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from google import genai
