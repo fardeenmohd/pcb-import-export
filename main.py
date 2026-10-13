@@ -245,14 +245,20 @@ class App(ctk.CTk):
         self.current_hq_urls = []
         self.populate_hq_urls([])
 
-        # Initial starter queries
+        # Initial starter queries (covering all 9 product niches)
         starter_queries = [
             "switchgear panel distributors USA",
             "commercial lighting importers UAE",
             "industrial wire cable wholesalers Germany",
             "lithium battery pack distributors UK",
             "HVAC equipment wholesalers Australia",
-            "solar inverter distributors Canada"
+            "solar inverter distributors Canada",
+            "diesel generator dealers Saudi Arabia",
+            "cable gland terminal block importers Oman",
+            "floor scrubber cleaning equipment distributors Qatar",
+            "PIR sensor testing equipment wholesalers Singapore",
+            "industrial fan pump suppliers Kuwait",
+            "home energy storage importers Poland"
         ]
         self.populate_suggested_queries(starter_queries)
         self.select_suggested_query(starter_queries[0])
@@ -438,7 +444,13 @@ class App(ctk.CTk):
                 f"industrial wire cable wholesalers {dest}",
                 f"lithium battery pack distributors {dest}",
                 f"HVAC equipment wholesalers {dest}",
-                f"solar inverter distributors {dest}"
+                f"solar inverter distributors {dest}",
+                f"diesel generator dealers {dest}",
+                f"cable gland terminal block importers {dest}",
+                f"floor scrubber cleaning equipment distributors {dest}",
+                f"PIR sensor testing equipment wholesalers {dest}",
+                f"industrial fan pump suppliers {dest}",
+                f"home energy storage importers {dest}"
             ]
         self.populate_suggested_queries(queries)
         self.select_suggested_query(queries[0])
@@ -454,7 +466,13 @@ class App(ctk.CTk):
                 "copper wire cable manufacturers India",
                 "lithium battery pack makers Bangalore",
                 "HVAC components suppliers Maharashtra",
-                "circuit breaker factories India"
+                "circuit breaker factories India",
+                "diesel generator manufacturers Pune",
+                "brass cable glands manufacturers Jamnagar",
+                "LED streetlight luminaire factories India",
+                "industrial pump motor manufacturers Coimbatore",
+                "floor scrubber cleaning machine suppliers India",
+                "sensor testing equipment manufacturers Delhi NCR"
             ]
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
@@ -486,7 +504,13 @@ class App(ctk.CTk):
                 f"industrial wire cable wholesalers {dest}",
                 f"lithium battery pack distributors {dest}",
                 f"HVAC equipment wholesalers {dest}",
-                f"solar inverter distributors {dest}"
+                f"solar inverter distributors {dest}",
+                f"diesel generator dealers {dest}",
+                f"cable gland terminal block importers {dest}",
+                f"floor scrubber cleaning equipment distributors {dest}",
+                f"PIR sensor testing equipment wholesalers {dest}",
+                f"industrial fan pump suppliers {dest}",
+                f"home energy storage importers {dest}"
             ]
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
@@ -557,7 +581,7 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
             widget.destroy()
         lbl_loading = ctk.CTkLabel(
             self.queries_list_frame, 
-            text="⏳ Generating 6-8 search queries with Gemini...", 
+            text="⏳ Generating 12-14 diverse search queries with Gemini...", 
             font=("Arial", 11, "italic"), 
             text_color="gray",
             wraplength=240
@@ -577,29 +601,35 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
 
             if strategy == "Suppliers":
                 prompt = """You are an elite B2B sourcing expert for Indian export-import trade.
-Our product catalog includes:
-- Switchgear, circuit breakers, relays, and electrical control panels
-- Power cables, copper wire, armored XLPE cables, and cable glands/lugs
-- Distribution transformers and voltage stabilizers
-- Industrial automation sensors, PLCs, and terminal blocks
-- Lithium battery packs (LiFePO4) and solar inverters
-- Industrial fans, pumps, compressors, and HVAC components
-- Commercial LED lighting and wiring accessories
+Our company sources from Indian manufacturers across these 9 core industrial niches:
 
-Generate 6 to 8 short, simple, natural DuckDuckGo search queries to find Indian MANUFACTURERS and FACTORIES across India (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu).
+NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
+NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
+NICHE 3 - Switchgear & Panels: ACB, MCCB, MCB, VCB, relays, contactors, PCC/MCC panels, distribution boards
+NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
+NICHE 5 - Batteries & Energy Storage: LiFePO4 battery packs, home energy storage, marine batteries, GaN chargers, solar inverters
+NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent generators, wind turbines
+NICHE 7 - LED Lighting: Streetlights, high-bay LED, poultry lighting systems, smart WiFi sockets, luminaires
+NICHE 8 - Commercial Appliances: Industrial dehumidifiers, floor scrubbers, commercial laundry machines, kitchen equipment
+NICHE 9 - Sensors & Testing: PIR sensors, float switches, transformer test benches, multimeters, data loggers
+
+Generate 12 to 14 short, simple, natural DuckDuckGo search queries to find Indian MANUFACTURERS and FACTORIES across India (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu, Coimbatore, Pune, Jamnagar).
 
 RULES:
 1. Each query must be short and clean (3 to 6 words only).
    Examples of good queries:
    - "distribution transformer manufacturers India"
    - "switchgear panel factories Gujarat"
-   - "copper wire cable manufacturers India"
-   - "lithium battery pack makers Bangalore"
    - "brass cable glands manufacturers Jamnagar"
-   - "HVAC components suppliers Maharashtra"
-2. Do NOT use boolean operators (no AND, OR, NOT, site:).
-3. Do NOT use quotation marks or plus/minus signs.
-4. Keep queries realistic, diverse across products, and search-engine friendly.
+   - "diesel generator manufacturers Pune"
+   - "LED streetlight factories India"
+   - "floor scrubber machine suppliers India"
+   - "PIR sensor manufacturers Delhi NCR"
+2. CRITICAL: You MUST cover ALL 9 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 9 are covered.
+3. Rotate between different Indian industrial hubs (Gujarat, Maharashtra, Tamil Nadu, Karnataka, Delhi NCR, etc.).
+4. Do NOT use boolean operators (no AND, OR, NOT, site:).
+5. Do NOT use quotation marks or plus/minus signs.
+6. Keep queries realistic, diverse, and search-engine friendly.
 """
             elif strategy == "Logistics":
                 dest = region.split(" (")[0]
@@ -631,30 +661,35 @@ RULES:
                     region_kw = region_name
 
                 prompt = f"""You are an elite B2B export sales director.
-We are an Indian manufacturer and exporter supplying international buyers with:
-- Switchgear panels, circuit breakers, and electrical distribution boards
-- Copper wires, power cables, and cable accessories
-- Distribution transformers and solar inverters
-- Industrial automation components and terminal blocks
-- Lithium battery energy storage packs (LiFePO4)
-- Industrial fans, pumps, compressors, and HVAC spare parts
-- Commercial LED lighting and wiring accessories
+We are an Indian manufacturer and exporter supplying international buyers across these 9 core industrial niches:
 
-Generate 6 to 8 short, simple, natural DuckDuckGo search queries to find real B2B BUYERS, DISTRIBUTORS, IMPORTERS, WHOLESALERS, or CONTRACTORS in {region_target}.
+NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
+NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
+NICHE 3 - Switchgear & Panels: ACB, MCCB, MCB, VCB, relays, contactors, PCC/MCC panels, distribution boards
+NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
+NICHE 5 - Batteries & Energy Storage: LiFePO4 battery packs, home energy storage, marine batteries, GaN chargers, solar inverters
+NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent generators, wind turbines
+NICHE 7 - LED Lighting: Streetlights, high-bay LED, poultry lighting systems, smart WiFi sockets, luminaires
+NICHE 8 - Commercial Appliances: Industrial dehumidifiers, floor scrubbers, commercial laundry machines, kitchen equipment
+NICHE 9 - Sensors & Testing: PIR sensors, float switches, transformer test benches, multimeters, data loggers
+
+Generate 12 to 14 short, simple, natural DuckDuckGo search queries to find real B2B BUYERS, DISTRIBUTORS, IMPORTERS, WHOLESALERS, or CONTRACTORS in {region_target}.
 
 RULES:
 1. Each query must be short and clean (3 to 6 words only).
    Examples of good queries:
    - "switchgear panel distributors {region_kw}"
    - "commercial lighting importers {region_kw}"
-   - "industrial wire cable wholesalers {region_kw}"
-   - "lithium battery pack distributors {region_kw}"
-   - "HVAC equipment wholesalers {region_kw}"
-   - "circuit breaker distributors {region_kw}"
-   - "electrical supplies importers {region_kw}"
-2. Do NOT use boolean operators (no AND, OR, NOT, site:).
-3. Do NOT use quotation marks or plus/minus signs.
-4. Keep queries realistic, diverse across our product catalog, and search-engine friendly.
+   - "diesel generator dealers {region_kw}"
+   - "cable gland terminal block importers {region_kw}"
+   - "floor scrubber equipment distributors {region_kw}"
+   - "PIR sensor wholesalers {region_kw}"
+   - "home energy storage importers {region_kw}"
+2. CRITICAL: You MUST cover ALL 9 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 9 are covered.
+3. Use varied buyer types (distributors, importers, wholesalers, dealers, contractors, suppliers).
+4. Do NOT use boolean operators (no AND, OR, NOT, site:).
+5. Do NOT use quotation marks or plus/minus signs.
+6. Keep queries realistic, diverse, and search-engine friendly.
 """
 
             from llm_fallback import generate_with_fallback
@@ -699,7 +734,13 @@ RULES:
                         "copper wire cable manufacturers India",
                         "lithium battery pack makers Bangalore",
                         "HVAC components suppliers Maharashtra",
-                        "circuit breaker factories India"
+                        "circuit breaker factories India",
+                        "diesel generator manufacturers Pune",
+                        "brass cable glands manufacturers Jamnagar",
+                        "LED streetlight luminaire factories India",
+                        "industrial pump motor manufacturers Coimbatore",
+                        "floor scrubber cleaning machine suppliers India",
+                        "sensor testing equipment manufacturers Delhi NCR"
                     ]
                 elif strategy == "Logistics":
                     dest_term = region.split(" (")[0]
@@ -717,7 +758,13 @@ RULES:
                         f"industrial wire cable wholesalers {dest_term}",
                         f"lithium battery pack distributors {dest_term}",
                         f"HVAC equipment wholesalers {dest_term}",
-                        f"solar inverter distributors {dest_term}"
+                        f"solar inverter distributors {dest_term}",
+                        f"diesel generator dealers {dest_term}",
+                        f"cable gland terminal block importers {dest_term}",
+                        f"floor scrubber cleaning equipment distributors {dest_term}",
+                        f"PIR sensor testing equipment wholesalers {dest_term}",
+                        f"industrial fan pump suppliers {dest_term}",
+                        f"home energy storage importers {dest_term}"
                     ]
 
             self.ui_queue.put((self.on_suggest_complete, (queries,)))
@@ -731,7 +778,13 @@ RULES:
                     "copper wire cable manufacturers India",
                     "lithium battery pack makers Bangalore",
                     "HVAC components suppliers Maharashtra",
-                    "circuit breaker factories India"
+                    "circuit breaker factories India",
+                    "diesel generator manufacturers Pune",
+                    "brass cable glands manufacturers Jamnagar",
+                    "LED streetlight luminaire factories India",
+                    "industrial pump motor manufacturers Coimbatore",
+                    "floor scrubber cleaning machine suppliers India",
+                    "sensor testing equipment manufacturers Delhi NCR"
                 ]
             elif strategy == "Logistics":
                 fallback_queries = [
@@ -747,7 +800,13 @@ RULES:
                     f"industrial wire cable wholesalers {fallback_dest}",
                     f"lithium battery pack distributors {fallback_dest}",
                     f"HVAC equipment wholesalers {fallback_dest}",
-                    f"solar inverter distributors {fallback_dest}"
+                    f"solar inverter distributors {fallback_dest}",
+                    f"diesel generator dealers {fallback_dest}",
+                    f"cable gland terminal block importers {fallback_dest}",
+                    f"floor scrubber cleaning equipment distributors {fallback_dest}",
+                    f"PIR sensor testing equipment wholesalers {fallback_dest}",
+                    f"industrial fan pump suppliers {fallback_dest}",
+                    f"home energy storage importers {fallback_dest}"
                 ]
             self.ui_queue.put((self.on_suggest_complete, (fallback_queries,)))
 
