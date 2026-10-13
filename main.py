@@ -899,9 +899,6 @@ RULES:
         elif strategy == "Logistics":
             region_code = "in-en"
         else:
-            query_lower = query.lower()
-            if not any(term in query_lower for term in ["pcb", "circuit board", "circuit boards", "pcba", "smt"]):
-                query += " -\"PCB manufacturer\" -\"PCB assembly\" -\"printed circuit board\""
             region_code = self.region_var.get().split(" (")[1].replace(")", "")
             
         max_results = int(self.results_slider.get())
