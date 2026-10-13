@@ -245,7 +245,7 @@ class App(ctk.CTk):
         self.current_hq_urls = []
         self.populate_hq_urls([])
 
-        # Initial starter queries (covering all 9 product niches)
+        # Initial starter queries (covering all 10 product niches including Electric Vehicles)
         starter_queries = [
             "switchgear panel distributors USA",
             "commercial lighting importers UAE",
@@ -258,7 +258,9 @@ class App(ctk.CTk):
             "floor scrubber cleaning equipment distributors Qatar",
             "PIR sensor testing equipment wholesalers Singapore",
             "industrial fan pump suppliers Kuwait",
-            "home energy storage importers Poland"
+            "home energy storage importers Poland",
+            "EV charging station distributors USA",
+            "electric vehicle charger importers UAE"
         ]
         self.populate_suggested_queries(starter_queries)
         self.select_suggested_query(starter_queries[0])
@@ -450,7 +452,9 @@ class App(ctk.CTk):
                 f"floor scrubber cleaning equipment distributors {dest}",
                 f"PIR sensor testing equipment wholesalers {dest}",
                 f"industrial fan pump suppliers {dest}",
-                f"home energy storage importers {dest}"
+                f"home energy storage importers {dest}",
+                f"EV charging station distributors {dest}",
+                f"electric vehicle charger importers {dest}"
             ]
         self.populate_suggested_queries(queries)
         self.select_suggested_query(queries[0])
@@ -472,7 +476,9 @@ class App(ctk.CTk):
                 "LED streetlight luminaire factories India",
                 "industrial pump motor manufacturers Coimbatore",
                 "floor scrubber cleaning machine suppliers India",
-                "sensor testing equipment manufacturers Delhi NCR"
+                "sensor testing equipment manufacturers Delhi NCR",
+                "EV charging station manufacturers India",
+                "electric vehicle battery pack manufacturers Pune"
             ]
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
@@ -510,7 +516,9 @@ class App(ctk.CTk):
                 f"floor scrubber cleaning equipment distributors {dest}",
                 f"PIR sensor testing equipment wholesalers {dest}",
                 f"industrial fan pump suppliers {dest}",
-                f"home energy storage importers {dest}"
+                f"home energy storage importers {dest}",
+                f"EV charging station distributors {dest}",
+                f"electric vehicle charger importers {dest}"
             ]
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
@@ -581,7 +589,7 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
             widget.destroy()
         lbl_loading = ctk.CTkLabel(
             self.queries_list_frame, 
-            text="⏳ Generating 12-14 diverse search queries with Gemini...", 
+            text="⏳ Generating 12-15 diverse search queries with Gemini...", 
             font=("Arial", 11, "italic"), 
             text_color="gray",
             wraplength=240
@@ -601,7 +609,7 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
 
             if strategy == "Suppliers":
                 prompt = """You are an elite B2B sourcing expert for Indian export-import trade.
-Our company sources from Indian manufacturers across these 9 core industrial niches:
+Our company sources from Indian manufacturers across these 10 core industrial niches:
 
 NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
@@ -612,8 +620,9 @@ NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent 
 NICHE 7 - LED Lighting: Streetlights, high-bay LED, poultry lighting systems, smart WiFi sockets, luminaires
 NICHE 8 - Commercial Appliances: Industrial dehumidifiers, floor scrubbers, commercial laundry machines, kitchen equipment
 NICHE 9 - Sensors & Testing: PIR sensors, float switches, transformer test benches, multimeters, data loggers
+NICHE 10 - Electric Vehicles & EV Infrastructure: EV chargers (AC wallbox, DC fast chargers), EV charging cables, Type 2 & CCS2 connectors, EV battery packs (2W/3W/4W LiFePO4), BMS controllers, EV charging stations
 
-Generate 12 to 14 short, simple, natural DuckDuckGo search queries to find Indian MANUFACTURERS and FACTORIES across India (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu, Coimbatore, Pune, Jamnagar).
+Generate 12 to 15 short, simple, natural DuckDuckGo search queries to find Indian MANUFACTURERS and FACTORIES across India (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu, Coimbatore, Pune, Jamnagar).
 
 RULES:
 1. Each query must be short and clean (3 to 6 words only).
@@ -625,7 +634,9 @@ RULES:
    - "LED streetlight factories India"
    - "floor scrubber machine suppliers India"
    - "PIR sensor manufacturers Delhi NCR"
-2. CRITICAL: You MUST cover ALL 9 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 9 are covered.
+   - "EV charging station manufacturers India"
+   - "electric vehicle battery pack makers Pune"
+2. CRITICAL: You MUST cover ALL 10 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 10 are covered.
 3. Rotate between different Indian industrial hubs (Gujarat, Maharashtra, Tamil Nadu, Karnataka, Delhi NCR, etc.).
 4. Do NOT use boolean operators (no AND, OR, NOT, site:).
 5. Do NOT use quotation marks or plus/minus signs.
@@ -661,7 +672,7 @@ RULES:
                     region_kw = region_name
 
                 prompt = f"""You are an elite B2B export sales director.
-We are an Indian manufacturer and exporter supplying international buyers across these 9 core industrial niches:
+We are an Indian manufacturer and exporter supplying international buyers across these 10 core industrial niches:
 
 NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
@@ -672,8 +683,9 @@ NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent 
 NICHE 7 - LED Lighting: Streetlights, high-bay LED, poultry lighting systems, smart WiFi sockets, luminaires
 NICHE 8 - Commercial Appliances: Industrial dehumidifiers, floor scrubbers, commercial laundry machines, kitchen equipment
 NICHE 9 - Sensors & Testing: PIR sensors, float switches, transformer test benches, multimeters, data loggers
+NICHE 10 - Electric Vehicles & EV Infrastructure: EV chargers (AC wallbox, DC fast chargers), EV charging cables, Type 2 & CCS2 connectors, EV battery packs (2W/3W/4W LiFePO4), BMS controllers, EV charging stations
 
-Generate 12 to 14 short, simple, natural DuckDuckGo search queries to find real B2B BUYERS, DISTRIBUTORS, IMPORTERS, WHOLESALERS, or CONTRACTORS in {region_target}.
+Generate 12 to 15 short, simple, natural DuckDuckGo search queries to find real B2B BUYERS, DISTRIBUTORS, IMPORTERS, WHOLESALERS, or CONTRACTORS in {region_target}.
 
 RULES:
 1. Each query must be short and clean (3 to 6 words only).
@@ -685,7 +697,9 @@ RULES:
    - "floor scrubber equipment distributors {region_kw}"
    - "PIR sensor wholesalers {region_kw}"
    - "home energy storage importers {region_kw}"
-2. CRITICAL: You MUST cover ALL 9 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 9 are covered.
+   - "EV charging station distributors {region_kw}"
+   - "electric vehicle charger importers {region_kw}"
+2. CRITICAL: You MUST cover ALL 10 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 10 are covered.
 3. Use varied buyer types (distributors, importers, wholesalers, dealers, contractors, suppliers).
 4. Do NOT use boolean operators (no AND, OR, NOT, site:).
 5. Do NOT use quotation marks or plus/minus signs.
@@ -740,7 +754,9 @@ RULES:
                         "LED streetlight luminaire factories India",
                         "industrial pump motor manufacturers Coimbatore",
                         "floor scrubber cleaning machine suppliers India",
-                        "sensor testing equipment manufacturers Delhi NCR"
+                        "sensor testing equipment manufacturers Delhi NCR",
+                        "EV charging station manufacturers India",
+                        "electric vehicle battery pack manufacturers Pune"
                     ]
                 elif strategy == "Logistics":
                     dest_term = region.split(" (")[0]
@@ -764,7 +780,9 @@ RULES:
                         f"floor scrubber cleaning equipment distributors {dest_term}",
                         f"PIR sensor testing equipment wholesalers {dest_term}",
                         f"industrial fan pump suppliers {dest_term}",
-                        f"home energy storage importers {dest_term}"
+                        f"home energy storage importers {dest_term}",
+                        f"EV charging station distributors {dest_term}",
+                        f"electric vehicle charger importers {dest_term}"
                     ]
 
             self.ui_queue.put((self.on_suggest_complete, (queries,)))
@@ -784,7 +802,9 @@ RULES:
                     "LED streetlight luminaire factories India",
                     "industrial pump motor manufacturers Coimbatore",
                     "floor scrubber cleaning machine suppliers India",
-                    "sensor testing equipment manufacturers Delhi NCR"
+                    "sensor testing equipment manufacturers Delhi NCR",
+                    "EV charging station manufacturers India",
+                    "electric vehicle battery pack manufacturers Pune"
                 ]
             elif strategy == "Logistics":
                 fallback_queries = [
@@ -806,7 +826,9 @@ RULES:
                     f"floor scrubber cleaning equipment distributors {fallback_dest}",
                     f"PIR sensor testing equipment wholesalers {fallback_dest}",
                     f"industrial fan pump suppliers {fallback_dest}",
-                    f"home energy storage importers {fallback_dest}"
+                    f"home energy storage importers {fallback_dest}",
+                    f"EV charging station distributors {fallback_dest}",
+                    f"electric vehicle charger importers {fallback_dest}"
                 ]
             self.ui_queue.put((self.on_suggest_complete, (fallback_queries,)))
 
@@ -950,7 +972,7 @@ RULES:
         self.tab_suppliers.grid_columnconfigure(0, weight=1)
         self.tab_suppliers.grid_rowconfigure(3, weight=1)
         
-        criteria_text = "Supplier Context: Extracting Manufacturers, Factories, Capabilities, MOQs, & Certifications across all 9 Industrial Niches (Electrical, Cables, Switchgear, Batteries, HVAC, etc.)."
+        criteria_text = "Supplier Context: Extracting Manufacturers, Factories, Capabilities, MOQs, & Certifications across all 10 Industrial Niches (Electrical, Cables, Switchgear, Batteries, HVAC, Electric Vehicles, etc.)."
         lbl_criteria = ctk.CTkLabel(self.tab_suppliers, text=criteria_text, font=("Arial", 12, "bold"))
         lbl_criteria.grid(row=0, column=0, padx=10, pady=10, sticky="w")
         
