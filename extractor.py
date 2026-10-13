@@ -59,7 +59,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
         prompt = (
             "You are an elite B2B industrial sourcing specialist for international trade.\n"
             "Analyze the following text scraped from a manufacturer's website OR a B2B directory page (like IndiaMart, TradeIndia, JustDial, etc.).\n\n"
-            "We are sourcing from direct MANUFACTURERS, FACTORIES, and OEM MAKERS across 10 core industrial niches:\n"
+            "We are sourcing from direct MANUFACTURERS, FACTORIES, and OEM MAKERS across 11 core industrial niches:\n"
             "1. Electrical Components & Sockets (Cable Glands, Crimping Lugs, Terminal Blocks, Rocker/Push Switches, EV plugs)\n"
             "2. Wires & Cables (LV/MV/HV Power, Armored XLPE, Submersible, Binding Wires, Reeling systems, Hoses)\n"
             "3. Switchgear & Control Panels (ACB, MCCB, MCB, VCB, Relays, Contactors, PCC/MCC Panels)\n"
@@ -69,7 +69,8 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
             "7. LED Lighting & Luminaires (Streetlights, High-Bay LED, Corax Poultry Lighting, Smart WiFi Sockets)\n"
             "8. Electric Home & Commercial Appliances (Industrial Dehumidifiers, Floor Scrubbers, Commercial Laundry & Kitchen Equipment)\n"
             "9. Sensors & Testing Equipment (PIR Sensors, Level Float Switches, Transformer Test Benches, Multimeters)\n"
-            "10. Electric Vehicles & EV Infrastructure (EV Chargers, AC Wallbox/DC Fast Chargers, Charging Cables, Type 2/CCS2 Connectors, EV Battery Packs, BMS)\n\n"
+            "10. Electric Vehicles & EV Infrastructure (EV Chargers, AC Wallbox/DC Fast Chargers, Charging Cables, Type 2/CCS2 Connectors, EV Battery Packs, BMS)\n"
+            "11. Printed Circuit Boards (PCB) & PCBA Assembly (Rigid Multi-layer FR4, Flex FPC, Metal Core MCPCB, SMT/THT PCBA, Turnkey EMS, Copper Clad Laminates CCL, Electronic Components)\n\n"
             "CRITICAL INSTRUCTIONS:\n"
             "1. MULTI-COMPANY DIRECTORIES: If the page contains a list of multiple different suppliers or factories, you MUST extract EACH of them as a separate entry in the list! Do NOT name the company 'IndiaMart' or 'TradeIndia'.\n"
             "2. CONTACT DETAILS: Aggressively search headers, footers, sidebars, and body text to extract ALL email addresses (sales@, info@, export@), phone numbers, and WhatsApp numbers.\n"
@@ -118,7 +119,7 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
     prompt = f'''
     You are an expert B2B lead generation analyst.
     Analyze the following scraped text from a company's website.
-    We are looking for B2B buyers, distributors, and OEMs across 10 core industrial niches:
+    We are looking for B2B buyers, distributors, and OEMs across 11 core industrial niches:
     1. Electrical Components & Sockets (Glands, Lugs, Terminal Blocks, Switches)
     2. Wires & Cables (LV/MV/HV Power, XLPE, Submersible, Reels)
     3. Switchgear & Control Panels (ACB, MCCB, MCB, VCB, Relays, MCC Panels)
@@ -129,6 +130,7 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
     8. Electric Appliances (Commercial Juicers, Vacuums, Kettles, Espresso Machines)
     9. Sensors & Testing Equipment (PIR Sensors, Multimeters, Rheometers, Hardness Testers)
     10. Electric Vehicles & EV Infrastructure (EV Chargers, Fast Charging Stations, Cables, Connectors, EV Batteries)
+    11. Printed Circuit Boards (PCB) & PCBA Assembly (Bare PCBs, Rigid FR4, Flex FPC, SMT Assembly, PCBA, Turnkey EMS, Electronic Hardware)
     If they fall into these categories, they are highly qualified buyers.
     CRITICAL INSTRUCTION: You must aggressively scan the text (especially footers/headers) to find ANY email addresses (e.g. sales@, info@) and phone numbers. If the company name is missing, infer it from the domain or copyright text.
     CRITICAL INSTRUCTION: If this is a directory page containing MULTIPLE companies, you MUST extract EACH company as a separate entry in the list! Do NOT skip a company just because you think they aren't a hardware OEM.

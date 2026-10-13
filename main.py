@@ -245,7 +245,7 @@ class App(ctk.CTk):
         self.current_hq_urls = []
         self.populate_hq_urls([])
 
-        # Initial starter queries (covering all 10 product niches including Electric Vehicles)
+        # Initial starter queries (covering all 11 product niches including PCBs & Electric Vehicles)
         starter_queries = [
             "switchgear panel distributors USA",
             "commercial lighting importers UAE",
@@ -260,7 +260,11 @@ class App(ctk.CTk):
             "industrial fan pump suppliers Kuwait",
             "home energy storage importers Poland",
             "EV charging station distributors USA",
-            "electric vehicle charger importers UAE"
+            "electric vehicle charger importers UAE",
+            "PCB assembly PCBA turnkey services Germany",
+            "printed circuit board distributors USA",
+            "rigid multi layer FR4 PCB board importers UK",
+            "flexible PCB FPC distributors Canada"
         ]
         self.populate_suggested_queries(starter_queries)
         self.select_suggested_query(starter_queries[0])
@@ -454,7 +458,11 @@ class App(ctk.CTk):
                 f"industrial fan pump suppliers {dest}",
                 f"home energy storage importers {dest}",
                 f"EV charging station distributors {dest}",
-                f"electric vehicle charger importers {dest}"
+                f"electric vehicle charger importers {dest}",
+                f"PCB assembly PCBA turnkey services {dest}",
+                f"printed circuit board distributors {dest}",
+                f"rigid multi layer FR4 PCB importers {dest}",
+                f"flexible PCB FPC manufacturers {dest}"
             ]
         self.populate_suggested_queries(queries)
         self.select_suggested_query(queries[0])
@@ -478,7 +486,12 @@ class App(ctk.CTk):
                 "floor scrubber cleaning machine suppliers India",
                 "sensor testing equipment manufacturers Delhi NCR",
                 "EV charging station manufacturers India",
-                "electric vehicle battery pack manufacturers Pune"
+                "electric vehicle battery pack manufacturers Pune",
+                "printed circuit board PCB manufacturers India",
+                "PCB assembly SMT PCBA factories Bangalore",
+                "multi layer FR4 PCB board factories Gujarat",
+                "copper clad laminate CCL suppliers India",
+                "metal core aluminum MCPCB makers India"
             ]
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
@@ -518,7 +531,11 @@ class App(ctk.CTk):
                 f"industrial fan pump suppliers {dest}",
                 f"home energy storage importers {dest}",
                 f"EV charging station distributors {dest}",
-                f"electric vehicle charger importers {dest}"
+                f"electric vehicle charger importers {dest}",
+                f"PCB assembly PCBA turnkey services {dest}",
+                f"printed circuit board distributors {dest}",
+                f"rigid multi layer FR4 PCB importers {dest}",
+                f"flexible PCB FPC manufacturers {dest}"
             ]
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
@@ -589,7 +606,7 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
             widget.destroy()
         lbl_loading = ctk.CTkLabel(
             self.queries_list_frame, 
-            text="⏳ Generating 12-15 diverse search queries with Gemini...", 
+            text="⏳ Generating 14-18 diverse search queries with Gemini...", 
             font=("Arial", 11, "italic"), 
             text_color="gray",
             wraplength=240
@@ -609,7 +626,7 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
 
             if strategy == "Suppliers":
                 prompt = """You are an elite B2B sourcing expert for Indian export-import trade.
-Our company sources from Indian manufacturers across these 10 core industrial niches:
+Our company sources from Indian manufacturers across these 11 core industrial niches:
 
 NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
@@ -621,8 +638,9 @@ NICHE 7 - LED Lighting: Streetlights, high-bay LED, poultry lighting systems, sm
 NICHE 8 - Commercial Appliances: Industrial dehumidifiers, floor scrubbers, commercial laundry machines, kitchen equipment
 NICHE 9 - Sensors & Testing: PIR sensors, float switches, transformer test benches, multimeters, data loggers
 NICHE 10 - Electric Vehicles & EV Infrastructure: EV chargers (AC wallbox, DC fast chargers), EV charging cables, Type 2 & CCS2 connectors, EV battery packs (2W/3W/4W LiFePO4), BMS controllers, EV charging stations
+NICHE 11 - Printed Circuit Boards (PCB) & PCBA: Multi-layer rigid FR4 PCBs, flexible FPC, aluminum MCPCB, turn-key SMT PCBA assembly, electronic EMS manufacturing, copper clad laminates (CCL)
 
-Generate 12 to 15 short, simple, natural DuckDuckGo search queries to find Indian MANUFACTURERS and FACTORIES across India (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu, Coimbatore, Pune, Jamnagar).
+Generate 14 to 18 short, simple, natural DuckDuckGo search queries to find Indian MANUFACTURERS and FACTORIES across India (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu, Coimbatore, Pune, Jamnagar).
 
 RULES:
 1. Each query must be short and clean (3 to 6 words only).
@@ -636,7 +654,10 @@ RULES:
    - "PIR sensor manufacturers Delhi NCR"
    - "EV charging station manufacturers India"
    - "electric vehicle battery pack makers Pune"
-2. CRITICAL: You MUST cover ALL 10 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 10 are covered.
+   - "multi layer FR4 PCB manufacturers India"
+   - "PCB assembly SMT PCBA factories Bangalore"
+   - "copper clad laminate CCL suppliers India"
+2. CRITICAL: You MUST cover ALL 11 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 11 are covered.
 3. Rotate between different Indian industrial hubs (Gujarat, Maharashtra, Tamil Nadu, Karnataka, Delhi NCR, etc.).
 4. Do NOT use boolean operators (no AND, OR, NOT, site:).
 5. Do NOT use quotation marks or plus/minus signs.
@@ -647,7 +668,7 @@ RULES:
                 if "Worldwide" in dest or "Global" in dest:
                     dest = "worldwide"
                 prompt = f"""You are an international freight and logistics expert.
-We are shipping electrical and industrial goods from India to {dest}.
+We are shipping electrical, PCB/PCBA, and industrial goods from India to {dest}.
 
 Generate 6 to 8 short, simple, natural DuckDuckGo search queries to find freight forwarders, shipping lines, container logistics agents, or customs clearing agents handling cargo from India to {dest}.
 
@@ -672,7 +693,7 @@ RULES:
                     region_kw = region_name
 
                 prompt = f"""You are an elite B2B export sales director.
-We are an Indian manufacturer and exporter supplying international buyers across these 10 core industrial niches:
+We are an Indian manufacturer and exporter supplying international buyers across these 11 core industrial niches:
 
 NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
@@ -684,8 +705,9 @@ NICHE 7 - LED Lighting: Streetlights, high-bay LED, poultry lighting systems, sm
 NICHE 8 - Commercial Appliances: Industrial dehumidifiers, floor scrubbers, commercial laundry machines, kitchen equipment
 NICHE 9 - Sensors & Testing: PIR sensors, float switches, transformer test benches, multimeters, data loggers
 NICHE 10 - Electric Vehicles & EV Infrastructure: EV chargers (AC wallbox, DC fast chargers), EV charging cables, Type 2 & CCS2 connectors, EV battery packs (2W/3W/4W LiFePO4), BMS controllers, EV charging stations
+NICHE 11 - Printed Circuit Boards (PCB) & PCBA: Multi-layer rigid FR4 PCBs, flexible FPC, aluminum MCPCB, turn-key SMT PCBA assembly, electronic EMS manufacturing, copper clad laminates (CCL)
 
-Generate 12 to 15 short, simple, natural DuckDuckGo search queries to find real B2B BUYERS, DISTRIBUTORS, IMPORTERS, WHOLESALERS, or CONTRACTORS in {region_target}.
+Generate 14 to 18 short, simple, natural DuckDuckGo search queries to find real B2B BUYERS, DISTRIBUTORS, IMPORTERS, WHOLESALERS, or CONTRACTORS in {region_target}.
 
 RULES:
 1. Each query must be short and clean (3 to 6 words only).
@@ -699,7 +721,11 @@ RULES:
    - "home energy storage importers {region_kw}"
    - "EV charging station distributors {region_kw}"
    - "electric vehicle charger importers {region_kw}"
-2. CRITICAL: You MUST cover ALL 10 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 10 are covered.
+   - "PCB assembly PCBA turnkey services {region_kw}"
+   - "printed circuit board distributors {region_kw}"
+   - "rigid multi layer FR4 PCB importers {region_kw}"
+   - "flexible PCB FPC manufacturers {region_kw}"
+2. CRITICAL: You MUST cover ALL 11 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 11 are covered.
 3. Use varied buyer types (distributors, importers, wholesalers, dealers, contractors, suppliers).
 4. Do NOT use boolean operators (no AND, OR, NOT, site:).
 5. Do NOT use quotation marks or plus/minus signs.
@@ -756,7 +782,12 @@ RULES:
                         "floor scrubber cleaning machine suppliers India",
                         "sensor testing equipment manufacturers Delhi NCR",
                         "EV charging station manufacturers India",
-                        "electric vehicle battery pack manufacturers Pune"
+                        "electric vehicle battery pack manufacturers Pune",
+                        "printed circuit board PCB manufacturers India",
+                        "PCB assembly SMT PCBA factories Bangalore",
+                        "multi layer FR4 PCB board factories Gujarat",
+                        "copper clad laminate CCL suppliers India",
+                        "metal core aluminum MCPCB makers India"
                     ]
                 elif strategy == "Logistics":
                     dest_term = region.split(" (")[0]
@@ -782,7 +813,11 @@ RULES:
                         f"industrial fan pump suppliers {dest_term}",
                         f"home energy storage importers {dest_term}",
                         f"EV charging station distributors {dest_term}",
-                        f"electric vehicle charger importers {dest_term}"
+                        f"electric vehicle charger importers {dest_term}",
+                        f"PCB assembly PCBA turnkey services {dest_term}",
+                        f"printed circuit board distributors {dest_term}",
+                        f"rigid multi layer FR4 PCB importers {dest_term}",
+                        f"flexible PCB FPC manufacturers {dest_term}"
                     ]
 
             self.ui_queue.put((self.on_suggest_complete, (queries,)))
@@ -804,7 +839,12 @@ RULES:
                     "floor scrubber cleaning machine suppliers India",
                     "sensor testing equipment manufacturers Delhi NCR",
                     "EV charging station manufacturers India",
-                    "electric vehicle battery pack manufacturers Pune"
+                    "electric vehicle battery pack manufacturers Pune",
+                    "printed circuit board PCB manufacturers India",
+                    "PCB assembly SMT PCBA factories Bangalore",
+                    "multi layer FR4 PCB board factories Gujarat",
+                    "copper clad laminate CCL suppliers India",
+                    "metal core aluminum MCPCB makers India"
                 ]
             elif strategy == "Logistics":
                 fallback_queries = [
@@ -828,7 +868,11 @@ RULES:
                     f"industrial fan pump suppliers {fallback_dest}",
                     f"home energy storage importers {fallback_dest}",
                     f"EV charging station distributors {fallback_dest}",
-                    f"electric vehicle charger importers {fallback_dest}"
+                    f"electric vehicle charger importers {fallback_dest}",
+                    f"PCB assembly PCBA turnkey services {fallback_dest}",
+                    f"printed circuit board distributors {fallback_dest}",
+                    f"rigid multi layer FR4 PCB importers {fallback_dest}",
+                    f"flexible PCB FPC manufacturers {fallback_dest}"
                 ]
             self.ui_queue.put((self.on_suggest_complete, (fallback_queries,)))
 
@@ -855,7 +899,9 @@ RULES:
         elif strategy == "Logistics":
             region_code = "in-en"
         else:
-            query += " -\"PCB manufacturer\" -\"PCB assembly\" -\"printed circuit board\""
+            query_lower = query.lower()
+            if not any(term in query_lower for term in ["pcb", "circuit board", "circuit boards", "pcba", "smt"]):
+                query += " -\"PCB manufacturer\" -\"PCB assembly\" -\"printed circuit board\""
             region_code = self.region_var.get().split(" (")[1].replace(")", "")
             
         max_results = int(self.results_slider.get())
@@ -972,7 +1018,7 @@ RULES:
         self.tab_suppliers.grid_columnconfigure(0, weight=1)
         self.tab_suppliers.grid_rowconfigure(3, weight=1)
         
-        criteria_text = "Supplier Context: Extracting Manufacturers, Factories, Capabilities, MOQs, & Certifications across all 10 Industrial Niches (Electrical, Cables, Switchgear, Batteries, HVAC, Electric Vehicles, etc.)."
+        criteria_text = "Supplier Context: Extracting Manufacturers, Factories, Capabilities, MOQs, & Certifications across all 11 Industrial Niches (PCBs, PCBA, Electrical, Cables, Switchgear, Batteries, HVAC, Electric Vehicles, etc.)."
         lbl_criteria = ctk.CTkLabel(self.tab_suppliers, text=criteria_text, font=("Arial", 12, "bold"))
         lbl_criteria.grid(row=0, column=0, padx=10, pady=10, sticky="w")
         
