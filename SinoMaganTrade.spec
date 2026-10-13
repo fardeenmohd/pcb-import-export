@@ -10,6 +10,12 @@ ctk_datas = collect_data_files('customtkinter')
 # Collect Playwright driver files
 playwright_datas = collect_data_files('playwright')
 
+# Collect playwright_stealth evasions scripts (fixes FileNotFoundError)
+stealth_datas = collect_data_files('playwright_stealth')
+
+# Collect SSL certifi certificates
+certifi_datas = collect_data_files('certifi')
+
 # Application data files
 datas = [
     ('.env', '.'),
@@ -17,7 +23,7 @@ datas = [
     ('vision_context.md', '.'),
     ('vision_context_v2.md', '.'),
     ('vision_context_suppliers.md', '.'),
-] + ctk_datas + playwright_datas
+] + ctk_datas + playwright_datas + stealth_datas + certifi_datas
 
 hiddenimports = [
     'customtkinter',
