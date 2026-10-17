@@ -61,7 +61,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
             "You are an elite B2B industrial sourcing specialist for international trade.\n"
             "Analyze the following text scraped from a manufacturer's website OR a B2B directory page (like IndiaMart, TradeIndia, JustDial, etc.).\n\n"
             "We are sourcing from direct MANUFACTURERS, FACTORIES, and OEM MAKERS across 11 core industrial niches:\n"
-            "1. Electrical Components, Sockets & Remote Switches (Cable Glands, Crimping Lugs, Terminal Blocks, Rocker/Push Switches, Remote Control Switches, CAME TOP-433EE Gate Transmitters, 433.92 MHz RF Remotes, EV plugs, HS 852692, 853690)\n"
+            "1. Electrical & Electronic Components (Cable Glands, Lugs, Terminal Blocks, Rocker/Toggle Switches, Push Buttons, LCD/OLED Displays, Capacitors, Battery Holders, Fan Motors, Remote Switches, EV plugs, HS 853690, 8528, 8532, 852692)\n"
             "2. Wires & Cables (LV/MV/HV Power, Armored XLPE, Submersible, Binding Wires, Reeling systems, Hoses)\n"
             "3. Power Distribution & Protection Relays (Numerical Protection Relays, SEL-751 Arc-Flash, SEL-787 Transformer, SEL-700G Generator, Circuit Breakers, Contactors, Transformers, Switchgear, ACB, MCCB, MCB, VCB, Relays, PCC/MCC Panels, Feeder Pillars, HS 853649, 853710, 8504)\n"
             "4. Industrial HVAC, Fans & Pumps (Axial/Centrifugal Fans, Scroll/Screw Compressors, Submersible Pumps, Refrigeration Parts)\n"
@@ -121,7 +121,7 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
     You are an expert B2B lead generation analyst.
     Analyze the following scraped text from a company's website.
     We are looking for B2B buyers, distributors, and OEMs across 11 core industrial niches:
-    1. Electrical Components, Sockets & Remote Switches (Glands, Lugs, Terminal Blocks, Switches, Remote Control Switches, Gate Transmitters, CAME TOP-433EE, HS 852692)
+    1. Electrical & Electronic Components (Glands, Lugs, Terminal Blocks, Switches, Push Buttons, Toggle Switches, LCD/OLED Displays, Capacitors, Battery Holders, Fan Motors, HS 853690, 8528, 8532)
     2. Wires & Cables (LV/MV/HV Power, XLPE, Submersible, Reels)
     3. Power Distribution & Protection Relays (Numerical Protection Relays, SEL-751 Arc-Flash, SEL-787 Transformer, SEL-700G Generator, Circuit Breakers, Contactors, Transformers, Switchgear, ACB, MCCB, MCB, VCB, Relays, MCC Panels, HS 853649, 853710, 8504)
     4. Industrial HVAC & Compressors (Fans, Scroll Compressors, Pumps, Refrigeration Parts)
