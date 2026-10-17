@@ -63,7 +63,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
             "We are sourcing from direct MANUFACTURERS, FACTORIES, and OEM MAKERS across 11 core industrial niches:\n"
             "1. Electrical Components & Sockets (Cable Glands, Crimping Lugs, Terminal Blocks, Rocker/Push Switches, EV plugs)\n"
             "2. Wires & Cables (LV/MV/HV Power, Armored XLPE, Submersible, Binding Wires, Reeling systems, Hoses)\n"
-            "3. Power Distribution & Electrical Control Equipment (Circuit Breakers, Contactors, Transformers, Switchgear, ACB, MCCB, MCB, VCB, Relays, PCC/MCC Panels, Feeder Pillars, Industrial Power Management, HS 853710, 8504)\n"
+            "3. Power Distribution & Protection Relays (Numerical Protection Relays, SEL-751 Arc-Flash, SEL-787 Transformer, SEL-700G Generator, Circuit Breakers, Contactors, Transformers, Switchgear, ACB, MCCB, MCB, VCB, Relays, PCC/MCC Panels, Feeder Pillars, HS 853649, 853710, 8504)\n"
             "4. Industrial HVAC, Fans & Pumps (Axial/Centrifugal Fans, Scroll/Screw Compressors, Submersible Pumps, Refrigeration Parts)\n"
             "5. Batteries, Solar & Renewable Scrap (Solar Panel Scrap 500 MT, PV Module Scrap, Decommissioned Solar Panels, HS 854143, LiFePO4 battery packs, Home ESS, Marine IP67, GaN Chargers, Solar Inverters)\n"
             "6. Industrial Generators (Cummins Diesel, Gas Gensets, Silent Generators, Wind Turbines)\n"
@@ -123,7 +123,7 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
     We are looking for B2B buyers, distributors, and OEMs across 11 core industrial niches:
     1. Electrical Components & Sockets (Glands, Lugs, Terminal Blocks, Switches)
     2. Wires & Cables (LV/MV/HV Power, XLPE, Submersible, Reels)
-    3. Power Distribution & Electrical Control Equipment (Circuit Breakers, Contactors, Transformers, Switchgear, ACB, MCCB, MCB, VCB, Relays, MCC Panels, Industrial Power Management, HS 853710, 8504)
+    3. Power Distribution & Protection Relays (Numerical Protection Relays, SEL-751 Arc-Flash, SEL-787 Transformer, SEL-700G Generator, Circuit Breakers, Contactors, Transformers, Switchgear, ACB, MCCB, MCB, VCB, Relays, MCC Panels, HS 853649, 853710, 8504)
     4. Industrial HVAC & Compressors (Fans, Scroll Compressors, Pumps, Refrigeration Parts)
     5. Batteries, Solar & Renewable Scrap (Solar Panel Scrap 500 MT, PV Module Scrap, Decommissioned Solar Panels, HS 854143, LiFePO4, Marine IP67, Home ESS, Primary Cells)
     6. Industrial Generators (Cummins Diesel, Gas Gensets, Wind Gen)

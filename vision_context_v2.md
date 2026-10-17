@@ -48,6 +48,12 @@ The buy leads represent three distinct tiers of B2B procurement, each requiring 
 
 ### Niche 3: Switchgear, Circuit Breakers, Relays, Control Panels & Power Distribution Equipment
 * **Power Distribution Equipment & Infrastructure (Qatar & GCC Focus)**: High-demand procurement in Qatar (Hamad Port / Doha) for low/medium voltage power distribution equipment, main distribution boards (MDB), sub-main distribution boards (SMDB), feeder pillars, and distribution transformers (oil-cooled step-down and cast resin dry-type transformers). Structural materials specify electrolytic copper busbars (99.9% ETP), CRCA mild steel sheets with RAL 7032/7035 powder coating, and heavy-duty insulation materials (SMC, DMC, epoxy resin, Nomex).
+* **Numerical Protection Relays & Substation Automation (Oman & GCC Utility Focus)**: High-demand procurement in Oman (Sohar Port / Muscat / Salalah) for utility-grade digital numerical protection relays and substation automation IEDs. Brand-specific demand centers on Schweitzer Engineering Laboratories (SEL):
+  - *SEL-751 Feeder Protection Relay (P/N SEL 751-PF00254, SEL 751-DS-20250501)*: Integrated 2 ms ultra-fast arc-flash optical detection, directional overcurrent, overvoltage, underfrequency, and feeder breaker control.
+  - *SEL-787 Transformer Protection Relay (P/N SEL 787-PF00167, SEL 787-DS-20250411)*: Dual-slope restrained percentage differential, restricted earth fault (REF), thermal overload, and overexcitation protection.
+  - *SEL-700G Generator & Intertie Protection Relay (P/N SEL 700G-PF00211)*: Complete generator protection including 100% stator ground, loss of field, reverse power, and utility intertie islanding detection.
+  - *Specifications & Protocols*: Dual Ethernet ports with IEC 61850 MMS/GOOSE protocols, Modbus TCP, DNP3, conformal-coated circuit boards, and rack/panel-mount form factors.
+  - *Wholesale Procurement Dynamics*: 1 Less than Container Load (LCL) palletized shipment under CIF terms to Destination Port Oman (Sohar / Salalah), HS Code 8536.49.
 * **Electrical Control Equipment & Heavy Contactors**: Industrial AC/DC magnetic contactors (3-pole, 4-pole ratings from 9A to 800A), vacuum contactors, thermal overload relays, auxiliary contact blocks, and intelligent motor protection controllers for plant automation and industrial power management.
 * **Circuit Breakers & Protection Gear**: Air Circuit Breakers (ACB - intelligent draw-out and fixed types), Molded Case Circuit Breakers (MCCB - 3-phase high breaking capacity), Vacuum Circuit Breakers (VCB up to 33kV), and Miniature Circuit Breakers (MCB - DIN-rail mounted), fully compliant with IEC 60947 and Kahramaa utility specifications.
 * **Switchgear Assembly & Control Boards**: Metal-clad, pad-mounted, and vault-type switchgear spanning LV, MV, and HV. Power Control Centers (PCC), Motor Control Centers (MCC), synchronizing panels, and PLC automation panels.
@@ -100,6 +106,7 @@ This directory serves as the technical backbone for classification, logistics ro
 | **8536.69** | Plugs & Sockets | Polycarbonate, Copper/Brass Contacts, ABS | SAA 56 Series, Smart EU 20A Plugs |
 | **8536.90** | Electrical Connectors, Glands, Lugs | Brass, Copper, Polyamide (PA) | Phoenix Contact UT-4, Elmex, Marathon |
 | **8536.50** | Electrical Switches (Rocker, Push, Float) | PC, PP, Copper, Silver-Alloy Contacts | KEDU HY69, Shuyi ATS, Honeywell |
+| **8536.49** | Numerical Protection Relays & Feeder Controllers (> 60V) | Conformal-Coated PCBs, Microprocessors, Hardened Enclosures | SEL-751 (Arc-Flash), SEL-787 (Transformer), SEL-700G |
 | **8536.20** | Miniature Circuit Breakers (MCB) | Thermoplastic, Copper, Steel, Silver contacts | TOMZN, L&T, ABB, Hensel |
 | **8537.10** | Power Distribution Equipment, Control Gear & Lighting Controls (< 1000V) | Copper Busbars, Steel, DMC/SMC Insulation, Electronic Components | Circuit Breakers, Contactors, Transformers, Centralized Controls |
 | **8504.21** | Distribution Transformers (Liquid Dielectric <= 650 kVA) | Copper Windings, Silicon Steel Cores, Transformer Oil | Step-Down Distribution Transformers, Industrial Transformers |

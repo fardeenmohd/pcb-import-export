@@ -273,6 +273,10 @@ class App(ctk.CTk):
             "solar inverter distributors Canada",
             "diesel generator dealers Saudi Arabia",
             "cable gland terminal block importers Oman",
+            "numerical protection relays SEL distributors Oman",
+            "feeder protection relay SEL 751 importers Oman",
+            "transformer protection relay SEL 787 suppliers Oman",
+            "generator protection relay SEL 700G dealers Oman",
             "floor scrubber cleaning equipment distributors Qatar",
             "PIR sensor testing equipment wholesalers Singapore",
             "industrial fan pump suppliers Kuwait",
@@ -464,6 +468,10 @@ class App(ctk.CTk):
         else:
             queries = [
                 f"switchgear panel distributors {dest}",
+                f"numerical protection relays distributors {dest}",
+                f"feeder protection relay SEL arc flash importers {dest}",
+                f"transformer differential protection relay suppliers {dest}",
+                f"generator intertie protection relay dealers {dest}",
                 f"power distribution equipment distributors {dest}",
                 f"electrical control gear contactors wholesalers {dest}",
                 f"circuit breaker switchboard importers {dest}",
@@ -505,6 +513,8 @@ class App(ctk.CTk):
             self.btn_suggest.configure(state="normal")
             queries = [
                 "distribution transformer manufacturers India",
+                "numerical protection relay suppliers India",
+                "substation control and relay panel CRP manufacturers Gujarat",
                 "power distribution equipment manufacturers India",
                 "electrical contactors circuit breaker factories Gujarat",
                 "switchgear panel factories Gujarat",
@@ -558,6 +568,10 @@ class App(ctk.CTk):
                 dest = "worldwide"
             queries = [
                 f"switchgear panel distributors {dest}",
+                f"numerical protection relays distributors {dest}",
+                f"feeder protection relay SEL arc flash importers {dest}",
+                f"transformer differential protection relay suppliers {dest}",
+                f"generator intertie protection relay dealers {dest}",
                 f"power distribution equipment distributors {dest}",
                 f"electrical control gear contactors wholesalers {dest}",
                 f"circuit breaker switchboard importers {dest}",
@@ -678,7 +692,7 @@ Our company sources from Indian manufacturers across these 11 core industrial ni
 
 NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
-NICHE 3 - Power Distribution & Electrical Control Equipment: Power distribution equipment, electrical control gear, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, feeder pillars, industrial power management (HS 853710, 8504)
+NICHE 3 - Power Distribution & Protection Relays: Numerical protection relays (SEL-751 arc-flash feeder protection, SEL-787 transformer protection, SEL-700G generator intertie protection, differential/overcurrent relays, HS 853649), power distribution equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, CRP panels (HS 853710, 8504)
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
 NICHE 5 - Batteries, Solar & Renewable Scrap: LiFePO4 battery packs, home energy storage, solar inverters, solar panel scrap (PV module scrap, decommissioned solar panels, silver/silicon/copper recovery, HS 854143, 500 MT lots), battery scrap recycling, marine batteries, GaN chargers
 NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent generators, wind turbines
@@ -694,6 +708,8 @@ RULES:
 1. Each query must be short and clean (3 to 6 words only).
    Examples of good queries:
    - "distribution transformer manufacturers India"
+   - "numerical protection relay suppliers India"
+   - "substation control and relay panel CRP factories Gujarat"
    - "power distribution equipment manufacturers India"
    - "electrical contactors circuit breaker factories Gujarat"
    - "switchgear panel factories Gujarat"
@@ -752,7 +768,7 @@ We are an Indian manufacturer and exporter supplying international buyers across
 
 NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
-NICHE 3 - Power Distribution & Electrical Control Equipment: Power distribution equipment, electrical control gear, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, feeder pillars, industrial power management (HS 853710, 8504)
+NICHE 3 - Power Distribution & Protection Relays: Numerical protection relays (SEL-751 arc-flash feeder protection, SEL-787 transformer protection, SEL-700G generator intertie protection, differential/overcurrent relays, HS 853649), power distribution equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, CRP panels (HS 853710, 8504)
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
 NICHE 5 - Batteries, Solar & Renewable Scrap: LiFePO4 battery packs, home energy storage, solar inverters, solar panel scrap (PV module scrap, decommissioned solar panels, silver/silicon/copper recovery, HS 854143, 500 MT lots), battery scrap recycling, marine batteries, GaN chargers
 NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent generators, wind turbines
@@ -768,6 +784,9 @@ RULES:
 1. Each query must be short and clean (3 to 6 words only).
    Examples of good queries:
    - "switchgear panel distributors {region_kw}"
+   - "numerical protection relays distributors {region_kw}"
+   - "feeder protection relay SEL 751 importers {region_kw}"
+   - "transformer protection relay SEL 787 suppliers {region_kw}"
    - "power distribution equipment distributors {region_kw}"
    - "electrical control gear contactors wholesalers {region_kw}"
    - "circuit breaker switchboard importers {region_kw}"
@@ -866,6 +885,9 @@ RULES:
                     dest_term = region.split(" (")[0]
                     queries = [
                         f"switchgear panel distributors {dest_term}",
+                        f"numerical protection relays distributors {dest_term}",
+                        f"feeder protection relay SEL arc flash importers {dest_term}",
+                        f"transformer differential protection relay suppliers {dest_term}",
                         f"power distribution equipment distributors {dest_term}",
                         f"electrical control gear contactors wholesalers {dest_term}",
                         f"circuit breaker switchboard importers {dest_term}",
@@ -903,6 +925,8 @@ RULES:
             if strategy == "Suppliers":
                 fallback_queries = [
                     "distribution transformer manufacturers India",
+                    "numerical protection relay suppliers India",
+                    "substation control and relay panel CRP manufacturers Gujarat",
                     "power distribution equipment manufacturers India",
                     "electrical contactors circuit breaker factories Gujarat",
                     "switchgear panel factories Gujarat",
@@ -939,6 +963,9 @@ RULES:
             else:
                 fallback_queries = [
                     f"switchgear panel distributors {fallback_dest}",
+                    f"numerical protection relays distributors {fallback_dest}",
+                    f"feeder protection relay SEL arc flash importers {fallback_dest}",
+                    f"transformer differential protection relay suppliers {fallback_dest}",
                     f"power distribution equipment distributors {fallback_dest}",
                     f"electrical control gear contactors wholesalers {fallback_dest}",
                     f"circuit breaker switchboard importers {fallback_dest}",
@@ -1048,9 +1075,9 @@ RULES:
             if strategy == "Logistics":
                 filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
             elif strategy == "Suppliers":
-                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
-                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
             prompt = "You are an expert lead generation AI.\nThe user is searching for: " + filter_goal + "\n\nHere are the raw search results from DuckDuckGo:\n" + search_context + "\n\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
                 
@@ -1909,7 +1936,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as power distribution equipment, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 We are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
@@ -2238,7 +2265,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as power distribution equipment, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 Based on the logistics services and trade lanes shown on their website, we are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
