@@ -63,11 +63,11 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
             "We are sourcing from direct MANUFACTURERS, FACTORIES, and OEM MAKERS across 11 core industrial niches:\n"
             "1. Electrical Components & Sockets (Cable Glands, Crimping Lugs, Terminal Blocks, Rocker/Push Switches, EV plugs)\n"
             "2. Wires & Cables (LV/MV/HV Power, Armored XLPE, Submersible, Binding Wires, Reeling systems, Hoses)\n"
-            "3. Switchgear & Control Panels (ACB, MCCB, MCB, VCB, Relays, Contactors, PCC/MCC Panels)\n"
+            "3. Switchgear & Control Panels (ACB, MCCB, MCB, VCB, Relays, Contactors, PCC/MCC Panels, Lighting Control Panels, HS 853710)\n"
             "4. Industrial HVAC, Fans & Pumps (Axial/Centrifugal Fans, Scroll/Screw Compressors, Submersible Pumps, Refrigeration Parts)\n"
             "5. Batteries & Energy Storage (LiFePO4 battery packs, Home ESS, Marine IP67, GaN Chargers, Solar Inverters)\n"
             "6. Industrial Generators (Cummins Diesel, Gas Gensets, Silent Generators, Wind Turbines)\n"
-            "7. LED Lighting & Luminaires (Streetlights, High-Bay LED, Corax Poultry Lighting, Smart WiFi Sockets)\n"
+            "7. LED Lighting & Lighting Controls (Centralized Lighting Controls, Automated Lighting Controllers, Dimming Modules, Streetlight Monitoring Systems, Smart Building Automation, Streetlights, High-Bay LED, Corax Poultry Lighting, Smart WiFi Sockets, Electronic Control Components, HS 853710)\n"
             "8. Electric Home & Commercial Appliances (Industrial Dehumidifiers, Floor Scrubbers, Commercial Laundry & Kitchen Equipment)\n"
             "9. Sensors & Testing Equipment (PIR Sensors, Level Float Switches, Transformer Test Benches, Multimeters)\n"
             "10. Electric Vehicles & EV Infrastructure (EV Chargers, AC Wallbox/DC Fast Chargers, Charging Cables, Type 2/CCS2 Connectors, EV Battery Packs, BMS)\n"
@@ -123,11 +123,11 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
     We are looking for B2B buyers, distributors, and OEMs across 11 core industrial niches:
     1. Electrical Components & Sockets (Glands, Lugs, Terminal Blocks, Switches)
     2. Wires & Cables (LV/MV/HV Power, XLPE, Submersible, Reels)
-    3. Switchgear & Control Panels (ACB, MCCB, MCB, VCB, Relays, MCC Panels)
+    3. Switchgear & Control Panels (ACB, MCCB, MCB, VCB, Relays, MCC Panels, Lighting Control Panels, HS 853710)
     4. Industrial HVAC & Compressors (Fans, Scroll Compressors, Pumps, Refrigeration Parts)
     5. Batteries & Energy Storage (LiFePO4, Marine IP67, Home ESS, Primary Cells)
     6. Industrial Generators (Cummins Diesel, Gas Gensets, Wind Gen)
-    7. LED Lighting & Smart Home (Streetlights, Corax Poultry LED, WiFi Sockets)
+    7. LED Lighting & Lighting Controls (Centralized Controls, Automated Lighting Controllers, Dimming Modules, Streetlight Monitoring, Smart Building Automation, DALI/0-10V, Streetlights, High-Bay, Luminaires, HS 853710)
     8. Electric Appliances (Commercial Juicers, Vacuums, Kettles, Espresso Machines)
     9. Sensors & Testing Equipment (PIR Sensors, Multimeters, Rheometers, Hardness Testers)
     10. Electric Vehicles & EV Infrastructure (EV Chargers, Fast Charging Stations, Cables, Connectors, EV Batteries)

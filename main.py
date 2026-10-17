@@ -136,7 +136,7 @@ class App(ctk.CTk):
         )
         self.strategy_dropdown.pack(side="left", padx=5)
 
-        self.region_var = ctk.StringVar(value="Global (wt-wt)")
+        self.region_var = ctk.StringVar(value="Worldwide (wt-wt)")
         self.region_dropdown = ctk.CTkOptionMenu(
             control_frame, 
             values=['Worldwide (wt-wt)', 'Australia (au-en)', 'Poland (pl-pl)', 'Netherlands (nl-nl)', 'Malaysia (my-en)', 'USA (us-en)', 'Canada (ca-en)', 'Germany (de-de)', 'France (fr-fr)', 'United Kingdom (uk-en)', 'UAE (ae-en)', 'Saudi Arabia (sa-ar)', 'Qatar (qa-en)', 'Kuwait (kw-en)', 'Oman (om-en)', 'Bahrain (bh-en)', 'Singapore (sg-en)', 'Vietnam (vn-en)', 'Indonesia (id-en)', 'Philippines (ph-en)', 'Thailand (th-en)', 'South Korea (kr-kr)', 'China (cn-zh)', 'India (in-en)', 'South Africa (za-en)', 'Romania (ro-ro)', 'Finland (fi-fi)', 'Albania (al-al)', 'Moldova (md-ro)'],
@@ -255,6 +255,11 @@ class App(ctk.CTk):
         starter_queries = [
             "switchgear panel distributors USA",
             "commercial lighting importers UAE",
+            "centralized lighting control systems distributors Bahrain",
+            "automated lighting controls importers Bahrain",
+            "dimming modules lighting controllers UAE",
+            "smart building automation lighting controllers Saudi Arabia",
+            "streetlight monitoring control systems Qatar",
             "industrial wire cable wholesalers Germany",
             "lithium battery pack distributors UK",
             "HVAC equipment wholesalers Australia",
@@ -453,6 +458,10 @@ class App(ctk.CTk):
             queries = [
                 f"switchgear panel distributors {dest}",
                 f"commercial lighting importers {dest}",
+                f"centralized lighting control systems distributors {dest}",
+                f"automated lighting controllers importers {dest}",
+                f"dimming modules smart lighting wholesalers {dest}",
+                f"streetlight monitoring control systems {dest}",
                 f"industrial wire cable wholesalers {dest}",
                 f"lithium battery pack distributors {dest}",
                 f"HVAC equipment wholesalers {dest}",
@@ -481,6 +490,9 @@ class App(ctk.CTk):
             queries = [
                 "distribution transformer manufacturers India",
                 "switchgear panel factories Gujarat",
+                "centralized lighting control system manufacturers India",
+                "automated lighting controllers dimming modules factories India",
+                "streetlight monitoring control panel makers India",
                 "copper wire cable manufacturers India",
                 "lithium battery pack makers Bangalore",
                 "HVAC components suppliers Maharashtra",
@@ -526,6 +538,10 @@ class App(ctk.CTk):
             queries = [
                 f"switchgear panel distributors {dest}",
                 f"commercial lighting importers {dest}",
+                f"centralized lighting control systems distributors {dest}",
+                f"automated lighting controllers importers {dest}",
+                f"dimming modules smart lighting wholesalers {dest}",
+                f"streetlight monitoring control systems {dest}",
                 f"industrial wire cable wholesalers {dest}",
                 f"lithium battery pack distributors {dest}",
                 f"HVAC equipment wholesalers {dest}",
@@ -640,7 +656,7 @@ NICHE 3 - Switchgear & Panels: ACB, MCCB, MCB, VCB, relays, contactors, PCC/MCC 
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
 NICHE 5 - Batteries & Energy Storage: LiFePO4 battery packs, home energy storage, marine batteries, GaN chargers, solar inverters
 NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent generators, wind turbines
-NICHE 7 - LED Lighting: Streetlights, high-bay LED, poultry lighting systems, smart WiFi sockets, luminaires
+NICHE 7 - LED Lighting & Lighting Controls: Centralized controls, automated lighting controllers, dimming modules, DALI/0-10V controllers, streetlight monitoring systems, smart building automation, streetlights, high-bay LED, poultry lighting systems, smart WiFi sockets, luminaires (HS 853710)
 NICHE 8 - Commercial Appliances: Industrial dehumidifiers, floor scrubbers, commercial laundry machines, kitchen equipment
 NICHE 9 - Sensors & Testing: PIR sensors, float switches, transformer test benches, multimeters, data loggers
 NICHE 10 - Electric Vehicles & EV Infrastructure: EV chargers (AC wallbox, DC fast chargers), EV charging cables, Type 2 & CCS2 connectors, EV battery packs (2W/3W/4W LiFePO4), BMS controllers, EV charging stations
@@ -655,6 +671,9 @@ RULES:
    - "switchgear panel factories Gujarat"
    - "brass cable glands manufacturers Jamnagar"
    - "diesel generator manufacturers Pune"
+   - "centralized lighting control manufacturers India"
+   - "automated lighting controllers dimming modules factories India"
+   - "streetlight monitoring control panel makers India"
    - "LED streetlight factories India"
    - "floor scrubber machine suppliers India"
    - "PIR sensor manufacturers Delhi NCR"
@@ -707,7 +726,7 @@ NICHE 3 - Switchgear & Panels: ACB, MCCB, MCB, VCB, relays, contactors, PCC/MCC 
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
 NICHE 5 - Batteries & Energy Storage: LiFePO4 battery packs, home energy storage, marine batteries, GaN chargers, solar inverters
 NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent generators, wind turbines
-NICHE 7 - LED Lighting: Streetlights, high-bay LED, poultry lighting systems, smart WiFi sockets, luminaires
+NICHE 7 - LED Lighting & Lighting Controls: Centralized controls, automated lighting controllers, dimming modules, DALI/0-10V controllers, streetlight monitoring systems, smart building automation, streetlights, high-bay LED, poultry lighting systems, smart WiFi sockets, luminaires (HS 853710)
 NICHE 8 - Commercial Appliances: Industrial dehumidifiers, floor scrubbers, commercial laundry machines, kitchen equipment
 NICHE 9 - Sensors & Testing: PIR sensors, float switches, transformer test benches, multimeters, data loggers
 NICHE 10 - Electric Vehicles & EV Infrastructure: EV chargers (AC wallbox, DC fast chargers), EV charging cables, Type 2 & CCS2 connectors, EV battery packs (2W/3W/4W LiFePO4), BMS controllers, EV charging stations
@@ -720,6 +739,10 @@ RULES:
    Examples of good queries:
    - "switchgear panel distributors {region_kw}"
    - "commercial lighting importers {region_kw}"
+   - "centralized lighting controls distributors {region_kw}"
+   - "automated lighting controllers importers {region_kw}"
+   - "dimming modules smart lighting {region_kw}"
+   - "streetlight monitoring control systems {region_kw}"
    - "diesel generator dealers {region_kw}"
    - "cable gland terminal block importers {region_kw}"
    - "floor scrubber equipment distributors {region_kw}"
@@ -808,6 +831,10 @@ RULES:
                     queries = [
                         f"switchgear panel distributors {dest_term}",
                         f"commercial lighting importers {dest_term}",
+                        f"centralized lighting control systems distributors {dest_term}",
+                        f"automated lighting controllers importers {dest_term}",
+                        f"dimming modules smart lighting wholesalers {dest_term}",
+                        f"streetlight monitoring control systems {dest_term}",
                         f"industrial wire cable wholesalers {dest_term}",
                         f"lithium battery pack distributors {dest_term}",
                         f"HVAC equipment wholesalers {dest_term}",
@@ -834,6 +861,9 @@ RULES:
                 fallback_queries = [
                     "distribution transformer manufacturers India",
                     "switchgear panel factories Gujarat",
+                    "centralized lighting control system manufacturers India",
+                    "automated lighting controllers dimming modules factories India",
+                    "streetlight monitoring control panel makers India",
                     "copper wire cable manufacturers India",
                     "lithium battery pack makers Bangalore",
                     "HVAC components suppliers Maharashtra",
@@ -863,6 +893,10 @@ RULES:
                 fallback_queries = [
                     f"switchgear panel distributors {fallback_dest}",
                     f"commercial lighting importers {fallback_dest}",
+                    f"centralized lighting control systems distributors {fallback_dest}",
+                    f"automated lighting controllers importers {fallback_dest}",
+                    f"dimming modules smart lighting wholesalers {fallback_dest}",
+                    f"streetlight monitoring control systems {fallback_dest}",
                     f"industrial wire cable wholesalers {fallback_dest}",
                     f"lithium battery pack distributors {fallback_dest}",
                     f"HVAC equipment wholesalers {fallback_dest}",
@@ -960,9 +994,9 @@ RULES:
             if strategy == "Logistics":
                 filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
             elif strategy == "Suppliers":
-                filter_goal = "Manufacturers across all of India (nationwide) of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Manufacturers across all of India (nationwide) of Electrical Components, Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
-                filter_goal = "Actual company websites for buyers/OEMs of Electrical Components, Cables, Switchgear, HVAC Parts, Batteries, Generators, LED Lighting, Appliances, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                filter_goal = "Actual company websites for buyers/distributors/OEMs of Electrical Components, Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
             prompt = "You are an expert lead generation AI.\nThe user is searching for: " + filter_goal + "\n\nHere are the raw search results from DuckDuckGo:\n" + search_context + "\n\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
                 
@@ -1021,7 +1055,7 @@ RULES:
         self.tab_suppliers.grid_columnconfigure(0, weight=1)
         self.tab_suppliers.grid_rowconfigure(3, weight=1)
         
-        criteria_text = "Supplier Context: Extracting Manufacturers, Factories, Capabilities, MOQs, & Certifications across all 11 Industrial Niches (PCBs, PCBA, Electrical, Cables, Switchgear, Batteries, HVAC, Electric Vehicles, etc.)."
+        criteria_text = "Supplier Context: Extracting Manufacturers, Factories, Capabilities, MOQs, & Certifications across all 11 Industrial Niches (Lighting Controls, PCBs, PCBA, Electrical, Cables, Switchgear, Batteries, HVAC, Electric Vehicles, etc.)."
         lbl_criteria = ctk.CTkLabel(self.tab_suppliers, text=criteria_text, font=("Arial", 12, "bold"))
         lbl_criteria.grid(row=0, column=0, padx=10, pady=10, sticky="w")
         
@@ -1821,7 +1855,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as electrical switchgear, cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as electrical switchgear, centralized lighting control systems & dimming modules, cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 We are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
@@ -2150,7 +2184,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as electrical switchgear, cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as electrical switchgear, centralized lighting control systems & dimming modules, cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 Based on the logistics services and trade lanes shown on their website, we are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).

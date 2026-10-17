@@ -313,10 +313,12 @@ The buy leads represent three distinct tiers of B2B procurement, each requiring 
 * **Diesel & Gas Generator Sets**: Cummins-powered silent diesel generators (15 KVA to 3000 KVA), standby generator sets, and 2MW natural gas generators (CE approved). Portable small silent generators (3 KVA, 6KW to 12KW) for remote backup.
 * **Wind Generation Systems**: Dynamic wind generators for structural facade/door testing, requiring large axial-flow propellers/impellers (2500–3000mm diameter, variable speed control via VFD, horizontal shaft installation, variable pitch blades, and high dynamic balancing grades).
 
-### Niche 7: Smart Home, LED Lighting, & Luminaires
-* **Streetlight & Infrastructure Luminaires**: Hot-dip galvanized steel and aluminum streetlight/decorative poles (HS code 730890), panel luminaires, industrial recessed LED panels, and high-bay warehouse floodlights.
+### Niche 7: Smart Home, LED Lighting, Centralized Lighting Controls & Luminaires
+* **Lighting Control Systems & Centralized Controls**: Commercial, municipal, and infrastructure-scale lighting control systems, centralized controls, automated lighting controllers, and dimming modules (DALI, 0-10V, wireless Zigbee/LoRaWAN). Widely utilized in municipal streetlight monitoring, commercial smart building automation, industrial warehouses, and energy management. Equipment includes multi-channel DIN-rail lighting controllers, relay panels, automated dimming racks, and IoT streetlight gateway controllers. Material composition centers on electronic control components, industrial-grade microcontrollers, and flame-retardant enclosures (HS Code 8537.10).
+* **Streetlight & Infrastructure Luminaires & Monitoring**: Centralized streetlight monitoring systems, hot-dip galvanized steel and aluminum streetlight/decorative poles (HS code 730890), panel luminaires, industrial recessed LED panels, and high-bay warehouse floodlights.
 * **Niche Agricultural Lighting**: Flicker-free agricultural lighting systems designed for poultry houses (*Corax LED Poultry* series with IP67 ingress protection, 3-year warranty, warm white emitting color, and active dimming circuitry).
 * **Festive & Home Lighting**: LED night lights, decorative candle jars (soy/paraffin wax), home figurines, wooden/metal/ceramic festive lanterns, and LED wall sconces.
+* **Wholesale Procurement Dynamics (Bahrain & GCC)**: High-volume commercial buy inquiries specifying full 20-Foot Container (1 x 20ft FCL) quantities for Lighting Control Systems, Centralized Controls, and Dimming Modules. Standard commercial trade requirements: CIF terms to Destination Port Bahrain, Payment Terms under Letter of Credit (LC), and strict "CONTACT VIA EMAIL ONLY" protocols.
 
 ### Niche 8: Electric Home & Commercial Appliances
 * **Air Management**: Industrial-grade portable wheeled dehumidifiers with high moisture extraction capacity (158L/Day, 220V/60Hz, HS code 847989).
@@ -343,7 +345,7 @@ This directory serves as the technical backbone for classification, logistics ro
 | **8536.90** | Electrical Connectors, Glands, Lugs | Brass, Copper, Polyamide (PA) | Phoenix Contact UT-4, Elmex, Marathon |
 | **8536.50** | Electrical Switches (Rocker, Push, Float) | PC, PP, Copper, Silver-Alloy Contacts | KEDU HY69, Shuyi ATS, Honeywell |
 | **8536.20** | Miniature Circuit Breakers (MCB) | Thermoplastic, Copper, Steel, Silver contacts | TOMZN, L&T, ABB, Hensel |
-| **8537.10** | Control Panels & Boards (< 1000V) | Mild Steel, Stainless Steel, Copper Busbars | DSE7320, Allen Bradley, JohnZink |
+| **8537.10** | Control Panels, Lighting Controls & Dimming Modules (< 1000V) | Mild Steel, Stainless Steel, Electronic Control Components, PCBA | Centralized Lighting Controls, Automated Dimming Modules, DSE7320, Allen Bradley |
 | **8537.20** | Switchgear Panels (> 1000V) | Galvanized Steel, Copper, Insulators | ABB VD4G, Siemens, L&T |
 | **8507.60** | Lithium-Ion Batteries & Energy Storage | LiFePO4, Lithium Cobalt Oxide, BMS, Aluminum | DEYE SE-G5.1, EVE, CATL, BYD |
 | **8502.11** | Diesel Generator Sets (< 75 KVA) | Steel Frame, Copper Alternator, Cummins Engine | Cummins, Perkins |
