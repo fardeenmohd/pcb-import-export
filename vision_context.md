@@ -28,6 +28,9 @@ The scraped lead data reveals five high-value, highly technical product categori
 ├──────────────────────────┼───────────────────────────┼─────────────────────────────────┤
 │ E. Commercial & Domestic │ Food Processing, Kettles, │ Commercial Kitchen Integrators, │
 │    Electro-Thermic App.  │ Blenders, Air Fryers      │ Appliance Distributors, Retail  │
+├──────────────────────────┼───────────────────────────┼─────────────────────────────────┤
+│ F. Building Materials &  │ Plywood Panels, MDF,      │ Retailers, Building Material    │
+│    Architectural Surfaces│ Laminated/Decorative Board│ Distributors, Joinery OEM       │
 └──────────────────────────┴───────────────────────────┴─────────────────────────────────┘
 ```
 
@@ -65,13 +68,19 @@ This segment focuses on power transmission cables, signal/control cables, and th
     *   **Smart Electrical Hardware**: WiFi-enabled smart home sockets, energy-monitoring plugs (e.g., 20A EU standard outlets with voice/app control), switches, and intelligent distribution boxes.
     *   **Remote Control Switches & Wireless Access Hardware**: Radio remote control transmitters and switches for automatic gates, barrier operators, and garage doors. Key models include CAME TOP-433EE dual-channel gate transmitters (433.92 MHz fixed/rolling code, 5x multipacks), RF receiver modules, and smart access control switches (HS Code 8526.92, wholesale orders: 100 Set/Sets, CIF shipping terms to Destination Port: Qatar / Hamad Port).
     *   **Consolidated Electronic & Electromechanical Components**: High-variety containerized procurement of electronic components for assembly and OEM production. Key sub-categories: Displays (LCD, LED, and OLED display modules), electromechanical switches (push buttons, toggle switches, microswitches), passive components (electrolytic, ceramic, and film capacitors), semiconductor discretes, battery hardware (rechargeable batteries, through-hole/SMD battery holders, battery contacts, clips), and small motor systems (fan motors, air cooler motors, submersible circulation pumps). Sourced in consolidated container loads (1 Twenty-Foot Container / 20ft FCL), under FOB shipping terms, with Destination Port: Hong Kong, classified under HS Code 8536.90 / 8528.59 / 8532.22 / 8501.10.
-    *   **Consolidated Electronic & Electromechanical Components**: High-variety containerized procurement of electronic components for assembly and OEM production. Key sub-categories: Displays (LCD, LED, and OLED display modules), electromechanical switches (push buttons, toggle switches, microswitches), passive components (electrolytic, ceramic, and film capacitors), semiconductor discretes, battery hardware (rechargeable batteries, through-hole/SMD battery holders, battery contacts, clips), and small motor systems (fan motors, air cooler motors, submersible circulation pumps). Sourced in consolidated container loads (1 Twenty-Foot Container / 20ft FCL), under FOB shipping terms, with Destination Port: Hong Kong, classified under HS Code 8536.90 / 8528.59 / 8532.22 / 8501.10.
 
 ### Segment E: Specialized Electro-Thermic and Motor-Driven Domestic/Commercial Appliances
 This segment addresses commercial processing machinery alongside bulk consumer kitchen electrics.
 *   **Sub-niches**:
     *   **Industrial/Commercial Food Processing**: Screw-type fruit/vegetable juicers (0.5t–2.5t/h capacity, 1.1kW+ motors), commercial mango/tomato pureeing systems, and professional-grade stainless steel beverage extractors.
     *   **Small Domestic Appliances (SDA) - Bulk Import**: Electric kettles, countertop blenders, hand mixers, air fryers, induction cooktops, and sandwich makers, primarily sourced for retail and hospitality distribution.
+
+### Segment F: Building Materials, Architectural Surfaces & Engineered Wooden Panels
+This segment covers engineered wood products and decorative panels procured by regional distributors, building materials retailers, and furniture/interior fit-out contractors in high-growth Southeast Asian corridors (Philippines).
+*   **Sub-niches**:
+    *   **Plywood Panels & Marine Boards**: Commercial plywood sheets, film-faced shuttering plywood, marine-grade plywood (BWP/BWR grades, IS 710/IS 303 standards), calibrated plywood, and decorative hardwood veneered boards (4mm, 6mm, 9mm, 12mm, 18mm standard thicknesses).
+    *   **MDF Panels & Laminated Decorative Boards**: Medium Density Fiberboard (MDF panels, plain and pre-laminated), High Density Fiberboard (HDF), particle boards, melamine-faced decorative boards, wood-grain laminated panels, and textured acoustic wall panels.
+    *   **Wholesale Procurement Dynamics**: Destined for retail distribution networks and commercial building contractors. Sourced in full container loads (1 Twenty-Foot Container / 20ft FCL) with standard export packaging (strapped seaworthy bundles on wooden skids with plastic corner guards), under CIF or FOB shipping terms, with Destination Port: Philippines (Port of Manila / Cebu / Batangas), classified under HS Code 4412.99 / 4411.14.
 
 ---
 
@@ -87,12 +96,14 @@ Our platform monitors and extracts opportunities containing the following high-i
 *   **Energy Storage, Solar & Renewable Recycling**: `"Solar Panel Scrap"`, `"PV Module Scrap"`, `"Solar Recycling"`, `"End-of-Life Solar Panels"`, `"Decommissioned Solar Modules"`, `"Solar Inverter"`, `"Li-Ion Battery Pack"`, `"LiFePO4"`, `"Sodium-Ion Battery"`, `"Sodium Power Bank"`, `"18650"`, `"21700"`, `"Marine Battery IP67"`, `"LR44"`, `"A76"`, `"Alkaline Button Battery"`, `"Solid-State Battery"`.
 *   **Electrical & Electronic Components**: `"LCD Display Modules"`, `"OLED Display Modules"`, `"LED Displays"`, `"Toggle Switches"`, `"Push Buttons"`, `"Battery Holders"`, `"Rechargeable Batteries"`, `"Capacitors"`, `"Fan Motor"`, `"Air Cooler Motor"`, `"Cooler Pump"`, `"Remote Control Switches"`, `"CAME TOP-433EE"`, `"Gate Transmitter"`, `"433.92 MHz Remote"`, `"Radio Remote Control Apparatus"`, `"Gate Barrier Remote"`, `"Power Cable"`, `"Control Cable"`, `"XLPE Cable"`, `"Copper Conductor"`, `"Industrial Plug"`, `"IP44 Socket"`, `"56 Series SAA Plug"`, `"EV Charger Plug"`, `"Cable Gland"`, `"WiFi Smart Socket 20A"`.
 *   **Industrial Processing & Appliances**: `"Screw Juicer"`, `"Pureeing System"`, `"Fruit Processing Plant"`, `"Electric Kettle"`, `"Air Fryer 1800W"`, `"Induction Cooker"`.
+*   **Building Materials & Wooden Panels**: `"Wooden Panels"`, `"Plywood Panels"`, `"MDF Panels"`, `"Laminated Boards"`, `"Decorative Panels"`, `"Melamine Boards"`, `"Veneered Panels"`, `"Commercial Plywood"`, `"Marine Plywood"`, `"Particle Board"`, `"Building Materials Retailer"`.
 
 ### 2.2 Material & Component Taxonomy
 We prioritize leads specifying the following materials:
 *   **Metals**: Food-Grade Stainless Steel (SUS304, SUS316) for processing machinery and enclosures; Electrolytic Tough Pitch (ETP) Copper and Aluminum for cable conductors and busbars; Mild Steel with protective powder coatings for industrial control panels.
 *   **Engineering Plastics**: High-impact ABS Plastic, Flame-Retardant Polycarbonate (PC) for electrical enclosures, plugs, and instrument housings; Cross-linked Polyethylene (XLPE) and Polyvinyl Chloride (PVC) for high-dielectric wiring insulation.
 *   **Electronic Hardware**: Silicon semiconductor chips, printed circuit board assemblies (PCBAs), electronic control components, microcontrollers, dimming racks, terminal blocks, relays, and heavy-duty magnetic contactors.
+*   **Engineered Wood & Surface Materials**: Hardwood/softwood veneers (Gurjan, Birch, Poplar, Eucalyptus), Melamine-impregnated decorative paper, Phenol-Formaldehyde (PF) and Urea-Formaldehyde (UF) resins, MDF wood-fiber cores, High-Pressure Laminates (HPL).
 *   **Dielectric & Insulation Materials**: Bulk insulation materials including Sheet Moulding Compound (SMC), Dough Moulding Compound (DMC), epoxy resin, Nomex, mica, pressboard, porcelain insulators, and XLPE for electrical control enclosures and transformer isolation.
 
 ### 2.3 Reference HS Codes
@@ -128,6 +139,8 @@ Our scraping agents use the following Harmonized System (HS) codes to filter, ca
 │ 8435.10  │ Presses, crushers and similar machinery used in juice/beverage manufacture  │
 │ 8516.79  │ Other electro-thermic domestic appliances (Kettles, Air Fryers, Toasters)   │
 │ 8509.40  │ Electromechanical domestic food grinders, mixers, and fruit juice extractors│
+│ 4412.99  │ Plywood, veneered panels and similar laminated wood (decorative boards)     │
+│ 4411.14  │ Medium density fibreboard (MDF) of thickness > 9 mm (laminated panels)      │
 └──────────┴─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -144,7 +157,7 @@ To ensure leads are commercially viable and match our target supplier network, t
     *   *Numerical Protection Relays & Substation Automation*: High-value palletized instrumentation orders (1 Less than Container Load / LCL) under CIF shipping terms to Destination Port Oman (Sohar Port, Port Sultan Qaboos, Salalah).
     *   *Remote Control Switches & Access Automation*: Commercial wholesale batches (100 Sets to 5,000 Sets) under CIF shipping terms to Destination Port Qatar (Hamad Port / Doha) for barrier gate automation and security integration.
     *   *Consolidated Electronics & Component Containers*: Full container shipments (1 Twenty-Foot Container / 20ft FCL) under FOB shipping terms to premier East Asian technology hubs (Hong Kong, Singapore, Shenzhen), covering multi-category electronics (displays, switches, capacitors, motors, battery holders).
-    *   *Consolidated Electronics & Component Containers*: Full container shipments (1 Twenty-Foot Container / 20ft FCL) under FOB shipping terms to premier East Asian technology hubs (Hong Kong, Singapore, Shenzhen), covering multi-category electronics (displays, switches, capacitors, motors, battery holders).
+    *   *Building Materials & Wooden Panels*: Full container shipments (1 Twenty-Foot Container / 20ft FCL) under CIF or FOB shipping terms to Destination Port Philippines (Manila / Cebu / Batangas) for building material retailers, furniture manufacturers, and decorative board distributors.
 *   **Payment & Shipping Standards**:
     *   *Sourcing Geographies*: Worldwide open sourcing, with a high concentration of demand in the Middle East (Saudi Arabia, UAE, Qatar, Kuwait, Oman, Bahrain), Asia-Pacific (Singapore, Australia, Philippines, Vietnam, Indonesia), Europe (Germany, Italy, France), and North America (Canada).
     *   *Payment Terms*: Strict business-to-business payment methods, prioritizing Letters of Credit (L/C, LC at sight, LC 30-60-90 Days), Telegraphic Transfers (T/T, e.g., 30% advance / 70% against documents), or Bank Transfers.
