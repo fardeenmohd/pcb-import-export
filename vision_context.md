@@ -63,6 +63,7 @@ This segment focuses on power transmission cables, signal/control cables, and th
     *   **Bulk Power & Control Cabling**: Low and medium voltage copper and aluminum conductor cables, XLPE and PVC insulated options, control wires, optical fiber cables, and specialized heating cables.
     *   **Industrial Connections & Wiring Accessories**: SAA approved plugs (56 Series), heavy-duty IP44/IP67 industrial sockets (CEE/IEC standards), EV charging plugs (5-pin, 10A–32A), cable glands, power cords, patch cords, and terminal connectors.
     *   **Smart Electrical Hardware**: WiFi-enabled smart home sockets, energy-monitoring plugs (e.g., 20A EU standard outlets with voice/app control), switches, and intelligent distribution boxes.
+    *   **Remote Control Switches & Wireless Access Hardware**: Radio remote control transmitters and switches for automatic gates, barrier operators, and garage doors. Key models include CAME TOP-433EE dual-channel gate transmitters (433.92 MHz fixed/rolling code, 5x multipacks), RF receiver modules, and smart access control switches (HS Code 8526.92, wholesale orders: 100 Set/Sets, CIF shipping terms to Destination Port: Qatar / Hamad Port).
 
 ### Segment E: Specialized Electro-Thermic and Motor-Driven Domestic/Commercial Appliances
 This segment addresses commercial processing machinery alongside bulk consumer kitchen electrics.
@@ -82,7 +83,7 @@ Our platform monitors and extracts opportunities containing the following high-i
 *   **Metrology & Quality Assurance**: `"Eco Tip"`, `"Hardness Tester"`, `"Dynamic Shear Rheometer"`, `"MCR 92"`, `"Bending Beam Rheometer"`, `"Pressure Ageing Vessel"`, `"Salt Spray"`, `"CCT Chamber"`, `"UTM WAW-1000D"`, `"Digital Multimeter"`, `"Clamp Meter"`, `"Megohm Meter"`, `"Insulation Tester"`, `"Calibration Instrument"`.
 *   **Automation & Drive Systems**: `"Protection Relay"`, `"Numerical Protection Relay"`, `"Feeder Protection Relay"`, `"Transformer Protection Relay"`, `"Generator Protection Relay"`, `"Arc-Flash Protection"`, `"SEL-751"`, `"SEL-787"`, `"SEL-700G"`, `"Power Distribution Equipment"`, `"Electrical Control Equipment"`, `"Circuit Breakers"`, `"Contactors"`, `"Distribution Transformers"`, `"Industrial Power Management"`, `"Variable Frequency Drive"`, `"VFD"`, `"Variable Speed Drive"`, `"VSD"`, `"AC Drive"`, `"Servo Drive"`, `"DSE7320"`, `"Generator Control Module"`, `"PLC Component"`, `"MCC Panel"`, `"PCC Panel"`, `"Control Panel"`, `"AC-DC Converter"`, `"Lighting Control Systems"`, `"Centralized Controls"`, `"Automated Lighting Controls"`, `"Lighting Controller"`, `"Dimming Module"`, `"Streetlight Monitoring"`, `"Smart Building Automation"`, `"Electronic Control Components"`.
 *   **Energy Storage, Solar & Renewable Recycling**: `"Solar Panel Scrap"`, `"PV Module Scrap"`, `"Solar Recycling"`, `"End-of-Life Solar Panels"`, `"Decommissioned Solar Modules"`, `"Solar Inverter"`, `"Li-Ion Battery Pack"`, `"LiFePO4"`, `"Sodium-Ion Battery"`, `"Sodium Power Bank"`, `"18650"`, `"21700"`, `"Marine Battery IP67"`, `"LR44"`, `"A76"`, `"Alkaline Button Battery"`, `"Solid-State Battery"`.
-*   **Electrical Infrastructure**: `"Power Cable"`, `"Control Cable"`, `"XLPE Cable"`, `"Copper Conductor"`, `"Industrial Plug"`, `"IP44 Socket"`, `"56 Series SAA Plug"`, `"EV Charger Plug"`, `"Cable Gland"`, `"WiFi Smart Socket 20A"`.
+*   **Electrical Infrastructure & Access Control**: `"Remote Control Switches"`, `"CAME TOP-433EE"`, `"Gate Transmitter"`, `"433.92 MHz Remote"`, `"Radio Remote Control Apparatus"`, `"Gate Barrier Remote"`, `"Power Cable"`, `"Control Cable"`, `"XLPE Cable"`, `"Copper Conductor"`, `"Industrial Plug"`, `"IP44 Socket"`, `"56 Series SAA Plug"`, `"EV Charger Plug"`, `"Cable Gland"`, `"WiFi Smart Socket 20A"`.
 *   **Industrial Processing & Appliances**: `"Screw Juicer"`, `"Pureeing System"`, `"Fruit Processing Plant"`, `"Electric Kettle"`, `"Air Fryer 1800W"`, `"Induction Cooker"`.
 
 ### 2.2 Material & Component Taxonomy
@@ -116,6 +117,7 @@ Our scraping agents use the following Harmonized System (HS) codes to filter, ca
 │ 8506.00  │ Primary cells and primary batteries (Alkaline, Button Cells, Duracell)       │
 │ 8544.49  │ Other electric conductors, for a voltage not exceeding 1,000 V (Unfitted)   │
 │ 8544.42  │ Electric conductors, for a voltage <= 1,000 V, fitted with connectors        │
+│ 8526.92  │ Radio remote control apparatus (gate transmitters, RF remote switches)     │
 │ 8536.69  │ Plugs and sockets for a voltage not exceeding 1,000 V                       │
 │ 8536.90  │ Other electrical apparatus for switching or protecting electrical circuits │
 │ 8435.10  │ Presses, crushers and similar machinery used in juice/beverage manufacture  │
@@ -135,6 +137,7 @@ To ensure leads are commercially viable and match our target supplier network, t
     *   *Power Distribution & Electrical Control Equipment*: FCL orders (1 Twenty-Foot Container / 20ft FCL) for power distribution equipment, electrical control gear, circuit breakers, contactors, and distribution transformers under CIF or FOB terms to Destination Port Qatar (Hamad Port) under Letter of Credit (L/C).
     *   *Solar Panel Scrap & Industrial Clean-Tech Recycling*: Large-tonnage commodity shipments (e.g., 500 Metric Tons / 500 MT) under FOB shipping terms, with Destination Port: India (Nhava Sheva, Mundra, Chennai), supplying Indian metallurgical refiners, solar recyclers, and secondary raw material processors.
     *   *Numerical Protection Relays & Substation Automation*: High-value palletized instrumentation orders (1 Less than Container Load / LCL) under CIF shipping terms to Destination Port Oman (Sohar Port, Port Sultan Qaboos, Salalah).
+    *   *Remote Control Switches & Access Automation*: Commercial wholesale batches (100 Sets to 5,000 Sets) under CIF shipping terms to Destination Port Qatar (Hamad Port / Doha) for barrier gate automation and security integration.
 *   **Payment & Shipping Standards**:
     *   *Sourcing Geographies*: Worldwide open sourcing, with a high concentration of demand in the Middle East (Saudi Arabia, UAE, Qatar, Kuwait, Oman, Bahrain), Asia-Pacific (Singapore, Australia, Philippines, Vietnam, Indonesia), Europe (Germany, Italy, France), and North America (Canada).
     *   *Payment Terms*: Strict business-to-business payment methods, prioritizing Letters of Credit (L/C, LC at sight, LC 30-60-90 Days), Telegraphic Transfers (T/T, e.g., 30% advance / 70% against documents), or Bank Transfers.
@@ -169,8 +172,8 @@ Inject the following XML-formatted block directly into the LLM orchestration lay
        - Target HS Codes: 854143, 850760, 850780, 850600, 850680.
 
     4. ELECTRICAL WIRING SYSTEMS &amp; SMART CONNECTIONS (Segment D)
-       - Keywords: Low/medium voltage power cables, control cables, XLPE/PVC insulation, copper/aluminum conductor wires, industrial plugs/sockets (CEE/IEC IP44/IP67), 56 Series SAA plugs, EV charger plugs (5-pin, 10A-32A), WiFi smart home plugs (20A EU), cable glands, power cords.
-       - Target HS Codes: 854449, 854442, 853669, 853690.
+       - Keywords: Remote control switches, CAME TOP-433EE gate transmitters, 433.92 MHz RF remotes, wireless access controls, low/medium voltage power cables, control cables, XLPE/PVC insulation, copper/aluminum conductor wires, industrial plugs/sockets (CEE/IEC IP44/IP67), 56 Series SAA plugs, EV charger plugs (5-pin, 10A-32A), WiFi smart home plugs (20A EU), cable glands, power cords.
+       - Target HS Codes: 854449, 854442, 852692, 853669, 853690.
 
     5. COMMERCIAL PROCESSING &amp; ELECTRO-THERMIC APPLIANCES (Segment E)
        - Keywords: Industrial screw juice extractors, commercial mango/tomato pureeing systems, wholesale food preparation appliances (blenders, air fryers, induction cookers, electric kettles).

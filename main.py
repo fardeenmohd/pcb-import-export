@@ -257,6 +257,9 @@ class App(ctk.CTk):
             "commercial lighting importers UAE",
             "power distribution equipment distributors Qatar",
             "electrical control equipment contactors importers Qatar",
+            "CAME TOP-433EE remote control transmitters Qatar",
+            "gate automation remote control switches distributors Qatar",
+            "433MHz wireless RF transmitter switches importers Qatar",
             "solar panel scrap importers India",
             "PV module scrap buyers 500 MT India",
             "decommissioned solar panels scrap recyclers India",
@@ -488,6 +491,8 @@ class App(ctk.CTk):
                 f"solar inverter distributors {dest}",
                 f"diesel generator dealers {dest}",
                 f"cable gland terminal block importers {dest}",
+                f"gate automation remote control switches distributors {dest}",
+                f"wireless RF transmitter switches 433MHz importers {dest}",
                 f"floor scrubber cleaning equipment distributors {dest}",
                 f"PIR sensor testing equipment wholesalers {dest}",
                 f"industrial fan pump suppliers {dest}",
@@ -530,6 +535,8 @@ class App(ctk.CTk):
                 "circuit breaker factories India",
                 "diesel generator manufacturers Pune",
                 "brass cable glands manufacturers Jamnagar",
+                "RF remote control switch manufacturers India",
+                "gate automation transmitter receiver factories India",
                 "LED streetlight luminaire factories India",
                 "industrial pump motor manufacturers Coimbatore",
                 "floor scrubber cleaning machine suppliers India",
@@ -588,6 +595,8 @@ class App(ctk.CTk):
                 f"solar inverter distributors {dest}",
                 f"diesel generator dealers {dest}",
                 f"cable gland terminal block importers {dest}",
+                f"gate automation remote control switches distributors {dest}",
+                f"wireless RF transmitter switches 433MHz importers {dest}",
                 f"floor scrubber cleaning equipment distributors {dest}",
                 f"PIR sensor testing equipment wholesalers {dest}",
                 f"industrial fan pump suppliers {dest}",
@@ -690,7 +699,7 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
                 prompt = """You are an elite B2B sourcing expert for Indian export-import trade.
 Our company sources from Indian manufacturers across these 11 core industrial niches:
 
-NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
+NICHE 1 - Electrical Components & Remote Switches: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, remote control switches (CAME TOP-433EE dual-channel gate transmitters, 433.92 MHz RF remotes, wireless barrier remotes, HS 852692), EV plugs, wiring sockets
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
 NICHE 3 - Power Distribution & Protection Relays: Numerical protection relays (SEL-751 arc-flash feeder protection, SEL-787 transformer protection, SEL-700G generator intertie protection, differential/overcurrent relays, HS 853649), power distribution equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, CRP panels (HS 853710, 8504)
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
@@ -714,6 +723,8 @@ RULES:
    - "electrical contactors circuit breaker factories Gujarat"
    - "switchgear panel factories Gujarat"
    - "brass cable glands manufacturers Jamnagar"
+   - "RF remote control switch manufacturers India"
+   - "gate automation transmitter factories India"
    - "solar panel scrap suppliers exporters"
    - "PV module scrap suppliers 500 MT"
    - "diesel generator manufacturers Pune"
@@ -766,7 +777,7 @@ RULES:
                 prompt = f"""You are an elite B2B export sales director.
 We are an Indian manufacturer and exporter supplying international buyers across these 11 core industrial niches:
 
-NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
+NICHE 1 - Electrical Components & Remote Switches: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, remote control switches (CAME TOP-433EE dual-channel gate transmitters, 433.92 MHz RF remotes, wireless barrier remotes, HS 852692), EV plugs, wiring sockets
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
 NICHE 3 - Power Distribution & Protection Relays: Numerical protection relays (SEL-751 arc-flash feeder protection, SEL-787 transformer protection, SEL-700G generator intertie protection, differential/overcurrent relays, HS 853649), power distribution equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, CRP panels (HS 853710, 8504)
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
@@ -798,6 +809,8 @@ RULES:
    - "streetlight monitoring control systems {region_kw}"
    - "diesel generator dealers {region_kw}"
    - "cable gland terminal block importers {region_kw}"
+   - "CAME TOP-433EE remote control distributors {region_kw}"
+   - "gate automation remote switches importers {region_kw}"
    - "floor scrubber equipment distributors {region_kw}"
    - "PIR sensor wholesalers {region_kw}"
    - "home energy storage importers {region_kw}"
@@ -904,6 +917,8 @@ RULES:
                         f"solar inverter distributors {dest_term}",
                         f"diesel generator dealers {dest_term}",
                         f"cable gland terminal block importers {dest_term}",
+                        f"gate automation remote control switches distributors {dest_term}",
+                        f"wireless RF transmitter switches 433MHz importers {dest_term}",
                         f"floor scrubber cleaning equipment distributors {dest_term}",
                         f"PIR sensor testing equipment wholesalers {dest_term}",
                         f"industrial fan pump suppliers {dest_term}",
@@ -941,6 +956,8 @@ RULES:
                     "circuit breaker factories India",
                     "diesel generator manufacturers Pune",
                     "brass cable glands manufacturers Jamnagar",
+                    "RF remote control switch manufacturers India",
+                    "gate automation transmitter receiver factories India",
                     "LED streetlight luminaire factories India",
                     "industrial pump motor manufacturers Coimbatore",
                     "floor scrubber cleaning machine suppliers India",
@@ -982,6 +999,8 @@ RULES:
                     f"solar inverter distributors {fallback_dest}",
                     f"diesel generator dealers {fallback_dest}",
                     f"cable gland terminal block importers {fallback_dest}",
+                    f"gate automation remote control switches distributors {fallback_dest}",
+                    f"wireless RF transmitter switches 433MHz importers {fallback_dest}",
                     f"floor scrubber cleaning equipment distributors {fallback_dest}",
                     f"PIR sensor testing equipment wholesalers {fallback_dest}",
                     f"industrial fan pump suppliers {fallback_dest}",
@@ -1075,9 +1094,9 @@ RULES:
             if strategy == "Logistics":
                 filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
             elif strategy == "Suppliers":
-                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Remote Control Switches (CAME TOP-433EE, gate transmitters), Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
-                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Remote Control Switches (CAME TOP-433EE, gate transmitters), Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
             prompt = "You are an expert lead generation AI.\nThe user is searching for: " + filter_goal + "\n\nHere are the raw search results from DuckDuckGo:\n" + search_context + "\n\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
                 
@@ -1936,7 +1955,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as remote control switches & gate automation transmitters, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 We are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
@@ -2265,7 +2284,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as remote control switches & gate automation transmitters, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 Based on the logistics services and trade lanes shown on their website, we are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
