@@ -267,6 +267,10 @@ class App(ctk.CTk):
             "wooden decorative panels wholesaler Philippines",
             "MDF panels laminated board importers Manila Philippines",
             "plywood sheets building materials dealers Cebu Philippines",
+            "Epson RA-8565SA PURE SN integrated circuit distributors Poland",
+            "electronic components IC distributors Poland",
+            "RA-8565SA real time clock IC tape reel Poland",
+            "brand new original integrated circuit suppliers Poland",
             "433MHz wireless RF transmitter switches importers Qatar",
             "solar panel scrap importers India",
             "PV module scrap buyers 500 MT India",
@@ -504,6 +508,8 @@ class App(ctk.CTk):
                 f"electronic components display LCD OLED distributors {dest}",
                 f"switches push button toggle capacitor wholesalers {dest}",
                 f"rechargeable battery holder components importers {dest}",
+                f"integrated circuit IC electronic components distributors {dest}",
+                f"real time clock RTC microcontroller suppliers {dest}",
                 f"fan motor pump cooler components suppliers {dest}",
                 f"plywood panels MDF laminated boards distributors {dest}",
                 f"wooden decorative panels wholesalers {dest}",
@@ -555,6 +561,9 @@ class App(ctk.CTk):
                 "toggle switches push button manufacturers India",
                 "electrolytic ceramic capacitor manufacturers Gujarat",
                 "fan motor air cooler pump manufacturers Coimbatore",
+                "integrated circuit IC component distributors India",
+                "electronic component authorized distributors Bangalore",
+                "Epson timing devices RTC distributors India",
                 "plywood panel MDF board manufacturers Yamunanagar",
                 "decorative laminated sheets manufacturers Gujarat",
                 "commercial marine plywood factories Kerala",
@@ -622,6 +631,8 @@ class App(ctk.CTk):
                 f"electronic components display LCD OLED distributors {dest}",
                 f"switches push button toggle capacitor wholesalers {dest}",
                 f"rechargeable battery holder components importers {dest}",
+                f"integrated circuit IC electronic components distributors {dest}",
+                f"real time clock RTC microcontroller suppliers {dest}",
                 f"fan motor pump cooler components suppliers {dest}",
                 f"plywood panels MDF laminated boards distributors {dest}",
                 f"wooden decorative panels wholesalers {dest}",
@@ -725,9 +736,9 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
 
             if strategy == "Suppliers":
                 prompt = """You are an elite B2B sourcing expert for Indian export-import trade.
-Our company sources from Indian manufacturers across these 11 core industrial niches:
+Our company sources from Indian manufacturers across these 12 core industrial niches:
 
-NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, switches (push buttons, toggle switches, rocker switches), LCD/LED/OLED display modules, capacitors, battery holders & rechargeable batteries, fan motors & pumps, remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 853690, 8528, 8532)
+NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, switches (push buttons, toggle, rocker), LCD/LED/OLED display modules, capacitors, battery holders, fan motors, integrated circuits (ICs, Real-Time Clocks like Epson RA-8565SA PURE SN, microcontrollers, semiconductors, HS 854200), remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 8542, 853690, 8528, 8532)
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
 NICHE 3 - Power Distribution & Protection Relays: Numerical protection relays (SEL-751 arc-flash feeder protection, SEL-787 transformer protection, SEL-700G generator intertie protection, differential/overcurrent relays, HS 853649), power distribution equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, CRP panels (HS 853710, 8504)
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
@@ -756,6 +767,8 @@ RULES:
    - "gate automation transmitter factories India"
    - "electronic displays LCD OLED module suppliers India"
    - "toggle switch push button manufacturers India"
+   - "integrated circuit IC component distributors India"
+   - "Epson timing devices RTC distributors India"
    - "plywood panel MDF board manufacturers Yamunanagar"
    - "decorative laminated sheets manufacturers Gujarat"
    - "solar panel scrap suppliers exporters"
@@ -810,7 +823,7 @@ RULES:
                 prompt = f"""You are an elite B2B export sales director.
 We are an Indian manufacturer and exporter supplying international buyers across these 12 core industrial niches:
 
-NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, switches (push buttons, toggle switches, rocker switches), LCD/LED/OLED display modules, capacitors, battery holders & rechargeable batteries, fan motors & pumps, remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 853690, 8528, 8532)
+NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, switches (push buttons, toggle, rocker), LCD/LED/OLED display modules, capacitors, battery holders, fan motors, integrated circuits (ICs, Real-Time Clocks like Epson RA-8565SA PURE SN, microcontrollers, semiconductors, HS 854200), remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 8542, 853690, 8528, 8532)
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
 NICHE 3 - Power Distribution & Protection Relays: Numerical protection relays (SEL-751 arc-flash feeder protection, SEL-787 transformer protection, SEL-700G generator intertie protection, differential/overcurrent relays, HS 853649), power distribution equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, CRP panels (HS 853710, 8504)
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
@@ -848,6 +861,9 @@ RULES:
    - "electronic components display LCD OLED distributors {region_kw}"
    - "switches push button toggle capacitor wholesalers {region_kw}"
    - "battery holder components importers {region_kw}"
+   - "Epson RA-8565SA integrated circuit distributors {region_kw}"
+   - "electronic components IC distributors {region_kw}"
+   - "brand new original integrated circuit suppliers {region_kw}"
    - "plywood panels MDF laminated boards distributors {region_kw}"
    - "wooden decorative panels wholesalers {region_kw}"
    - "floor scrubber equipment distributors {region_kw}"
@@ -914,6 +930,7 @@ RULES:
                         "decorative laminated sheets manufacturers Gujarat",
                         "plywood panel MDF board manufacturers Yamunanagar",
                     "decorative laminated sheets manufacturers Gujarat",
+                    "integrated circuit IC component distributors India",
                     "circuit breaker factories India",
                         "diesel generator manufacturers Pune",
                         "brass cable glands manufacturers Jamnagar",
@@ -965,6 +982,8 @@ RULES:
                         f"electronic components display LCD OLED distributors {dest_term}",
                         f"switches push button toggle capacitor wholesalers {dest_term}",
                         f"battery holder components importers {dest_term}",
+                        f"integrated circuit IC electronic components distributors {dest_term}",
+                        f"real time clock RTC microcontroller suppliers {dest_term}",
                         f"plywood panels MDF laminated boards distributors {dest_term}",
                         f"wooden decorative panels wholesalers {dest_term}",
                         f"floor scrubber cleaning equipment distributors {dest_term}",
@@ -1055,6 +1074,8 @@ RULES:
                     f"electronic components display LCD OLED distributors {fallback_dest}",
                     f"switches push button toggle capacitor wholesalers {fallback_dest}",
                     f"battery holder components importers {fallback_dest}",
+                    f"integrated circuit IC electronic components distributors {fallback_dest}",
+                    f"real time clock RTC microcontroller suppliers {fallback_dest}",
                     f"plywood panels MDF laminated boards distributors {fallback_dest}",
                     f"wooden decorative panels wholesalers {fallback_dest}",
                     f"floor scrubber cleaning equipment distributors {fallback_dest}",
@@ -1150,9 +1171,9 @@ RULES:
             if strategy == "Logistics":
                 filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
             elif strategy == "Suppliers":
-                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Remote Control Switches, Displays (LCD/OLED), Capacitors, Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
-                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Remote Control Switches, Displays (LCD/OLED), Capacitors, Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
             prompt = "You are an expert lead generation AI.\nThe user is searching for: " + filter_goal + "\n\nHere are the raw search results from DuckDuckGo:\n" + search_context + "\n\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
                 
@@ -2011,7 +2032,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as wooden panels (plywood, MDF, decorative laminated boards), consolidated electronic components (displays, capacitors, switches, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, switches, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 We are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
@@ -2340,7 +2361,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as wooden panels (plywood, MDF, decorative laminated boards), consolidated electronic components (displays, capacitors, switches, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, switches, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 Based on the logistics services and trade lanes shown on their website, we are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).

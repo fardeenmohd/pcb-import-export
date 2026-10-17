@@ -115,6 +115,8 @@ This directory serves as the technical backbone for classification, logistics ro
 | **8536.90** | Electrical Connectors, Glands, Lugs & Battery Holders | Brass, Copper, PA, Phosphor Bronze | Phoenix Contact, Elmex, Battery Holders |
 | **8528.59** | Displays (LCD, LED, OLED Display Modules) | Glass Substrate, Polarizer, Driver IC, FPC | TFT LCD Displays, Graphic OLED Modules |
 | **8532.22** | Fixed Electrical Capacitors | Aluminum Foil, Dielectric Electrolyte, Ceramic | Electrolytic Capacitors, Motor Run Capacitors |
+| **8542.00** | Electronic Integrated Circuits (ICs) | Monolithic Silicon Die, SOP14 Package, Pure Sn | Epson RA-8565SA, Microcontrollers, Timing ICs |
+| **8542.39** | Real-Time Clock (RTC) & Specialized ICs | Semiconductor Silicon, Molded Epoxy, Carrier Tape | Epson RA-8565SA PURE SN (I2C SOP14) |
 | **8536.50** | Electrical Switches (Rocker, Push, Float) | PC, PP, Copper, Silver-Alloy Contacts | KEDU HY69, Shuyi ATS, Honeywell |
 | **8536.49** | Numerical Protection Relays & Feeder Controllers (> 60V) | Conformal-Coated PCBs, Microprocessors, Hardened Enclosures | SEL-751 (Arc-Flash), SEL-787 (Transformer), SEL-700G |
 | **8536.20** | Miniature Circuit Breakers (MCB) | Thermoplastic, Copper, Steel, Silver contacts | TOMZN, L&T, ABB, Hensel |
