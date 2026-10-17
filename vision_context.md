@@ -54,6 +54,7 @@ This segment focuses on advanced chemistry battery packs, individual cells, and 
     *   **Lithium-Ion / LiFePO4 Packs**: Heavy-duty custom voltage configurations (22.2V, 44.4V, 51.2V) from 15Ah to 100Ah+, designed for Unmanned Ground Vehicles (UGVs), AGVs, robotic systems, electric scooters, and IP67 waterproof marine trolling/trolling motors.
     *   **Emerging Chemistries**: Sodium-Ion battery packs, portable power stations, and solid-state battery cells for next-generation mobile applications.
     *   **Primary Alkaline/Lithium Button & Cylindrical Cells**: High-volume wholesale consumer and industrial battery formats (AA, AAA, C, D, 9V, A76, LR44 button cells), with a focus on tier-one brands (e.g., Duracell, Toshiba) or high-quality OEM white labels.
+    *   **Solar Panel Scrap & Photovoltaic (PV) Module Recycling**: Dismantled, decommissioned, and end-of-life solar panel scrap for industrial recycling and secondary resource recovery (crystalline silicon wafers, silver metallization contacts, copper ribbon, tempered glass, aluminum frames). Transactions operate at industrial bulk commodity scales (e.g. 500 Metric Tons / 500 MT), under FOB or CIF shipping terms, with Destination Port: India (Nhava Sheva / JNPT, Mundra, Chennai), classified under HS Code 8541.43.
 
 ### Segment D: Electrical Wiring Systems, Infrastructure Cables, and Intelligent Electrical Fittings
 This segment focuses on power transmission cables, signal/control cables, and the industrial/residential wiring accessories required to safely connect and route them.
@@ -79,7 +80,7 @@ Our platform monitors and extracts opportunities containing the following high-i
 
 *   **Metrology & Quality Assurance**: `"Eco Tip"`, `"Hardness Tester"`, `"Dynamic Shear Rheometer"`, `"MCR 92"`, `"Bending Beam Rheometer"`, `"Pressure Ageing Vessel"`, `"Salt Spray"`, `"CCT Chamber"`, `"UTM WAW-1000D"`, `"Digital Multimeter"`, `"Clamp Meter"`, `"Megohm Meter"`, `"Insulation Tester"`, `"Calibration Instrument"`.
 *   **Automation & Drive Systems**: `"Power Distribution Equipment"`, `"Electrical Control Equipment"`, `"Circuit Breakers"`, `"Contactors"`, `"Distribution Transformers"`, `"Industrial Power Management"`, `"Variable Frequency Drive"`, `"VFD"`, `"Variable Speed Drive"`, `"VSD"`, `"AC Drive"`, `"Servo Drive"`, `"DSE7320"`, `"Generator Control Module"`, `"PLC Component"`, `"MCC Panel"`, `"PCC Panel"`, `"Control Panel"`, `"AC-DC Converter"`, `"Lighting Control Systems"`, `"Centralized Controls"`, `"Automated Lighting Controls"`, `"Lighting Controller"`, `"Dimming Module"`, `"Streetlight Monitoring"`, `"Smart Building Automation"`, `"Electronic Control Components"`.
-*   **Energy Storage & Battery Tech**: `"Li-Ion Battery Pack"`, `"LiFePO4"`, `"Sodium-Ion Battery"`, `"Sodium Power Bank"`, `"18650"`, `"21700"`, `"Marine Battery IP67"`, `"LR44"`, `"A76"`, `"Alkaline Button Battery"`, `"Solid-State Battery"`.
+*   **Energy Storage, Solar & Renewable Recycling**: `"Solar Panel Scrap"`, `"PV Module Scrap"`, `"Solar Recycling"`, `"End-of-Life Solar Panels"`, `"Decommissioned Solar Modules"`, `"Solar Inverter"`, `"Li-Ion Battery Pack"`, `"LiFePO4"`, `"Sodium-Ion Battery"`, `"Sodium Power Bank"`, `"18650"`, `"21700"`, `"Marine Battery IP67"`, `"LR44"`, `"A76"`, `"Alkaline Button Battery"`, `"Solid-State Battery"`.
 *   **Electrical Infrastructure**: `"Power Cable"`, `"Control Cable"`, `"XLPE Cable"`, `"Copper Conductor"`, `"Industrial Plug"`, `"IP44 Socket"`, `"56 Series SAA Plug"`, `"EV Charger Plug"`, `"Cable Gland"`, `"WiFi Smart Socket 20A"`.
 *   **Industrial Processing & Appliances**: `"Screw Juicer"`, `"Pureeing System"`, `"Fruit Processing Plant"`, `"Electric Kettle"`, `"Air Fryer 1800W"`, `"Induction Cooker"`.
 
@@ -107,6 +108,7 @@ Our scraping agents use the following Harmonized System (HS) codes to filter, ca
 │          │ (Power distribution equipment, control gear, circuit breakers, contactors)  │
 │ 8504.21  │ Liquid dielectric transformers having a power handling capacity <= 650 kVA  │
 │ 8536.20  │ Automatic circuit breakers for a voltage not exceeding 1,000 V             │
+│ 8541.43  │ Photovoltaic cells assembled in modules or made into panels (Solar Scrap)   │
 │ 8507.60  │ Lithium-ion accumulators (including battery packs)                          │
 │ 8507.80  │ Other electric accumulators (including Sodium-Ion, Solid-State)              │
 │ 8506.00  │ Primary cells and primary batteries (Alkaline, Button Cells, Duracell)       │
@@ -129,6 +131,7 @@ To ensure leads are commercially viable and match our target supplier network, t
     *   *Bulk Commodities & General Goods*: Minimum volumes of 1 Less-than-Container Load (LCL) up to multiple 20-foot or 40-foot Full Container Loads (FCL).
     *   *Lighting Control & Building Automation*: Wholesale container shipments (e.g., 1 Twenty-Foot Container / 20ft FCL) for centralized lighting controls, automated dimming modules, and streetlight monitoring systems.
     *   *Power Distribution & Electrical Control Equipment*: FCL orders (1 Twenty-Foot Container / 20ft FCL) for power distribution equipment, electrical control gear, circuit breakers, contactors, and distribution transformers under CIF or FOB terms to Destination Port Qatar (Hamad Port) under Letter of Credit (L/C).
+    *   *Solar Panel Scrap & Industrial Clean-Tech Recycling*: Large-tonnage commodity shipments (e.g., 500 Metric Tons / 500 MT) under FOB shipping terms, with Destination Port: India (Nhava Sheva, Mundra, Chennai), supplying Indian metallurgical refiners, solar recyclers, and secondary raw material processors.
 *   **Payment & Shipping Standards**:
     *   *Sourcing Geographies*: Worldwide open sourcing, with a high concentration of demand in the Middle East (Saudi Arabia, UAE, Qatar, Kuwait, Oman, Bahrain), Asia-Pacific (Singapore, Australia, Philippines, Vietnam, Indonesia), Europe (Germany, Italy, France), and North America (Canada).
     *   *Payment Terms*: Strict business-to-business payment methods, prioritizing Letters of Credit (L/C, LC at sight, LC 30-60-90 Days), Telegraphic Transfers (T/T, e.g., 30% advance / 70% against documents), or Bank Transfers.
@@ -159,8 +162,8 @@ Inject the following XML-formatted block directly into the LLM orchestration lay
        - Target HS Codes: 850440, 853710, 850140, 850131.
 
     3. ADVANCED BATTERIES &amp; ENERGY STORAGE (Segment C)
-       - Keywords: Rechargeable Lithium-Ion battery packs, LiFePO4 cells, Sodium-Ion batteries/power stations, solid-state batteries, high-capacity marine trolling batteries (IP67), customized packs (22.2V, 44.4V, 51.2V), wholesale primary cells (AA, AAA, C, D, 9V, A76, LR44 button cells).
-       - Target HS Codes: 850760, 850780, 850600, 850680.
+       - Keywords: Solar panel scrap, PV module scrap, decommissioned solar panels, solar inverters, rechargeable Lithium-Ion battery packs, LiFePO4 cells, Sodium-Ion batteries/power stations, solid-state batteries, high-capacity marine trolling batteries (IP67), customized packs (22.2V, 44.4V, 51.2V), wholesale primary cells (AA, AAA, C, D, 9V, A76, LR44 button cells).
+       - Target HS Codes: 854143, 850760, 850780, 850600, 850680.
 
     4. ELECTRICAL WIRING SYSTEMS &amp; SMART CONNECTIONS (Segment D)
        - Keywords: Low/medium voltage power cables, control cables, XLPE/PVC insulation, copper/aluminum conductor wires, industrial plugs/sockets (CEE/IEC IP44/IP67), 56 Series SAA plugs, EV charger plugs (5-pin, 10A-32A), WiFi smart home plugs (20A EU), cable glands, power cords.
@@ -176,7 +179,7 @@ Inject the following XML-formatted block directly into the LLM orchestration lay
     - Raw agricultural commodities (unless specifically processed into the heavy machinery machinery listed above).
     - Textiles, apparel, apparel hardware, and fast-moving consumer soft goods.
     - Raw chemicals, bulk minerals, polymers, and fuels (unless packaged specifically as a battery electrolyte or structural enclosure material).
-    - General consumer scrap, metal recycling waste, or consumer-grade toys and low-complexity plastic housewares.
+    - General municipal household trash or consumer plastics (NOTE: High-value industrial clean-energy recycling streams such as Solar Panel Scrap / PV Module Scrap under HS 8541.43 at 500 MT volumes and battery scrap are strictly QUALIFIED and TARGETED).
   </exclusion_filters>
 
   <data_extraction_rules>

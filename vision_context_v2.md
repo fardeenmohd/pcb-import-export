@@ -59,7 +59,8 @@ The buy leads represent three distinct tiers of B2B procurement, each requiring 
 * **Industrial & Fuel Pumps**: Centrifugal pumps, positive displacement gear/piston/vane pumps, submersible water pumps, self-priming jet water pumps (1HP to 1.5HP cast-iron booster pumps), and specialized fuel/LPG delivery pumps (such as *Liwa* pumps for automotive LPG mounting).
 * **Refrigeration Parts**: Spare parts for mobile refrigeration units (*Thermo King* compressor models X426/X4300 using R404A refrigerant), copper capillary tubes, filter driers, condensing units, and evaporator coils.
 
-### Niche 5: Batteries, Chargers, & Home Energy Storage
+### Niche 5: Batteries, Chargers, Solar Equipment & Renewable Scrap Recycling
+* **Solar Panel Scrap & PV Module Recycling (India Import Corridor)**: High-tonnage secondary raw material procurement by Indian recycling plants, smelters, and precious metal refiners. Key material: decommissioned, broken, or end-of-life photovoltaic (PV) solar panels and silicon cell scrap for recovery of high-purity crystalline silicon wafers, silver contact metallization, copper conductive ribbons, tempered solar glass, and aluminum frames. Standard transaction specification: bulk volume of 500 Metric Tons (500 MT), FOB shipping terms, HS Code 8541.43, with containerized discharge at major Indian ports (Nhava Sheva / JNPT, Mundra, Chennai).
 * **Home Energy Storage Systems**: Hybrid off-grid battery packs based on LiFePO4 chemistry. Key specs: 51.2V 200Ah (15.36 kWh) and 48V 100Ah (5.12 kWh) modules (such as *DEYE* SE-G5.1 Pro-B). Compatibility with tier-1 inverters (*Deye, Growatt, Victron, Solis, GoodWe, Huawei*) is mandatory. Certification compliance requires UN38.3, MSDS, CE, and IEC 62619.
 * **Specialty & Industrial Packs**: Waterproof IP67 12V/24V/36V marine trolling motor batteries, rechargeable lithium packs for UGV robots/scooters (22.2V to 44.4V using 18650 or 21700 cells), and bulk shipments of used lithium batteries for metal recycling/refurbishment.
 * **Consumer Power Accessories**: 65W GaN (Gallium Nitride) fast wall chargers (multi-port USB-C), fast-charging copper/PVC USB-C cables, OEM iPhone/Samsung charging accessories, and bulk retail quantities of Duracell LR44 alkaline button cells.
@@ -103,6 +104,7 @@ This directory serves as the technical backbone for classification, logistics ro
 | **8537.10** | Power Distribution Equipment, Control Gear & Lighting Controls (< 1000V) | Copper Busbars, Steel, DMC/SMC Insulation, Electronic Components | Circuit Breakers, Contactors, Transformers, Centralized Controls |
 | **8504.21** | Distribution Transformers (Liquid Dielectric <= 650 kVA) | Copper Windings, Silicon Steel Cores, Transformer Oil | Step-Down Distribution Transformers, Industrial Transformers |
 | **8537.20** | Switchgear Panels (> 1000V) | Galvanized Steel, Copper, Insulators | ABB VD4G, Siemens, L&T |
+| **8541.43** | Photovoltaic Cells & Solar Panels (incl. Solar Panel Scrap 500 MT) | Silicon Wafers, Silver Paste, Glass, Aluminum, Copper | End-of-Life PV Modules, Damaged Solar Scrap |
 | **8507.60** | Lithium-Ion Batteries & Energy Storage | LiFePO4, Lithium Cobalt Oxide, BMS, Aluminum | DEYE SE-G5.1, EVE, CATL, BYD |
 | **8502.11** | Diesel Generator Sets (< 75 KVA) | Steel Frame, Copper Alternator, Cummins Engine | Cummins, Perkins |
 | **8502.13** | Diesel Generator Sets (> 375 KVA) | Industrial Engines, Alternators, Silencers | Cummins 500KVA, Caterpillar |
