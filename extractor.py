@@ -61,7 +61,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
             "You are an elite B2B industrial sourcing specialist for international trade.\n"
             "Analyze the following text scraped from a manufacturer's website OR a B2B directory page (like IndiaMart, TradeIndia, JustDial, etc.).\n\n"
             "We are sourcing from direct MANUFACTURERS, FACTORIES, and OEM MAKERS across 12 core industrial niches:\n"
-            "1. Electrical & Electronic Components (Cable Glands, Lugs, Terminal Blocks, Rocker/Toggle Switches, Push Buttons, LCD/OLED Displays, Capacitors, Battery Holders, Fan Motors, Integrated Circuits ICs, Epson RA-8565SA RTC, Microcontrollers, Remote Switches, EV plugs, HS 854200, 853690, 8528, 8532, 852692)\n"
+            "1. Electrical & Electronic Components (Cable Glands, Lugs, Terminal Blocks, Rocker/Power Switches 6A-20A, Toggle/Push Switches, LCD/OLED Displays, Capacitors, Battery Holders, Fan Motors, Integrated Circuits ICs, Epson RA-8565SA RTC, Microcontrollers, Remote Switches, EV plugs, HS 853650, 854200, 853690, 8528, 8532, 852692)\n"
             "2. Wires & Cables (LV/MV/HV Power, Armored XLPE, Submersible, Binding Wires, Reeling systems, Hoses)\n"
             "3. Power Distribution & Protection Relays (Numerical Protection Relays, SEL-751 Arc-Flash, SEL-787 Transformer, SEL-700G Generator, Circuit Breakers, Contactors, Transformers, Switchgear, ACB, MCCB, MCB, VCB, Relays, PCC/MCC Panels, Feeder Pillars, HS 853649, 853710, 8504)\n"
             "4. Industrial HVAC, Fans, Pumps & Actuators (Hydraulic Actuators, Speed Regulating Motors, Groschopp WK0920702, Motor Governors, Axial Fans, Compressors, Pumps, HS 850110, 8414, 8413)\n"
@@ -122,7 +122,7 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
     You are an expert B2B lead generation analyst.
     Analyze the following scraped text from a company's website.
     We are looking for B2B buyers, distributors, and OEMs across 12 core industrial niches:
-    1. Electrical & Electronic Components (Glands, Lugs, Terminal Blocks, Switches, Push Buttons, Toggle Switches, LCD/OLED Displays, Capacitors, Battery Holders, Fan Motors, Integrated Circuits ICs, Epson RA-8565SA RTC, Microcontrollers, HS 854200, 853690, 8528, 8532)
+    1. Electrical & Electronic Components (Glands, Lugs, Terminal Blocks, Rocker/Power Switches 6A-20A CQC/TUV/CE, Push Buttons, Toggle Switches, LCD/OLED Displays, Capacitors, Battery Holders, Fan Motors, Integrated Circuits ICs, Epson RA-8565SA RTC, Microcontrollers, HS 853650, 854200, 853690, 8528, 8532)
     2. Wires & Cables (LV/MV/HV Power, XLPE, Submersible, Reels)
     3. Power Distribution & Protection Relays (Numerical Protection Relays, SEL-751 Arc-Flash, SEL-787 Transformer, SEL-700G Generator, Circuit Breakers, Contactors, Transformers, Switchgear, ACB, MCCB, MCB, VCB, Relays, MCC Panels, HS 853649, 853710, 8504)
     4. Industrial HVAC, Fans, Pumps & Actuators (Hydraulic Actuators, Speed Regulating Motors, Groschopp WK0920702, Motor Governors, Fans, Scroll Compressors, Pumps, HS 850110, 8414, 8413)

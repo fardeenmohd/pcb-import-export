@@ -263,6 +263,10 @@ class App(ctk.CTk):
             "switches push button toggle switch wholesalers Hong Kong",
             "rechargeable battery holder capacitor importers Hong Kong",
             "fan motor pump air cooler components suppliers Hong Kong",
+            "illuminated rocker power switches 16A 20A distributors Hong Kong",
+            "round square big rocker switch suppliers Hong Kong",
+            "rocker switches CQC TUV CE red green button wholesalers Hong Kong",
+            "power switches 6A 10A 16A 20A importers Hong Kong",
             "plywood panels MDF laminated boards distributors Philippines",
             "wooden decorative panels wholesaler Philippines",
             "MDF panels laminated board importers Manila Philippines",
@@ -515,6 +519,8 @@ class App(ctk.CTk):
                 f"wireless RF transmitter switches 433MHz importers {dest}",
                 f"electronic components display LCD OLED distributors {dest}",
                 f"switches push button toggle capacitor wholesalers {dest}",
+                f"illuminated rocker power switch 16A 20A distributors {dest}",
+                f"round square rocker switches suppliers {dest}",
                 f"rechargeable battery holder components importers {dest}",
                 f"integrated circuit IC electronic components distributors {dest}",
                 f"real time clock RTC microcontroller suppliers {dest}",
@@ -573,6 +579,9 @@ class App(ctk.CTk):
                 "gate automation transmitter receiver factories India",
                 "electronic displays LCD OLED module suppliers India",
                 "toggle switches push button manufacturers India",
+                "illuminated rocker switch manufacturers India",
+                "power switches 16A 20A CQC CE factories India",
+                "round square rocker switch makers Gujarat",
                 "electrolytic ceramic capacitor manufacturers Gujarat",
                 "fan motor air cooler pump manufacturers Coimbatore",
                 "hydraulic actuator motor manufacturers India",
@@ -647,6 +656,8 @@ class App(ctk.CTk):
                 f"wireless RF transmitter switches 433MHz importers {dest}",
                 f"electronic components display LCD OLED distributors {dest}",
                 f"switches push button toggle capacitor wholesalers {dest}",
+                f"illuminated rocker power switch 16A 20A distributors {dest}",
+                f"round square rocker switches suppliers {dest}",
                 f"rechargeable battery holder components importers {dest}",
                 f"integrated circuit IC electronic components distributors {dest}",
                 f"real time clock RTC microcontroller suppliers {dest}",
@@ -759,7 +770,7 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
                 prompt = """You are an elite B2B sourcing expert for Indian export-import trade.
 Our company sources from Indian manufacturers across these 12 core industrial niches:
 
-NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, switches (push buttons, toggle, rocker), LCD/LED/OLED display modules, capacitors, battery holders, fan motors, integrated circuits (ICs, Real-Time Clocks like Epson RA-8565SA PURE SN, microcontrollers, semiconductors, HS 854200), remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 8542, 853690, 8528, 8532)
+NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, rocker switches (round/square big rocker power switches, 6A-20A, illuminated red/green buttons, CQC/TUV/CE/RoHS, HS 853650), toggle/push switches, LCD/LED/OLED display modules, capacitors, battery holders, fan motors, integrated circuits (ICs, Real-Time Clocks like Epson RA-8565SA PURE SN, microcontrollers, semiconductors, HS 854200), remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 853650, 8542, 853690, 8528, 8532)
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
 NICHE 3 - Power Distribution & Protection Relays: Numerical protection relays (SEL-751 arc-flash feeder protection, SEL-787 transformer protection, SEL-700G generator intertie protection, differential/overcurrent relays, HS 853649), power distribution equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, CRP panels (HS 853710, 8504)
 NICHE 4 - HVAC, Fans, Pumps & Actuators: Hydraulic actuators (Groschopp WK0920702 1767-367, speed regulating motors, motor governors, HS 850110), axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
@@ -788,6 +799,8 @@ RULES:
    - "gate automation transmitter factories India"
    - "electronic displays LCD OLED module suppliers India"
    - "toggle switch push button manufacturers India"
+   - "illuminated rocker switch manufacturers India"
+   - "power switches 16A 20A CQC CE factories India"
    - "hydraulic actuator motor manufacturers India"
    - "speed regulating motor governor factories Pune"
    - "integrated circuit IC component distributors India"
@@ -848,7 +861,7 @@ RULES:
                 prompt = f"""You are an elite B2B export sales director.
 We are an Indian manufacturer and exporter supplying international buyers across these 12 core industrial niches:
 
-NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, switches (push buttons, toggle, rocker), LCD/LED/OLED display modules, capacitors, battery holders, fan motors, integrated circuits (ICs, Real-Time Clocks like Epson RA-8565SA PURE SN, microcontrollers, semiconductors, HS 854200), remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 8542, 853690, 8528, 8532)
+NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, rocker switches (round/square big rocker power switches, 6A-20A, illuminated red/green buttons, CQC/TUV/CE/RoHS, HS 853650), toggle/push switches, LCD/LED/OLED display modules, capacitors, battery holders, fan motors, integrated circuits (ICs, Real-Time Clocks like Epson RA-8565SA PURE SN, microcontrollers, semiconductors, HS 854200), remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 853650, 8542, 853690, 8528, 8532)
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
 NICHE 3 - Power Distribution & Protection Relays: Numerical protection relays (SEL-751 arc-flash feeder protection, SEL-787 transformer protection, SEL-700G generator intertie protection, differential/overcurrent relays, HS 853649), power distribution equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, CRP panels (HS 853710, 8504)
 NICHE 4 - HVAC, Fans, Pumps & Actuators: Hydraulic actuators (Groschopp WK0920702 1767-367, speed regulating motors, motor governors, HS 850110), axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
@@ -885,6 +898,8 @@ RULES:
    - "gate automation remote switches importers {region_kw}"
    - "electronic components display LCD OLED distributors {region_kw}"
    - "switches push button toggle capacitor wholesalers {region_kw}"
+   - "illuminated rocker power switches 16A 20A distributors {region_kw}"
+   - "round square big rocker switch suppliers {region_kw}"
    - "battery holder components importers {region_kw}"
    - "Groschopp hydraulic actuator motor distributors {region_kw}"
    - "hydraulic actuator speed regulating motor importers {region_kw}"
@@ -1204,9 +1219,9 @@ RULES:
             if strategy == "Logistics":
                 filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
             elif strategy == "Suppliers":
-                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
-                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
             prompt = "You are an expert lead generation AI.\nThe user is searching for: " + filter_goal + "\n\nHere are the raw search results from DuckDuckGo:\n" + search_context + "\n\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
                 
@@ -2065,7 +2080,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as hydraulic actuators & speed regulating motors (Groschopp WK0920702 motor governors), photovoltaic solar panels (monocrystalline & TOPCon PV modules for solar energy systems), wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, switches, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as hydraulic actuators & speed regulating motors (Groschopp WK0920702 motor governors), photovoltaic solar panels (monocrystalline & TOPCon PV modules for solar energy systems), wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, illuminated rocker & power switches 6A-20A, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 We are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
@@ -2394,7 +2409,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as hydraulic actuators & speed regulating motors (Groschopp WK0920702 motor governors), photovoltaic solar panels (monocrystalline & TOPCon PV modules for solar energy systems), wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, switches, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as hydraulic actuators & speed regulating motors (Groschopp WK0920702 motor governors), photovoltaic solar panels (monocrystalline & TOPCon PV modules for solar energy systems), wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, illuminated rocker & power switches 6A-20A, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 Based on the logistics services and trade lanes shown on their website, we are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
