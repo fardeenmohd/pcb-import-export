@@ -64,7 +64,7 @@ def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[
             "1. Electrical & Electronic Components (Cable Glands, Lugs, Terminal Blocks, Rocker/Toggle Switches, Push Buttons, LCD/OLED Displays, Capacitors, Battery Holders, Fan Motors, Integrated Circuits ICs, Epson RA-8565SA RTC, Microcontrollers, Remote Switches, EV plugs, HS 854200, 853690, 8528, 8532, 852692)\n"
             "2. Wires & Cables (LV/MV/HV Power, Armored XLPE, Submersible, Binding Wires, Reeling systems, Hoses)\n"
             "3. Power Distribution & Protection Relays (Numerical Protection Relays, SEL-751 Arc-Flash, SEL-787 Transformer, SEL-700G Generator, Circuit Breakers, Contactors, Transformers, Switchgear, ACB, MCCB, MCB, VCB, Relays, PCC/MCC Panels, Feeder Pillars, HS 853649, 853710, 8504)\n"
-            "4. Industrial HVAC, Fans & Pumps (Axial/Centrifugal Fans, Scroll/Screw Compressors, Submersible Pumps, Refrigeration Parts)\n"
+            "4. Industrial HVAC, Fans, Pumps & Actuators (Hydraulic Actuators, Speed Regulating Motors, Groschopp WK0920702, Motor Governors, Axial Fans, Compressors, Pumps, HS 850110, 8414, 8413)\n"
             "5. Batteries, Solar Energy & Renewable Scrap (Photovoltaic Solar Panels, Solar Energy Systems, Monocrystalline TOPCon PV Modules, Solar Panel Scrap 500 MT, PV Module Scrap, Decommissioned Panels, HS 854143, LiFePO4 packs, Home ESS, Marine IP67, Solar Inverters)\n"
             "6. Industrial Generators (Cummins Diesel, Gas Gensets, Silent Generators, Wind Turbines)\n"
             "7. LED Lighting & Lighting Controls (Centralized Lighting Controls, Automated Lighting Controllers, Dimming Modules, Streetlight Monitoring Systems, Smart Building Automation, Streetlights, High-Bay LED, Corax Poultry Lighting, Smart WiFi Sockets, Electronic Control Components, HS 853710)\n"
@@ -125,7 +125,7 @@ def extract_buyer_info(text: str, logger: logging.Logger) -> Optional[List[Buyer
     1. Electrical & Electronic Components (Glands, Lugs, Terminal Blocks, Switches, Push Buttons, Toggle Switches, LCD/OLED Displays, Capacitors, Battery Holders, Fan Motors, Integrated Circuits ICs, Epson RA-8565SA RTC, Microcontrollers, HS 854200, 853690, 8528, 8532)
     2. Wires & Cables (LV/MV/HV Power, XLPE, Submersible, Reels)
     3. Power Distribution & Protection Relays (Numerical Protection Relays, SEL-751 Arc-Flash, SEL-787 Transformer, SEL-700G Generator, Circuit Breakers, Contactors, Transformers, Switchgear, ACB, MCCB, MCB, VCB, Relays, MCC Panels, HS 853649, 853710, 8504)
-    4. Industrial HVAC & Compressors (Fans, Scroll Compressors, Pumps, Refrigeration Parts)
+    4. Industrial HVAC, Fans, Pumps & Actuators (Hydraulic Actuators, Speed Regulating Motors, Groschopp WK0920702, Motor Governors, Fans, Scroll Compressors, Pumps, HS 850110, 8414, 8413)
     5. Batteries, Solar Energy & Renewable Scrap (Solar Panels, Photovoltaic Solar Modules, Monocrystalline TOPCon, Solar Energy Systems, Solar Panel Scrap 500 MT, PV Module Scrap, HS 854143, LiFePO4, Home ESS, Inverters)
     6. Industrial Generators (Cummins Diesel, Gas Gensets, Wind Gen)
     7. LED Lighting & Lighting Controls (Centralized Controls, Automated Lighting Controllers, Dimming Modules, Streetlight Monitoring, Smart Building Automation, DALI/0-10V, Streetlights, High-Bay, Luminaires, HS 853710)

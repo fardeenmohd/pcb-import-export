@@ -307,7 +307,8 @@ The buy leads represent three distinct tiers of B2B procurement, each requiring 
 * **Switchgear Assembly & Control Boards**: Metal-clad, pad-mounted, and vault-type switchgear spanning LV, MV, and HV. Power Control Centers (PCC), Motor Control Centers (MCC), synchronizing panels, and PLC automation panels.
 * **Wholesale Procurement Dynamics (Qatar)**: Sourced in full container lots (1 Twenty-Foot Container / 20ft FCL), under CIF or FOB terms to Destination Port Qatar (Hamad Port), strictly secured through irrevocable Letters of Credit (L/C).
 
-### Niche 4: Industrial Fans, Compressors, Pumps, & HVAC Spare Parts
+### Niche 4: Industrial Fans, Compressors, Pumps, Actuators & Drive Motors
+* **Hydraulic Actuators, Speed Regulating Motors & Governors (Philippines Automation Corridor)**: Sourced for heavy industrial hydraulic machinery, marine engine control, and precision speed regulation in the Philippines. Brand-specific demand: *GROSCHOPP WK0920702 1767-367* Hydraulic Actuator Speed Motor / Speed Regulating Motor Governor (fractional horsepower DC/AC motor with integrated governor, high-torque gearing, speed regulation feedback). Sourced in 1 x 20' FCL container quantities under CIF or FOB shipping terms to Destination Port Philippines, classified under HS Code 8501.10.
 * **Electric & Industrial Fans**: High-efficiency axial flow fans for smoke extraction (1400–10000 CFM), rooftop centrifugal exhaust fans (21500 CFM), wall-mounted remote-control domestic fans, and miniature handheld USB rechargeable pocket fans. Brand-specific requests emphasize *EBM-PAPST* (Model A2E250-AE65-01, 250mm diameter, 230V-50/60Hz).
 * **Air & HVAC Compressors**: Rotary, reciprocating, and screw air compressors, centrifugal compressors, refrigerant air dryers, and specialized scroll compressors (such as *Mitsubishi Heavy Industries* GTC5150NC40KF/AGT201C724FA, net weight 55kg, for refrigeration systems).
 * **Industrial & Fuel Pumps**: Centrifugal pumps, positive displacement gear/piston/vane pumps, submersible water pumps, self-priming jet water pumps (1HP to 1.5HP cast-iron booster pumps), and specialized fuel/LPG delivery pumps (such as *Liwa* pumps for automotive LPG mounting).
@@ -373,6 +374,7 @@ This directory serves as the technical backbone for classification, logistics ro
 | **8507.60** | Lithium-Ion Batteries & Energy Storage | LiFePO4, Lithium Cobalt Oxide, BMS, Aluminum | DEYE SE-G5.1, EVE, CATL, BYD |
 | **8502.11** | Diesel Generator Sets (< 75 KVA) | Steel Frame, Copper Alternator, Cummins Engine | Cummins, Perkins |
 | **8502.13** | Diesel Generator Sets (> 375 KVA) | Industrial Engines, Alternators, Silencers | Cummins 500KVA, Caterpillar |
+| **8501.10** | Electric Motors <= 37.5 W (Actuators, Governors, Small Motors) | Copper Windings, Permanent Magnets, Die-Cast Enclosure | Groschopp WK0920702, Air Cooler Motors, Fan Motors |
 | **8414.59** | Electric Fans, Exhausts, Blowers | Steel, Polycarbonate, Aluminum | EBM-PAPST A2E250, LS Electric |
 | **8414.80** | Air & Gas Compressors | Cast Iron, Forged Steel, Copper Windings | LG Compressors, Atlas Copco |
 | **8413.70** | Centrifugal Pumps | Cast Iron, Stainless Steel, Carbon-Ceramic Seals | Lowara, Goulds, Grundfos |
