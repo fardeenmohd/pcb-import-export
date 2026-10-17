@@ -44,7 +44,7 @@ This segment targets components and integrated assemblies that regulate, convert
 *   **Sub-niches**:
     *   **Motor Speed Control**: Variable Frequency Drives (VFDs), Variable Speed Drives (VSDs), AC/DC Drives, and Servo Drives.
     *   **Process Automation & Logic Control**: Programmable Logic Controllers (PLCs), Input/Output modules, Control Relays, and HMI units.
-    *   **Power Distribution Panels & Switchgear**: Motor Control Center (MCC) panels, PLC panels, and utility-grade power control panels.
+    *   **Power Distribution Equipment & Electrical Control Gear**: Low and medium voltage power distribution equipment, switchboards, feeder pillars, Motor Control Center (MCC) panels, Power Control Center (PCC) panels, distribution transformers (step-down, dry-type, oil-immersed), circuit breakers (ACB, MCCB, MCB, VCB), heavy-duty magnetic contactors, and industrial power management panels. Materials prioritize electrolytic copper busbars/windings, heavy-gauge steel enclosures, high-grade insulation materials (DMC/SMC, epoxy resin, Nomex), and electronic control components (HS Code 8537.10 / 8504.21 / 8536.20; container volume: 1 Twenty-Foot Container / 20ft FCL; CIF or FOB shipping terms to Destination Port: Qatar / Hamad Port; Payment Terms: Letter of Credit L/C).
     *   **Power Conversion & Generation Control**: AC-DC Switch Mode Power Supplies (SMPS) (e.g., DIN-rail / modular systems), Auto Mains Failure (AMF) control modules (e.g., Deep Sea Electronics DSE7320 series), and high-output industrial AC/DC motors.
     *   **Building & Infrastructure Automation**: Centralized lighting control systems, automated lighting controls, dimming modules (DALI, 0-10V, wireless Zigbee/LoRaWAN), streetlight monitoring systems, and smart building energy management systems. Specifications focus on electronic control components, relay control panels, dimming racks, and multi-channel microcontroller units (HS Code 8537.10, wholesale container-lot orders e.g., 1 Twenty-Foot Container / FCL, CIF shipping terms, LC payment terms, Destination Port: Bahrain / GCC / Worldwide).
 
@@ -78,7 +78,7 @@ To guide our automated systems, scraping agents, and matching pipelines, we use 
 Our platform monitors and extracts opportunities containing the following high-intent keywords:
 
 *   **Metrology & Quality Assurance**: `"Eco Tip"`, `"Hardness Tester"`, `"Dynamic Shear Rheometer"`, `"MCR 92"`, `"Bending Beam Rheometer"`, `"Pressure Ageing Vessel"`, `"Salt Spray"`, `"CCT Chamber"`, `"UTM WAW-1000D"`, `"Digital Multimeter"`, `"Clamp Meter"`, `"Megohm Meter"`, `"Insulation Tester"`, `"Calibration Instrument"`.
-*   **Automation & Drive Systems**: `"Variable Frequency Drive"`, `"VFD"`, `"Variable Speed Drive"`, `"VSD"`, `"AC Drive"`, `"Servo Drive"`, `"DSE7320"`, `"Generator Control Module"`, `"PLC Component"`, `"MCC Panel"`, `"Control Panel"`, `"AC-DC Converter"`, `"Lighting Control Systems"`, `"Centralized Controls"`, `"Automated Lighting Controls"`, `"Lighting Controller"`, `"Dimming Module"`, `"Streetlight Monitoring"`, `"Smart Building Automation"`, `"Electronic Control Components"`.
+*   **Automation & Drive Systems**: `"Power Distribution Equipment"`, `"Electrical Control Equipment"`, `"Circuit Breakers"`, `"Contactors"`, `"Distribution Transformers"`, `"Industrial Power Management"`, `"Variable Frequency Drive"`, `"VFD"`, `"Variable Speed Drive"`, `"VSD"`, `"AC Drive"`, `"Servo Drive"`, `"DSE7320"`, `"Generator Control Module"`, `"PLC Component"`, `"MCC Panel"`, `"PCC Panel"`, `"Control Panel"`, `"AC-DC Converter"`, `"Lighting Control Systems"`, `"Centralized Controls"`, `"Automated Lighting Controls"`, `"Lighting Controller"`, `"Dimming Module"`, `"Streetlight Monitoring"`, `"Smart Building Automation"`, `"Electronic Control Components"`.
 *   **Energy Storage & Battery Tech**: `"Li-Ion Battery Pack"`, `"LiFePO4"`, `"Sodium-Ion Battery"`, `"Sodium Power Bank"`, `"18650"`, `"21700"`, `"Marine Battery IP67"`, `"LR44"`, `"A76"`, `"Alkaline Button Battery"`, `"Solid-State Battery"`.
 *   **Electrical Infrastructure**: `"Power Cable"`, `"Control Cable"`, `"XLPE Cable"`, `"Copper Conductor"`, `"Industrial Plug"`, `"IP44 Socket"`, `"56 Series SAA Plug"`, `"EV Charger Plug"`, `"Cable Gland"`, `"WiFi Smart Socket 20A"`.
 *   **Industrial Processing & Appliances**: `"Screw Juicer"`, `"Pureeing System"`, `"Fruit Processing Plant"`, `"Electric Kettle"`, `"Air Fryer 1800W"`, `"Induction Cooker"`.
@@ -87,7 +87,8 @@ Our platform monitors and extracts opportunities containing the following high-i
 We prioritize leads specifying the following materials:
 *   **Metals**: Food-Grade Stainless Steel (SUS304, SUS316) for processing machinery and enclosures; Electrolytic Tough Pitch (ETP) Copper and Aluminum for cable conductors and busbars; Mild Steel with protective powder coatings for industrial control panels.
 *   **Engineering Plastics**: High-impact ABS Plastic, Flame-Retardant Polycarbonate (PC) for electrical enclosures, plugs, and instrument housings; Cross-linked Polyethylene (XLPE) and Polyvinyl Chloride (PVC) for high-dielectric wiring insulation.
-*   **Electronic Hardware**: Silicon semiconductor chips, printed circuit board assemblies (PCBAs), electronic control components, microcontrollers, dimming racks, terminal blocks, relays, and heavy-duty contactors.
+*   **Electronic Hardware**: Silicon semiconductor chips, printed circuit board assemblies (PCBAs), electronic control components, microcontrollers, dimming racks, terminal blocks, relays, and heavy-duty magnetic contactors.
+*   **Dielectric & Insulation Materials**: Bulk insulation materials including Sheet Moulding Compound (SMC), Dough Moulding Compound (DMC), epoxy resin, Nomex, mica, pressboard, porcelain insulators, and XLPE for electrical control enclosures and transformer isolation.
 
 ### 2.3 Reference HS Codes
 Our scraping agents use the following Harmonized System (HS) codes to filter, categorize, and validate commercial import intent:
@@ -102,8 +103,10 @@ Our scraping agents use the following Harmonized System (HS) codes to filter, ca
 │ 9030.33  │ Instruments & apparatus for measuring or checking voltage, current, resistance│
 │ 9024.10  │ Machines & appliances for testing hardness, strength, elasticity of metals  │
 │ 8504.40  │ Static converters (Inverters, Rectifiers, VFDs, VSDs, SMPS)                  │
-│ 8537.10  │ Boards, panels, consoles, and bases for electric control or distribution    │
-│          │ (Lighting control systems, centralized controls, dimming modules, MCC/PLC)  │
+│ 8537.10  │ Boards, panels, consoles, bases for electric control or distribution        │
+│          │ (Power distribution equipment, control gear, circuit breakers, contactors)  │
+│ 8504.21  │ Liquid dielectric transformers having a power handling capacity <= 650 kVA  │
+│ 8536.20  │ Automatic circuit breakers for a voltage not exceeding 1,000 V             │
 │ 8507.60  │ Lithium-ion accumulators (including battery packs)                          │
 │ 8507.80  │ Other electric accumulators (including Sodium-Ion, Solid-State)              │
 │ 8506.00  │ Primary cells and primary batteries (Alkaline, Button Cells, Duracell)       │
@@ -125,6 +128,7 @@ To ensure leads are commercially viable and match our target supplier network, t
     *   *Consumable Components / Industrial Parts*: Minimum Order Quantities (MOQs) starting at 100 to 10,000 units (e.g., genset controllers, smart plugs, primary batteries).
     *   *Bulk Commodities & General Goods*: Minimum volumes of 1 Less-than-Container Load (LCL) up to multiple 20-foot or 40-foot Full Container Loads (FCL).
     *   *Lighting Control & Building Automation*: Wholesale container shipments (e.g., 1 Twenty-Foot Container / 20ft FCL) for centralized lighting controls, automated dimming modules, and streetlight monitoring systems.
+    *   *Power Distribution & Electrical Control Equipment*: FCL orders (1 Twenty-Foot Container / 20ft FCL) for power distribution equipment, electrical control gear, circuit breakers, contactors, and distribution transformers under CIF or FOB terms to Destination Port Qatar (Hamad Port) under Letter of Credit (L/C).
 *   **Payment & Shipping Standards**:
     *   *Sourcing Geographies*: Worldwide open sourcing, with a high concentration of demand in the Middle East (Saudi Arabia, UAE, Qatar, Kuwait, Oman, Bahrain), Asia-Pacific (Singapore, Australia, Philippines, Vietnam, Indonesia), Europe (Germany, Italy, France), and North America (Canada).
     *   *Payment Terms*: Strict business-to-business payment methods, prioritizing Letters of Credit (L/C, LC at sight, LC 30-60-90 Days), Telegraphic Transfers (T/T, e.g., 30% advance / 70% against documents), or Bank Transfers.
@@ -151,7 +155,7 @@ Inject the following XML-formatted block directly into the LLM orchestration lay
        - Target HS Codes: 903180, 903033, 902410, 903084.
        
     2. POWER ELECTRONICS &amp; INDUSTRIAL AUTOMATION (Segment B)
-       - Keywords: Variable Frequency Drives (VFD), Variable Speed Drives (VSD), AC/DC speed controllers, servo drives, PLC modules, I/O boards, automation control panels, MCC panels, AC-DC switch-mode converters, Deep Sea generator control modules (DSE7320), lighting control systems, centralized lighting controls, automated lighting controllers, dimming modules, streetlight monitoring systems, smart building automation, electronic control components.
+       - Keywords: Power distribution equipment, electrical control equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, industrial power management, Variable Frequency Drives (VFD), Variable Speed Drives (VSD), AC/DC speed controllers, servo drives, PLC modules, I/O boards, automation control panels, MCC panels, PCC switchboards, AC-DC switch-mode converters, Deep Sea generator control modules (DSE7320), lighting control systems, centralized lighting controls, automated lighting controllers, dimming modules, streetlight monitoring systems, smart building automation, electronic control components.
        - Target HS Codes: 850440, 853710, 850140, 850131.
 
     3. ADVANCED BATTERIES &amp; ENERGY STORAGE (Segment C)

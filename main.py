@@ -255,6 +255,10 @@ class App(ctk.CTk):
         starter_queries = [
             "switchgear panel distributors USA",
             "commercial lighting importers UAE",
+            "power distribution equipment distributors Qatar",
+            "electrical control equipment contactors importers Qatar",
+            "circuit breaker distribution transformer wholesalers Qatar",
+            "industrial power management switchboard dealers Qatar",
             "centralized lighting control systems distributors Bahrain",
             "automated lighting controls importers Bahrain",
             "dimming modules lighting controllers UAE",
@@ -457,6 +461,11 @@ class App(ctk.CTk):
         else:
             queries = [
                 f"switchgear panel distributors {dest}",
+                f"power distribution equipment distributors {dest}",
+                f"electrical control gear contactors wholesalers {dest}",
+                f"circuit breaker switchboard importers {dest}",
+                f"distribution transformer dealers {dest}",
+                f"industrial power management panel distributors {dest}",
                 f"commercial lighting importers {dest}",
                 f"centralized lighting control systems distributors {dest}",
                 f"automated lighting controllers importers {dest}",
@@ -489,7 +498,10 @@ class App(ctk.CTk):
             self.btn_suggest.configure(state="normal")
             queries = [
                 "distribution transformer manufacturers India",
+                "power distribution equipment manufacturers India",
+                "electrical contactors circuit breaker factories Gujarat",
                 "switchgear panel factories Gujarat",
+                "industrial power control panel makers Maharashtra",
                 "centralized lighting control system manufacturers India",
                 "automated lighting controllers dimming modules factories India",
                 "streetlight monitoring control panel makers India",
@@ -537,6 +549,11 @@ class App(ctk.CTk):
                 dest = "worldwide"
             queries = [
                 f"switchgear panel distributors {dest}",
+                f"power distribution equipment distributors {dest}",
+                f"electrical control gear contactors wholesalers {dest}",
+                f"circuit breaker switchboard importers {dest}",
+                f"distribution transformer dealers {dest}",
+                f"industrial power management panel distributors {dest}",
                 f"commercial lighting importers {dest}",
                 f"centralized lighting control systems distributors {dest}",
                 f"automated lighting controllers importers {dest}",
@@ -652,7 +669,7 @@ Our company sources from Indian manufacturers across these 11 core industrial ni
 
 NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
-NICHE 3 - Switchgear & Panels: ACB, MCCB, MCB, VCB, relays, contactors, PCC/MCC panels, distribution boards
+NICHE 3 - Power Distribution & Electrical Control Equipment: Power distribution equipment, electrical control gear, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, feeder pillars, industrial power management (HS 853710, 8504)
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
 NICHE 5 - Batteries & Energy Storage: LiFePO4 battery packs, home energy storage, marine batteries, GaN chargers, solar inverters
 NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent generators, wind turbines
@@ -668,6 +685,8 @@ RULES:
 1. Each query must be short and clean (3 to 6 words only).
    Examples of good queries:
    - "distribution transformer manufacturers India"
+   - "power distribution equipment manufacturers India"
+   - "electrical contactors circuit breaker factories Gujarat"
    - "switchgear panel factories Gujarat"
    - "brass cable glands manufacturers Jamnagar"
    - "diesel generator manufacturers Pune"
@@ -722,7 +741,7 @@ We are an Indian manufacturer and exporter supplying international buyers across
 
 NICHE 1 - Electrical Components: Cable glands, crimping lugs, terminal blocks, rocker switches, push buttons, EV plugs, wiring sockets
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
-NICHE 3 - Switchgear & Panels: ACB, MCCB, MCB, VCB, relays, contactors, PCC/MCC panels, distribution boards
+NICHE 3 - Power Distribution & Electrical Control Equipment: Power distribution equipment, electrical control gear, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, feeder pillars, industrial power management (HS 853710, 8504)
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
 NICHE 5 - Batteries & Energy Storage: LiFePO4 battery packs, home energy storage, marine batteries, GaN chargers, solar inverters
 NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent generators, wind turbines
@@ -738,6 +757,10 @@ RULES:
 1. Each query must be short and clean (3 to 6 words only).
    Examples of good queries:
    - "switchgear panel distributors {region_kw}"
+   - "power distribution equipment distributors {region_kw}"
+   - "electrical control gear contactors wholesalers {region_kw}"
+   - "circuit breaker switchboard importers {region_kw}"
+   - "distribution transformer dealers {region_kw}"
    - "commercial lighting importers {region_kw}"
    - "centralized lighting controls distributors {region_kw}"
    - "automated lighting controllers importers {region_kw}"
@@ -830,6 +853,11 @@ RULES:
                     dest_term = region.split(" (")[0]
                     queries = [
                         f"switchgear panel distributors {dest_term}",
+                        f"power distribution equipment distributors {dest_term}",
+                        f"electrical control gear contactors wholesalers {dest_term}",
+                        f"circuit breaker switchboard importers {dest_term}",
+                        f"distribution transformer dealers {dest_term}",
+                        f"industrial power management panel distributors {dest_term}",
                         f"commercial lighting importers {dest_term}",
                         f"centralized lighting control systems distributors {dest_term}",
                         f"automated lighting controllers importers {dest_term}",
@@ -860,6 +888,8 @@ RULES:
             if strategy == "Suppliers":
                 fallback_queries = [
                     "distribution transformer manufacturers India",
+                    "power distribution equipment manufacturers India",
+                    "electrical contactors circuit breaker factories Gujarat",
                     "switchgear panel factories Gujarat",
                     "centralized lighting control system manufacturers India",
                     "automated lighting controllers dimming modules factories India",
@@ -892,6 +922,11 @@ RULES:
             else:
                 fallback_queries = [
                     f"switchgear panel distributors {fallback_dest}",
+                    f"power distribution equipment distributors {fallback_dest}",
+                    f"electrical control gear contactors wholesalers {fallback_dest}",
+                    f"circuit breaker switchboard importers {fallback_dest}",
+                    f"distribution transformer dealers {fallback_dest}",
+                    f"industrial power management panel distributors {fallback_dest}",
                     f"commercial lighting importers {fallback_dest}",
                     f"centralized lighting control systems distributors {fallback_dest}",
                     f"automated lighting controllers importers {fallback_dest}",
@@ -994,9 +1029,9 @@ RULES:
             if strategy == "Logistics":
                 filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
             elif strategy == "Suppliers":
-                filter_goal = "Manufacturers across all of India (nationwide) of Electrical Components, Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
-                filter_goal = "Actual company websites for buyers/distributors/OEMs of Electrical Components, Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
             prompt = "You are an expert lead generation AI.\nThe user is searching for: " + filter_goal + "\n\nHere are the raw search results from DuckDuckGo:\n" + search_context + "\n\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
                 
@@ -1855,7 +1890,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as electrical switchgear, centralized lighting control systems & dimming modules, cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as power distribution equipment, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 We are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
@@ -2184,7 +2219,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as electrical switchgear, centralized lighting control systems & dimming modules, cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as power distribution equipment, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 Based on the logistics services and trade lanes shown on their website, we are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
