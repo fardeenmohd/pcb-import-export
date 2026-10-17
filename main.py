@@ -139,7 +139,7 @@ class App(ctk.CTk):
         self.region_var = ctk.StringVar(value="Worldwide (wt-wt)")
         self.region_dropdown = ctk.CTkOptionMenu(
             control_frame, 
-            values=['Worldwide (wt-wt)', 'Australia (au-en)', 'Poland (pl-pl)', 'Netherlands (nl-nl)', 'Malaysia (my-en)', 'USA (us-en)', 'Canada (ca-en)', 'Germany (de-de)', 'France (fr-fr)', 'United Kingdom (uk-en)', 'UAE (ae-en)', 'Saudi Arabia (sa-ar)', 'Qatar (qa-en)', 'Kuwait (kw-en)', 'Oman (om-en)', 'Bahrain (bh-en)', 'Singapore (sg-en)', 'Hong Kong (hk-en)', 'Vietnam (vn-en)', 'Indonesia (id-en)', 'Philippines (ph-en)', 'Thailand (th-en)', 'South Korea (kr-kr)', 'China (cn-zh)', 'India (in-en)', 'South Africa (za-en)', 'Romania (ro-ro)', 'Finland (fi-fi)', 'Albania (al-al)', 'Moldova (md-ro)'],
+            values=['Worldwide (wt-wt)', 'Australia (au-en)', 'Poland (pl-pl)', 'Netherlands (nl-nl)', 'Malaysia (my-en)', 'USA (us-en)', 'Canada (ca-en)', 'Germany (de-de)', 'France (fr-fr)', 'Spain (es-es)', 'United Kingdom (uk-en)', 'UAE (ae-en)', 'Saudi Arabia (sa-ar)', 'Qatar (qa-en)', 'Kuwait (kw-en)', 'Oman (om-en)', 'Bahrain (bh-en)', 'Singapore (sg-en)', 'Hong Kong (hk-en)', 'Vietnam (vn-en)', 'Indonesia (id-en)', 'Philippines (ph-en)', 'Thailand (th-en)', 'South Korea (kr-kr)', 'China (cn-zh)', 'India (in-en)', 'South Africa (za-en)', 'Romania (ro-ro)', 'Finland (fi-fi)', 'Albania (al-al)', 'Moldova (md-ro)'],
             variable=self.region_var, width=120,
             command=self.on_region_change
         )
@@ -271,6 +271,10 @@ class App(ctk.CTk):
             "electronic components IC distributors Poland",
             "RA-8565SA real time clock IC tape reel Poland",
             "brand new original integrated circuit suppliers Poland",
+            "photovoltaic solar panels distributors Spain",
+            "solar energy panels importers Seville Spain",
+            "commercial PV module suppliers Spain",
+            "solar panel wholesale container suppliers Spain",
             "433MHz wireless RF transmitter switches importers Qatar",
             "solar panel scrap importers India",
             "PV module scrap buyers 500 MT India",
@@ -517,8 +521,8 @@ class App(ctk.CTk):
                 f"PIR sensor testing equipment wholesalers {dest}",
                 f"industrial fan pump suppliers {dest}",
                 f"home energy storage importers {dest}",
-                f"solar panel scrap importers {dest}",
-                f"PV module scrap buyers {dest}",
+                f"photovoltaic solar panels distributors {dest}",
+                f"commercial solar energy systems importers {dest}",
                 f"solar panel scrap importers {dest}",
                 f"PV module scrap buyers {dest}",
                 f"EV charging station distributors {dest}",
@@ -548,6 +552,10 @@ class App(ctk.CTk):
                 "automated lighting controllers dimming modules factories India",
                 "streetlight monitoring control panel makers India",
                 "copper wire cable manufacturers India",
+                "solar panel PV module manufacturers Gujarat",
+                "monocrystalline TOPCon solar panel factories India",
+                "Tier 1 solar panel exporters India",
+                "photovoltaic module manufacturers Bangalore",
                 "solar panel scrap suppliers exporters",
                 "PV module scrap suppliers 500 MT",
                 "lithium battery pack makers Bangalore",
@@ -640,6 +648,8 @@ class App(ctk.CTk):
                 f"PIR sensor testing equipment wholesalers {dest}",
                 f"industrial fan pump suppliers {dest}",
                 f"home energy storage importers {dest}",
+                f"photovoltaic solar panels distributors {dest}",
+                f"commercial solar energy systems importers {dest}",
                 f"EV charging station distributors {dest}",
                 f"electric vehicle charger importers {dest}",
                 f"PCB assembly PCBA turnkey services {dest}",
@@ -742,7 +752,7 @@ NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, termi
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
 NICHE 3 - Power Distribution & Protection Relays: Numerical protection relays (SEL-751 arc-flash feeder protection, SEL-787 transformer protection, SEL-700G generator intertie protection, differential/overcurrent relays, HS 853649), power distribution equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, CRP panels (HS 853710, 8504)
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
-NICHE 5 - Batteries, Solar & Renewable Scrap: LiFePO4 battery packs, home energy storage, solar inverters, solar panel scrap (PV module scrap, decommissioned solar panels, silver/silicon/copper recovery, HS 854143, 500 MT lots), battery scrap recycling, marine batteries, GaN chargers
+NICHE 5 - Batteries, Solar Energy & Renewable Scrap: Solar panels (photovoltaic PV modules, monocrystalline PERC, TOPCon, bifacial, Tier-1 brands, solar energy systems, container shipments, HS 854143), solar panel scrap (PV module scrap, decommissioned panels, 500 MT lots), LiFePO4 battery packs, home energy storage, solar inverters, marine batteries, GaN chargers
 NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent generators, wind turbines
 NICHE 7 - LED Lighting & Lighting Controls: Centralized controls, automated lighting controllers, dimming modules, DALI/0-10V controllers, streetlight monitoring systems, smart building automation, streetlights, high-bay LED, poultry lighting systems, smart WiFi sockets, luminaires (HS 853710)
 NICHE 8 - Commercial Appliances: Industrial dehumidifiers, floor scrubbers, commercial laundry machines, kitchen equipment
@@ -771,6 +781,8 @@ RULES:
    - "Epson timing devices RTC distributors India"
    - "plywood panel MDF board manufacturers Yamunanagar"
    - "decorative laminated sheets manufacturers Gujarat"
+   - "solar panel PV module manufacturers Gujarat"
+   - "Tier 1 solar panel exporters India"
    - "solar panel scrap suppliers exporters"
    - "PV module scrap suppliers 500 MT"
    - "diesel generator manufacturers Pune"
@@ -827,7 +839,7 @@ NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, termi
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
 NICHE 3 - Power Distribution & Protection Relays: Numerical protection relays (SEL-751 arc-flash feeder protection, SEL-787 transformer protection, SEL-700G generator intertie protection, differential/overcurrent relays, HS 853649), power distribution equipment, circuit breakers (ACB, MCCB, MCB, VCB), contactors, distribution transformers, switchgear, relays, PCC/MCC panels, CRP panels (HS 853710, 8504)
 NICHE 4 - HVAC, Fans & Pumps: Axial/centrifugal fans, scroll/screw compressors, submersible pumps, refrigeration parts
-NICHE 5 - Batteries, Solar & Renewable Scrap: LiFePO4 battery packs, home energy storage, solar inverters, solar panel scrap (PV module scrap, decommissioned solar panels, silver/silicon/copper recovery, HS 854143, 500 MT lots), battery scrap recycling, marine batteries, GaN chargers
+NICHE 5 - Batteries, Solar Energy & Renewable Scrap: Solar panels (photovoltaic PV modules, monocrystalline PERC, TOPCon, bifacial, Tier-1 brands, solar energy systems, container shipments, HS 854143), solar panel scrap (PV module scrap, decommissioned panels, 500 MT lots), LiFePO4 battery packs, home energy storage, solar inverters, marine batteries, GaN chargers
 NICHE 6 - Industrial Generators: Cummins diesel gensets, gas generators, silent generators, wind turbines
 NICHE 7 - LED Lighting & Lighting Controls: Centralized controls, automated lighting controllers, dimming modules, DALI/0-10V controllers, streetlight monitoring systems, smart building automation, streetlights, high-bay LED, poultry lighting systems, smart WiFi sockets, luminaires (HS 853710)
 NICHE 8 - Commercial Appliances: Industrial dehumidifiers, floor scrubbers, commercial laundry machines, kitchen equipment
@@ -869,6 +881,8 @@ RULES:
    - "floor scrubber equipment distributors {region_kw}"
    - "PIR sensor wholesalers {region_kw}"
    - "home energy storage importers {region_kw}"
+   - "photovoltaic solar panels distributors {region_kw}"
+   - "solar energy panels importers {region_kw}"
    - "solar panel scrap importers {region_kw}"
    - "PV module scrap buyers {region_kw}"
    - "EV charging station distributors {region_kw}"
@@ -990,6 +1004,8 @@ RULES:
                         f"PIR sensor testing equipment wholesalers {dest_term}",
                         f"industrial fan pump suppliers {dest_term}",
                         f"home energy storage importers {dest_term}",
+                        f"photovoltaic solar panels distributors {dest_term}",
+                        f"solar energy panels importers {dest_term}",
                         f"solar panel scrap importers {dest_term}",
                         f"PV module scrap buyers {dest_term}",
                         f"EV charging station distributors {dest_term}",
@@ -1082,6 +1098,8 @@ RULES:
                     f"PIR sensor testing equipment wholesalers {fallback_dest}",
                     f"industrial fan pump suppliers {fallback_dest}",
                     f"home energy storage importers {fallback_dest}",
+                    f"photovoltaic solar panels distributors {fallback_dest}",
+                    f"solar energy panels importers {fallback_dest}",
                     f"solar panel scrap importers {fallback_dest}",
                     f"PV module scrap buyers {fallback_dest}",
                     f"EV charging station distributors {fallback_dest}",
@@ -1171,9 +1189,9 @@ RULES:
             if strategy == "Logistics":
                 filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
             elif strategy == "Suppliers":
-                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
-                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
             prompt = "You are an expert lead generation AI.\nThe user is searching for: " + filter_goal + "\n\nHere are the raw search results from DuckDuckGo:\n" + search_context + "\n\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
                 
@@ -2032,7 +2050,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, switches, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as photovoltaic solar panels (monocrystalline & TOPCon PV modules for solar energy systems), wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, switches, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 We are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
@@ -2361,7 +2379,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, switches, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as photovoltaic solar panels (monocrystalline & TOPCon PV modules for solar energy systems), wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, switches, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 Based on the logistics services and trade lanes shown on their website, we are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
