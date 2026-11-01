@@ -3161,7 +3161,7 @@ SinoMagan Indus Global Trade LLP
                     
                 tree["columns"] = cols
                 for col in cols:
-                    tree.heading(col, text=col)
+                    tree.heading(col, text=col, command=lambda _c=col: self.sort_tree_column(tree, _c, False))
                     if col in ["Proposal", "Inquiry"]:
                         tree.column(col, width=110, minwidth=90, anchor="center")
                     elif col == "Copy URL":
@@ -3180,6 +3180,72 @@ SinoMagan Indus Global Trade LLP
                 self.logger.error(f"Failed to load matrix: {e}")
         else:
             self.logger.warning(f"No local matrix found to load: {output_file}")
+
+    def sort_tree_column(self, tree, col, reverse):
+        """
+        Sorts the ttk.Treeview rows when clicking on a column header.
+        Supports automatic numeric/currency/sqft detection, Indian lakh/crore units,
+        case-insensitive string sorting, and toggles between ascending and descending order.
+        Empty rows remain neatly at the bottom.
+        """
+        items = tree.get_children('')
+        if not items:
+            return
+
+        cols = list(tree['columns'])
+        try:
+            col_idx = cols.index(col)
+        except ValueError:
+            return
+
+        import re
+
+        def is_empty_val(v):
+            if v is None:
+                return True
+            s = str(v).strip().lower()
+            return s in ["", "none", "nan", "null", "-", "n/a"]
+
+        def parse_sort_val(v):
+            s = str(v).strip()
+            clean_s = re.sub(r'^[^\d+-]+', '', s)
+            m = re.match(r'^[-+]?\d+(?:,\d+)*(?:\.\d+)?', clean_s)
+            if m:
+                num_str = m.group(0).replace(',', '')
+                try:
+                    val_num = float(num_str)
+                    lower_s = s.lower()
+                    if 'lakh' in lower_s or 'lac' in lower_s:
+                        val_num *= 100000
+                    elif 'crore' in lower_s or ' cr' in lower_s:
+                        val_num *= 10000000
+                    return (0, val_num)
+                except ValueError:
+                    pass
+            return (1, s.lower())
+
+        data = []
+        for item_id in items:
+            row_vals = tree.item(item_id, 'values')
+            val = row_vals[col_idx] if col_idx < len(row_vals) else ""
+            data.append((val, item_id))
+
+        valid_items = [x for x in data if not is_empty_val(x[0])]
+        empty_items = [x for x in data if is_empty_val(x[0])]
+
+        valid_items.sort(key=lambda x: parse_sort_val(x[0]), reverse=reverse)
+        sorted_data = valid_items + empty_items
+
+        for index, (_, item_id) in enumerate(sorted_data):
+            tree.move(item_id, '', index)
+
+        arrow = " ▼" if reverse else " ▲"
+        for c in cols:
+            clean_c = c.replace(" ▲", "").replace(" ▼", "")
+            if c == col:
+                tree.heading(c, text=clean_c + arrow, command=lambda _c=c: self.sort_tree_column(tree, _c, not reverse))
+            else:
+                tree.heading(c, text=clean_c, command=lambda _c=c: self.sort_tree_column(tree, _c, False))
             
     def clean_local_matrix(self, output_file, tree):
         clean_matrix(output_file, self.logger)
