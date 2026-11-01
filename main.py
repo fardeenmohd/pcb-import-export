@@ -127,25 +127,52 @@ class App(ctk.CTk):
         control_frame = ctk.CTkFrame(self.tab_discovery)
         control_frame.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         
+        self.country_regions = [
+            'Worldwide (wt-wt)', 'Australia (au-en)', 'Poland (pl-pl)', 'Netherlands (nl-nl)', 
+            'Malaysia (my-en)', 'USA (us-en)', 'Canada (ca-en)', 'Germany (de-de)', 'France (fr-fr)', 
+            'Spain (es-es)', 'United Kingdom (uk-en)', 'UAE (ae-en)', 'Saudi Arabia (sa-ar)', 
+            'Qatar (qa-en)', 'Kuwait (kw-en)', 'Oman (om-en)', 'Bahrain (bh-en)', 'Singapore (sg-en)', 
+            'Hong Kong (hk-en)', 'Vietnam (vn-en)', 'Indonesia (id-en)', 'Philippines (ph-en)', 
+            'Thailand (th-en)', 'South Korea (kr-kr)', 'China (cn-zh)', 'India (in-en)', 
+            'South Africa (za-en)', 'Romania (ro-ro)', 'Finland (fi-fi)', 'Albania (al-al)', 'Moldova (md-ro)'
+        ]
+        self.indian_city_regions = [
+            'Mumbai', 'Bhiwandi', 'Navi Mumbai', 'Thane', 'Pune', 'Chakan', 'Delhi NCR', 
+            'Gurgaon', 'Noida', 'Faridabad', 'Ghaziabad', 'Bangalore', 'Hyderabad', 
+            'Chennai', 'Ahmedabad', 'Surat', 'Kolkata', 'Jaipur', 'Indore', 'Nagpur', 
+            'Coimbatore', 'Vadodara', 'Nashik', 'Chandigarh', 'Ludhiana', 'Kochi'
+        ]
+        self.radius_options = ['5 km', '10 km', '15 km', '20 km', '25 km', '30 km', '50 km', '75 km', '100 km']
+
         self.strategy_var = ctk.StringVar(value="Buyers")
         self.strategy_dropdown = ctk.CTkOptionMenu(
             control_frame, 
-            values=["Suppliers", "Buyers", "Logistics"],
-            variable=self.strategy_var, width=120,
+            values=["Buyers", "Suppliers", "Warehouses", "Logistics"],
+            variable=self.strategy_var, width=115,
             command=self.on_strategy_change
         )
-        self.strategy_dropdown.pack(side="left", padx=5)
+        self.strategy_dropdown.pack(side="left", padx=4)
 
         self.region_var = ctk.StringVar(value="Worldwide (wt-wt)")
         self.region_dropdown = ctk.CTkOptionMenu(
             control_frame, 
-            values=['Worldwide (wt-wt)', 'Australia (au-en)', 'Poland (pl-pl)', 'Netherlands (nl-nl)', 'Malaysia (my-en)', 'USA (us-en)', 'Canada (ca-en)', 'Germany (de-de)', 'France (fr-fr)', 'Spain (es-es)', 'United Kingdom (uk-en)', 'UAE (ae-en)', 'Saudi Arabia (sa-ar)', 'Qatar (qa-en)', 'Kuwait (kw-en)', 'Oman (om-en)', 'Bahrain (bh-en)', 'Singapore (sg-en)', 'Hong Kong (hk-en)', 'Vietnam (vn-en)', 'Indonesia (id-en)', 'Philippines (ph-en)', 'Thailand (th-en)', 'South Korea (kr-kr)', 'China (cn-zh)', 'India (in-en)', 'South Africa (za-en)', 'Romania (ro-ro)', 'Finland (fi-fi)', 'Albania (al-al)', 'Moldova (md-ro)'],
-            variable=self.region_var, width=120,
+            values=self.country_regions,
+            variable=self.region_var, width=130,
             command=self.on_region_change
         )
-        self.region_dropdown.pack(side="left", padx=5)
+        self.region_dropdown.pack(side="left", padx=4)
+
+        self.radius_var = ctk.StringVar(value="15 km")
+        self.radius_dropdown = ctk.CTkOptionMenu(
+            control_frame,
+            values=self.radius_options,
+            variable=self.radius_var, width=80,
+            command=self.on_radius_change
+        )
+        self.radius_dropdown.pack(side="left", padx=4)
+        self.radius_dropdown.configure(state="disabled")
         
-        self.query_entry = ctk.CTkTextbox(control_frame, width=350, height=60, wrap="word")
+        self.query_entry = ctk.CTkTextbox(control_frame, width=280, height=60, wrap="word")
         self.query_entry.insert("0.0", "Enter base query...")
         self.query_entry.pack(side="left", padx=10, pady=10)
         
@@ -165,6 +192,8 @@ class App(ctk.CTk):
                 return "supplier"
             elif s == "Logistics":
                 return "logistics"
+            elif s == "Warehouses":
+                return "warehouse"
             return "buyer"
 
         self.btn_disc_prop = ctk.CTkButton(
@@ -467,20 +496,57 @@ class App(ctk.CTk):
             self.sup_urls_textbox.insert("0.0", urls_joined)
             self.tabview.set("Suppliers Scraper")
             self.lbl_sup_status.configure(text=f"Loaded {len(self.current_hq_urls)} URLs from Discovery")
-        elif strategy == "Logistics":
+        elif strategy in ["Logistics", "Warehouses"]:
             self.log_urls_textbox.delete("0.0", "end")
             self.log_urls_textbox.insert("0.0", urls_joined)
             self.tabview.set("Logistics Scraper")
-            self.lbl_log_status.configure(text=f"Loaded {len(self.current_hq_urls)} URLs from Discovery")
+            label_type = "Warehouses" if strategy == "Warehouses" else "Logistics"
+            self.lbl_log_status.configure(text=f"Loaded {len(self.current_hq_urls)} {label_type} URLs from Discovery")
         else:
             self.buy_urls_textbox.delete("0.0", "end")
             self.buy_urls_textbox.insert("0.0", urls_joined)
             self.tabview.set("Buyers Scraper")
             self.lbl_buy_status.configure(text=f"Loaded {len(self.current_hq_urls)} URLs from Discovery")
 
+    def on_radius_change(self, choice):
+        strategy = self.strategy_var.get()
+        if strategy == "Warehouses":
+            city = self.region_var.get()
+            radius = choice
+            queries = self.get_warehouse_starter_queries(city, radius)
+            self.populate_suggested_queries(queries)
+            self.select_suggested_query(queries[0])
+
+    def get_warehouse_starter_queries(self, city, radius):
+        return [
+            f"warehouse for rent {city} {radius}",
+            f"garage storage space for rent {city} {radius}",
+            f"godown on lease {city} {radius}",
+            f"industrial shed for rent {city} {radius}",
+            f"commercial storage unit for rent {city} {radius}",
+            f"warehouse for rent {city} {radius} olx",
+            f"garage for rent {city} {radius} olx",
+            f"godown for rent {city} {radius} 99acres",
+            f"industrial warehouse lease {city} {radius} magicbricks",
+            f"storage space for rent {city} {radius} nobroker",
+            f"warehouse shed on rent {city} {radius} justdial",
+            f"logistics park warehouse lease {city} {radius}",
+            f"heavy vehicle parking garage yard {city} {radius}",
+            f"small warehouse storage for rent {city} {radius} olx",
+            f"RCC godown storage space for rent {city} {radius}",
+            f"container trailer accessible warehouse {city} {radius}"
+        ]
+
     def on_region_change(self, choice):
         strategy = self.strategy_var.get()
         if strategy == "Suppliers":
+            return
+        if strategy == "Warehouses":
+            city = choice
+            radius = self.radius_var.get()
+            queries = self.get_warehouse_starter_queries(city, radius)
+            self.populate_suggested_queries(queries)
+            self.select_suggested_query(queries[0])
             return
         dest = choice.split(" (")[0]
         if "Worldwide" in dest or "Global" in dest:
@@ -550,7 +616,8 @@ class App(ctk.CTk):
     def on_strategy_change(self, choice):
         if choice == "Suppliers":
             self.btn_disc_prop.configure(text="🌐 Quick URL Inquiry")
-            self.region_dropdown.configure(state="disabled")
+            self.region_dropdown.configure(values=self.country_regions, state="disabled")
+            self.radius_dropdown.configure(state="disabled")
             self.btn_suggest.configure(state="normal")
             queries = [
                 "distribution transformer manufacturers India",
@@ -610,7 +677,10 @@ class App(ctk.CTk):
             self.select_suggested_query(queries[0])
         elif choice == "Logistics":
             self.btn_disc_prop.configure(text="🌐 Quick Freight RFQ")
-            self.region_dropdown.configure(state="normal")
+            self.region_dropdown.configure(values=self.country_regions, state="normal")
+            if self.region_var.get() not in self.country_regions:
+                self.region_var.set("Worldwide (wt-wt)")
+            self.radius_dropdown.configure(state="disabled")
             self.btn_suggest.configure(state="disabled")
             dest = self.region_var.get().split(" (")[0]
             if "Worldwide" in dest or "Global" in dest:
@@ -623,9 +693,24 @@ class App(ctk.CTk):
             ]
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
+        elif choice == "Warehouses":
+            self.btn_disc_prop.configure(text="🌐 Quick Rental Inquiry")
+            self.region_dropdown.configure(values=self.indian_city_regions, state="normal")
+            if self.region_var.get() not in self.indian_city_regions:
+                self.region_var.set("Mumbai")
+            self.radius_dropdown.configure(state="normal")
+            self.btn_suggest.configure(state="normal")
+            city = self.region_var.get()
+            radius = self.radius_var.get()
+            queries = self.get_warehouse_starter_queries(city, radius)
+            self.populate_suggested_queries(queries)
+            self.select_suggested_query(queries[0])
         else:
             self.btn_disc_prop.configure(text="🌐 Quick URL Proposal")
-            self.region_dropdown.configure(state="normal")
+            self.region_dropdown.configure(values=self.country_regions, state="normal")
+            if self.region_var.get() not in self.country_regions:
+                self.region_var.set("Worldwide (wt-wt)")
+            self.radius_dropdown.configure(state="disabled")
             self.btn_suggest.configure(state="normal")
             dest = self.region_var.get().split(" (")[0]
             if "Worldwide" in dest or "Global" in dest:
@@ -709,6 +794,10 @@ class App(ctk.CTk):
                 if "Worldwide" in dest or "Global" in dest:
                     dest = "worldwide"
                 target_desc = f"freight forwarders or shipping lines from India to {dest}"
+            elif strategy == "Warehouses":
+                city_name = region if region in self.indian_city_regions else "Mumbai"
+                rad_val = self.radius_var.get() if hasattr(self, 'radius_var') else "15 km"
+                target_desc = f"commercial warehouses, godowns, industrial sheds, or garage storage spaces for rent/lease within {rad_val} of {city_name} on Indian real estate portals & classifieds like OLX, MagicBricks, 99acres, JustDial"
             else:
                 region_name = region.split(" (")[0]
                 if "Worldwide" in region_name or "Global" in region_name:
@@ -848,6 +937,37 @@ RULES:
    - "air cargo logistics India to {dest}"
 2. Do NOT use boolean operators (no AND, OR, NOT, site:).
 3. Do NOT use quotation marks or plus/minus signs.
+"""
+            elif strategy == "Warehouses":
+                city_name = region if region in self.indian_city_regions else "Mumbai"
+                rad_val = self.radius_var.get() if hasattr(self, 'radius_var') else "15 km"
+                prompt = f"""You are an elite Indian commercial real estate, warehousing, and industrial logistics broker.
+We are looking to lease, rent, or acquire commercial warehouses, godowns, industrial sheds, and garage storage spaces within a {rad_val} radius around {city_name}, India.
+These spaces will be used for inventory storage, export container staging, packaging, light assembly, or secure garage/vehicle parking.
+We specifically utilize India's premier real estate yellowpages and classifieds: OLX India (olx.in), MagicBricks (magicbricks.com), 99acres (99acres.com), JustDial (justdial.com), NoBroker (nobroker.in), Housing.com (housing.com), Quikr (quikr.com), and IndiaMart (indiamart.com).
+
+Generate 14 to 18 short, simple, natural DuckDuckGo search queries to find real estate listings, yellowpages pages, and classifieds ads for warehouses and garage storage spaces in {city_name} within {rad_val}.
+
+RULES:
+1. Each query must be short and clean (4 to 7 words).
+2. Cover diverse property types: commercial warehouse, godown, industrial shed, garage storage space, RCC storage godown, logistics park unit, container accessible warehouse.
+3. Incorporate mentions of key Indian real estate yellowpages (e.g. olx, 99acres, magicbricks, nobroker, justdial, indiamart) naturally across several queries.
+4. Examples of good queries:
+   - "warehouse for rent {city_name} {rad_val} olx"
+   - "godown on lease {city_name} {rad_val} 99acres"
+   - "garage storage space for rent {city_name}"
+   - "industrial shed for rent {city_name} {rad_val} magicbricks"
+   - "storage space for rent {city_name} {rad_val} nobroker"
+   - "warehouse shed on lease {city_name} justdial"
+   - "commercial godown for rent {city_name} olx"
+   - "logistics park warehouse lease {city_name} {rad_val}"
+   - "heavy vehicle parking garage yard {city_name}"
+   - "small warehouse storage unit {city_name} olx"
+   - "RCC warehouse for rent {city_name} {rad_val}"
+   - "container trailer accessible godown {city_name}"
+5. Do NOT use boolean operators (no AND, OR, NOT, site:).
+6. Do NOT use quotation marks or plus/minus signs.
+7. Keep queries realistic, diverse, and search-engine friendly.
 """
             else:
                 region_name = region.split(" (")[0]
@@ -998,6 +1118,10 @@ RULES:
                         f"container logistics agents India {dest_term}",
                         f"FCL shipping lines India {dest_term}"
                     ]
+                elif strategy == "Warehouses":
+                    city_name = region if region in self.indian_city_regions else "Mumbai"
+                    rad_val = self.radius_var.get() if hasattr(self, 'radius_var') else "15 km"
+                    queries = self.get_warehouse_starter_queries(city_name, rad_val)
                 else:
                     dest_term = region.split(" (")[0]
                     queries = [
@@ -1093,6 +1217,10 @@ RULES:
                     f"container logistics agents India {fallback_dest}",
                     f"FCL shipping lines India {fallback_dest}"
                 ]
+            elif strategy == "Warehouses":
+                city_name = region if region in self.indian_city_regions else "Mumbai"
+                rad_val = self.radius_var.get() if hasattr(self, 'radius_var') else "15 km"
+                fallback_queries = self.get_warehouse_starter_queries(city_name, rad_val)
             else:
                 fallback_queries = [
                     f"switchgear panel distributors {fallback_dest}",
@@ -1161,6 +1289,10 @@ RULES:
         if strategy == "Suppliers":
             query += " (site:indiamart.com OR site:tradeindia.com OR site:justdial.com OR site:exportersindia.com)"
             region_code = "in-en"
+        elif strategy == "Warehouses":
+            region_code = "in-en"
+            if "site:" not in query.lower():
+                query += " (site:olx.in OR site:magicbricks.com OR site:99acres.com OR site:justdial.com OR site:housing.com OR site:nobroker.in OR site:quikr.com OR site:indiamart.com)"
         elif strategy == "Logistics":
             region_code = "in-en"
         else:
@@ -1189,7 +1321,20 @@ RULES:
         try:
             self.logger.info(f"Searching DuckDuckGo for: {query} [Region: {region_code}]")
             with DDGS() as ddgs:
-                results = list(ddgs.text(query, region=region_code, max_results=max_results))
+                try:
+                    results = list(ddgs.text(query, region=region_code, max_results=max_results))
+                except Exception as dde:
+                    self.logger.warning(f"Initial DuckDuckGo query failed: {dde}")
+                    results = []
+                if not results and "site:" in query:
+                    import re
+                    clean_query = re.sub(r'\\(?site:[^\\)]+\\)?', '', query).strip()
+                    self.logger.info(f"Retrying DuckDuckGo search with broader query: {clean_query}")
+                    try:
+                        results = list(ddgs.text(clean_query, region=region_code, max_results=max_results))
+                    except Exception as fallback_err:
+                        self.logger.warning(f"Fallback search also failed: {fallback_err}")
+                        results = []
             
             if not results:
                 self.ui_queue.put((self.on_discovery_complete, ([], [], None)))
@@ -1218,6 +1363,10 @@ RULES:
                 
             if strategy == "Logistics":
                 filter_goal = "Actual company websites of Indian logistics companies, freight forwarders, or shipping lines providing container transport solutions. REMOVE news, Wikipedia, and non-logistics sites."
+            elif strategy == "Warehouses":
+                city_name = self.region_var.get()
+                rad_val = self.radius_var.get() if hasattr(self, 'radius_var') else "15 km"
+                filter_goal = f"Direct property listings, classified ads, or yellowpages entries for commercial warehouses, godowns, industrial sheds, garage storage spaces, or logistics parks available for rent or lease in and around {city_name} (within {rad_val}). KEEP listings from OLX, MagicBricks, 99acres, JustDial, NoBroker, Housing.com, Quikr, IndiaMart, and direct commercial property owners/brokers. REMOVE non-real estate articles, purely residential apartments without garage/storage, Wikipedia, and generic news."
             elif strategy == "Suppliers":
                 filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
@@ -2167,6 +2316,8 @@ SinoMagan Indus Global Trade LLP
             win.title("Instant Logistics & Freight RFQ Generator")
         elif mode == "supplier":
             win.title("Instant Supplier Sourcing Inquiry Generator")
+        elif mode == "warehouse":
+            win.title("Instant Warehouse & Garage Rental Inquiry Generator")
         else:
             win.title("Instant B2B Trade Proposal Generator")
         win.geometry("820x760")
@@ -2189,6 +2340,11 @@ SinoMagan Indus Global Trade LLP
             lbl_sub_text = "Enter logistics or freight forwarder website to analyze shipping routes, container services, and generate an official Freight Cargo RFQ from SinoMagan Indus Global Trade LLP."
             btn_gen_text = "⚡ Generate Freight RFQ"
             default_placeholder = "Your generated freight cargo inquiry will appear here..."
+        elif mode == "warehouse":
+            lbl_title_text = "🏢 Instant Warehouse / Garage Rental Inquiry"
+            lbl_sub_text = "Enter real estate listing or warehouse portal URL (OLX, MagicBricks, 99acres, etc.) to analyze property specs and generate an official Commercial Rental / Lease Inquiry from SinoMagan Indus Global Trade LLP."
+            btn_gen_text = "⚡ Generate Rental Inquiry"
+            default_placeholder = "Your generated warehouse / garage rental inquiry will appear here..."
         elif mode == "supplier":
             lbl_title_text = "🏭 Instant Sourcing RFQ from Supplier Website"
             lbl_sub_text = "Enter supplier website to scrape manufacturing capabilities and generate an official Sourcing RFQ from SinoMagan Indus Global Trade LLP."
@@ -2233,7 +2389,7 @@ SinoMagan Indus Global Trade LLP
         btn_generate = ctk.CTkButton(
             url_frame, 
             text=btn_gen_text, 
-            width=175 if mode in ["supplier", "logistics"] else 160, 
+            width=175 if mode in ["supplier", "logistics", "warehouse"] else 160, 
             height=36,
             fg_color="#1f7a1f", 
             hover_color="#145214",
@@ -2288,7 +2444,8 @@ SinoMagan Indus Global Trade LLP
                 default_placeholder, 
                 "Your generated commercial proposal will appear here...",
                 "Your generated sourcing inquiry will appear here...",
-                "Your generated freight cargo inquiry will appear here..."
+                "Your generated freight cargo inquiry will appear here...",
+                "Your generated warehouse / garage rental inquiry will appear here..."
             ]
             if val and not val.startswith("⏳") and val not in placeholders:
                 self.clipboard_clear()
@@ -2311,7 +2468,8 @@ SinoMagan Indus Global Trade LLP
                 default_placeholder, 
                 "Your generated commercial proposal will appear here...",
                 "Your generated sourcing inquiry will appear here...",
-                "Your generated freight cargo inquiry will appear here..."
+                "Your generated freight cargo inquiry will appear here...",
+                "Your generated warehouse / garage rental inquiry will appear here..."
             ]
             if b and not b.startswith("⏳") and b not in placeholders:
                 self.clipboard_clear()
@@ -2353,6 +2511,8 @@ SinoMagan Indus Global Trade LLP
             txt_body.delete("0.0", "end")
             if mode == "logistics":
                 action_step = "shipping routes and freight services"
+            elif mode == "warehouse":
+                action_step = "warehouse facility specs and lease terms"
             elif mode == "supplier":
                 action_step = "manufacturing capabilities"
             else:
@@ -2375,6 +2535,8 @@ SinoMagan Indus Global Trade LLP
                     def update_status_ai():
                         if mode == "logistics":
                             target_type = "freight inquiry"
+                        elif mode == "warehouse":
+                            target_type = "rental inquiry"
                         elif mode == "supplier":
                             target_type = "sourcing inquiry"
                         else:
@@ -2441,6 +2603,59 @@ CRITICAL INSTRUCTIONS FOR GMAIL-READY PLAIN TEXT:
      * Open directly by introducing SinoMagan Indus Global Trade LLP and referencing their shipping solutions observed on their website.
    - COMMERCIAL & LOGISTICS REALISM:
      * Mention regular container volume movements, FCL/LCL requirements, prompt documentation, and interest in establishing an ongoing logistics agency relationship.
+   - SIGN-OFF:
+     The sign-off MUST strictly be formatted as:
+
+Warm regards,
+
+Fardin Mohammed
+Partner
+SinoMagan Indus Global Trade LLP
+"""
+                    elif mode == "warehouse":
+                        prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing an official Commercial Lease / Rental Inquiry for a warehouse, godown, industrial shed, or garage storage space.
+
+Target Property / Portal Listing URL: {target_url}
+Known Scraped Email: {scraped_email}
+
+{content_block}
+
+Your Company:
+- SinoMagan Indus Global Trade LLP (International trade, export sourcing, contract manufacturing, containerized freight operations)
+- Authorized Signatory: Fardin Mohammed, Partner
+
+PURPOSE OF THIS EMAIL (WAREHOUSE / GARAGE LEASE & RENTAL INQUIRY):
+SinoMagan Indus Global Trade LLP is actively seeking suitable commercial premises for immediate/near-term lease to support our export-import staging, inventory warehousing (electrical components, power equipment, solar panels, wooden panels, hardware), and vehicle/garage storage needs in India.
+Based on the property listing or real estate contact observed at their URL, we are reaching out to verify property availability, technical specifications, and commercial leasing terms.
+
+CRITICAL INSTRUCTIONS FOR GMAIL-READY PLAIN TEXT:
+1. SUBJECT LINE:
+   - Provide a concise, highly professional Subject line referencing Commercial Warehouse / Godown / Garage Rental Inquiry for SinoMagan Indus Global Trade LLP. Include location if detected. No quotes or markdown.
+2. RECIPIENT EMAIL:
+   - If a contact email is found in the scraped content or Known Scraped Email, provide it. Otherwise leave empty string.
+3. EMAIL BODY (STRICT GMAIL PLAIN TEXT FORMAT):
+   - The body MUST be 100% ready to paste directly into the Gmail composer.
+   - ABSOLUTELY NO MARKDOWN FORMATTING:
+     * NEVER use asterisks for bold or italic (NO **word** or *word*).
+     * NEVER use markdown headings (# or ##).
+     * NEVER use markdown horizontal rules (---).
+     * NEVER use markdown links [text](url).
+   - INQUIRY SPECIFICATIONS:
+     * Request specific confirmation regarding:
+       • Total usable carpet area (sq ft) and open yard / vehicle parking area
+       • Clear ceiling height (ft) and wide rolling shutter / ground-level dock access
+       • Heavy-duty industrial flooring condition and 3-phase electric power load (HP/kVA)
+       • Access road width and commercial container trailer (20ft / 40ft) turnaround capability
+       • Monthly rent (per sq ft or lump sum), maintenance charges, security deposit, and minimum lease lock-in
+       • Permitted commercial storage & garage operations, 24/7 access, and security / CCTV provisions
+       • Fire safety NOC and local municipal industrial licensing status
+     * Format these bullet points cleanly with '• '.
+   - HUMAN TONE:
+     * Sound like an authentic, decisive commercial principal (Fardin Mohammed).
+     * BANNED PHRASES: "I hope this email finds you well", "In today's fast-paced world", "Look no further", "delve", "testament to", "thrilled to connect".
+     * Open directly by introducing SinoMagan Indus Global Trade LLP and referencing the property listing seen online.
+   - COMMERCIAL LEASING REALISM:
+     * Mention readiness for prompt site inspection and immediate lease execution for qualified spaces.
    - SIGN-OFF:
      The sign-off MUST strictly be formatted as:
 
@@ -2563,6 +2778,8 @@ SinoMagan Indus Global Trade LLP
                         txt_body.insert("0.0", body_val)
                         if mode == "logistics":
                             status_msg = "Status: Freight RFQ generated successfully! ✅"
+                        elif mode == "warehouse":
+                            status_msg = "Status: Rental Inquiry generated successfully! ✅"
                         elif mode == "supplier":
                             status_msg = "Status: Sourcing RFQ generated successfully! ✅"
                         else:

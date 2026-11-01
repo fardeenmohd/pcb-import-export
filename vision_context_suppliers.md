@@ -337,6 +337,11 @@ The buy leads represent three distinct tiers of B2B procurement, each requiring 
 * **Cleaning & Laundry Systems**: Commercial battery-powered floor scrubbing machines (*KUER* KR-XS430 Li-Ion), heavy-duty commercial laundry washing machines (50kg capacity washers, HS code 845020), and domestic vacuum cleaners (25L 3000W gold-and-black drum-style vacuum cleaners, handheld cordless stick vacuums with detachable batteries, and car vacuums).
 * **Kitchen & Prep Appliances**: Espresso coffee machines (OEM/ODM professional single-group, dual boiler, 220V), electric kettles, blenders, hand mixers, food processors, air fryers, induction cookers, vacuum food fryers, and commercial multi-deck electric pizza ovens (temperature range 20–400°C).
 
+### Niche 13: Commercial Warehouses, Godowns & Garage Storage Spaces (India Corridor)
+* **Storage & Garage Use Cases**: Commercial storage units, logistics inventory staging, distribution godowns, private garage spaces, vehicle parking depots, and industrial sheds.
+* **Indian Metropolitan & Industrial Hubs**: Bhiwandi / Thane, Mumbai, Navi Mumbai, Pune (Chakan / Talegaon / Bhosari), Delhi NCR (Gurgaon / Manesar, Noida / Greater Noida, Faridabad, Ghaziabad), Bangalore (Peenya / Hoskote / Nelamangala), Hyderabad, Chennai (Sriperumbudur / Oragadam), Ahmedabad (Sanand / Changodar), Kolkata, Surat, Jaipur, and Nagpur.
+* **Yellowpages & Classifieds Scraping Strategy**: Real estate opportunity discovery across OLX India (olx.in), MagicBricks, 99acres, JustDial, NoBroker, Housing.com, Quikr, and IndiaMart with radius filtering (5 km to 100 km).
+
 ### Niche 12: Building Materials, Wooden Panels & Decorative Boards (Philippines Retail & Distribution Corridor)
 * **Plywood Panels & Marine Boards**: Commercial grade plywood, moisture-resistant (MR) and boiling waterproof (BWR/BWP) plywood, film-faced shuttering plywood, and decorative natural wood veneered panels (Teak, Gurjan, Birch, Poplar). Thicknesses from 3mm to 25mm.
 * **MDF Panels & Laminated Decorative Boards**: Plain MDF, pre-laminated MDF, Melamine Faced Panels (MFC), High-Gloss acrylic panels, textured laminates, particle boards, and decorative wall cladding for architectural joinery and furniture production.

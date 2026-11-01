@@ -34,7 +34,7 @@ class LogisticsCompany(BaseModel):
     phone_numbers: List[str] = Field(default_factory=list, description="List of extracted phone numbers")
     locations_hq: List[str] = Field(default_factory=list, description="Headquarters or branch locations in India/globally")
     shipping_routes: List[str] = Field(default_factory=list, description="Regions or countries they ship to (e.g., Worldwide, Europe, USA, Middle East)")
-    services_offered: List[str] = Field(default_factory=list, description="Services like FCL, LCL, Air Freight, Customs Clearance, Warehousing")
+    services_offered: List[str] = Field(default_factory=list, description="Services like Warehousing, Storage Space, Garage, FCL, LCL, Air Freight, Customs Clearance")
     container_types: List[str] = Field(default_factory=list, description="Types of containers handled (e.g., 20ft, 40ft, Reefer, Flat Rack)")
     is_logistics_provider: bool = Field(description="True if this is a freight forwarder, shipping line, or logistics company capable of sending containers")
 LogisticsList.model_rebuild()
@@ -176,7 +176,7 @@ def extract_logistics_info(text: str, logger: logging.Logger) -> Optional[List[L
         from llm_fallback import generate_with_fallback
         prompt = f"""
             You are a B2B extraction AI. Extract the logistics company details from the following raw text.
-            We are looking for freight forwarders, shipping lines, and logistics companies based in India or globally that provide container transport solutions (FCL, LCL, Ocean Freight, Air Freight).
+            We are looking for freight forwarders, shipping lines, warehouse operators, and logistics/storage companies based in India or globally that provide commercial warehousing, storage spaces, garages, or container transport solutions.
             
             Look closely for contact emails and phones.
             If the page is a directory (like IndiaMart, JustDial, etc.), it may list MULTIPLE logistics companies.

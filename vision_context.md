@@ -79,6 +79,13 @@ This segment addresses commercial processing machinery alongside bulk consumer k
     *   **Industrial/Commercial Food Processing**: Screw-type fruit/vegetable juicers (0.5t–2.5t/h capacity, 1.1kW+ motors), commercial mango/tomato pureeing systems, and professional-grade stainless steel beverage extractors.
     *   **Small Domestic Appliances (SDA) - Bulk Import**: Electric kettles, countertop blenders, hand mixers, air fryers, induction cooktops, and sandwich makers, primarily sourced for retail and hospitality distribution.
 
+### Segment G: Commercial Warehousing, Industrial Storage & Garage Leasing (India Corridor)
+This segment focuses on sourcing commercial warehouses, godowns, industrial sheds, and garage storage spaces across major Indian industrial clusters and metropolitan fringes.
+*   **Target Applications**: Secure inventory warehousing, freight container staging, export packaging depots, vehicle parking/garage facilities, self-storage units, and light fabrication/assembly workshops.
+*   **Geographical Targeting & Radius Discovery**: City-centric radius screening (5 km to 100 km) covering premier logistics hubs: Mumbai / Bhiwandi, Navi Mumbai, Pune / Chakan, Delhi NCR / Gurgaon / Noida / Faridabad / Ghaziabad, Bangalore, Hyderabad, Chennai, Ahmedabad, Surat, Jaipur, Indore, Nagpur, and Coimbatore.
+*   **Real Estate Yellowpages & Classifieds Strategy**: Aggressive multi-portal monitoring utilizing India's leading property yellowpages and classifieds portals: OLX India (olx.in), MagicBricks (magicbricks.com), 99acres (99acres.com), JustDial (justdial.com), NoBroker (nobroker.in), Housing.com (housing.com), Quikr (quikr.com), and IndiaMart (indiamart.com).
+*   **Operational & Facility Mandates**: Facilities must specify clear carpet area (500 sq ft to 50,000+ sq ft), clear ceiling height (12 ft to 32 ft), heavy-duty concrete flooring, wide shutter access, ground-level loading docks, 3-phase industrial power supply, water connection, 24/7 security/CCTV, and commercial container trailer (20ft/40ft) turnaround road access.
+
 ### Segment F: Building Materials, Architectural Surfaces & Engineered Wooden Panels
 This segment covers engineered wood products and decorative panels procured by regional distributors, building materials retailers, and furniture/interior fit-out contractors in high-growth Southeast Asian corridors (Philippines).
 *   **Sub-niches**:
