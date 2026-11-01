@@ -476,7 +476,7 @@ class App(ctk.CTk):
             row_frame = ctk.CTkFrame(self.discovery_urls_frame, fg_color=("#EAEAEA", "#2B2B2B"), corner_radius=6)
             row_frame.pack(fill="x", padx=4, pady=3)
             
-            # Action button: 📝 Sourcing RFQ / 📝 Freight RFQ / 📝 Create Proposal
+            # Action button: 📝 Sourcing RFQ / 📝 Freight RFQ / 📝 Create Proposal / 🏢 Rental Inquiry
             btn_prop = ctk.CTkButton(
                 row_frame, 
                 text=prop_btn_text, 
@@ -488,6 +488,21 @@ class App(ctk.CTk):
                 command=lambda target=url_str, m=current_mode: self.open_url_proposal_window(target, auto_generate=True, mode=m)
             )
             btn_prop.pack(side="right", padx=(4, 6), pady=4)
+
+            # Yellowpages directory deep extraction button: 📦 Extract Properties
+            from scraper import is_yellowpages_directory
+            if strategy == "Warehouses" and is_yellowpages_directory(url_str):
+                btn_extract = ctk.CTkButton(
+                    row_frame,
+                    text="📦 Extract Properties",
+                    width=135,
+                    height=28,
+                    font=("Arial", 11, "bold"),
+                    fg_color="#6a0dad",
+                    hover_color="#4b0082",
+                    command=lambda target=url_str: self.scrape_properties_from_card(target)
+                )
+                btn_extract.pack(side="right", padx=(2, 4), pady=4)
             
             # Action button: 📋 Copy single URL
             btn_copy = ctk.CTkButton(
@@ -512,6 +527,32 @@ class App(ctk.CTk):
                 font=("Arial", 11)
             )
             lbl_url.pack(side="left", fill="x", expand=True, padx=(8, 4), pady=4)
+
+    def scrape_properties_from_card(self, directory_url):
+        self.lbl_disc_status.configure(text=f"Status: Deep scraping properties from directory...")
+        import threading
+        def worker():
+            try:
+                from scraper import extract_subproperties_from_directory
+                sub_props = extract_subproperties_from_directory(directory_url, logger=self.logger, max_properties=12)
+                if sub_props:
+                    current = list(self.current_hq_urls) if hasattr(self, 'current_hq_urls') else []
+                    new_added = [p for p in sub_props if p not in current]
+                    updated_urls = new_added + current
+                    self.current_hq_urls = updated_urls
+                    def on_success():
+                        self.populate_hq_urls(updated_urls)
+                        self.lbl_disc_status.configure(text=f"Extracted {len(new_added)} properties from directory! ✅")
+                    self.ui_queue.put((on_success, ()))
+                else:
+                    def on_fail():
+                        self.lbl_disc_status.configure(text="No direct property listings found on directory page.")
+                    self.ui_queue.put((on_fail, ()))
+            except Exception as e:
+                self.logger.error(f"Directory property extraction failed: {e}")
+                self.ui_queue.put((lambda: self.lbl_disc_status.configure(text="Error extracting properties."), ()))
+                
+        threading.Thread(target=worker, daemon=True).start()
 
     def copy_single_url(self, url_str):
         self.clipboard_clear()
@@ -1400,7 +1441,7 @@ RULES:
         elif strategy == "Warehouses":
             region_code = "in-en"
             if "site:" not in query.lower():
-                query += " (site:olx.in OR site:magicbricks.com OR site:99acres.com OR site:justdial.com OR site:housing.com OR site:nobroker.in OR site:quikr.com OR site:indiamart.com)"
+                query += " (site:olx.in/item OR site:olx.in OR site:99acres.com OR site:magicbricks.com OR site:justdial.com OR site:housing.com OR site:nobroker.in OR site:quikr.com OR site:indiamart.com)"
         elif strategy == "Logistics":
             region_code = "in-en"
         else:
@@ -1497,6 +1538,32 @@ RULES:
             filtered_data = FilteredURLs.model_validate_json(response.text)
             urls = filtered_data.urls
             
+            # OPPORTUNITY EXTRACTION: If strategy == "Warehouses", check for yellowpages directory URLs
+            # and scrape the raw page to discover multiple individual property listings
+            if strategy == "Warehouses":
+                try:
+                    from scraper import extract_subproperties_from_directory, is_yellowpages_directory
+                    candidate_dirs = [u for u in (urls + raw_urls) if is_yellowpages_directory(u)]
+                    if candidate_dirs:
+                        self.logger.info(f"Found {len(candidate_dirs)} yellowpages directory URLs. Deep scraping for individual properties...")
+                        self.ui_queue.put((self.update_discovery_status, ("Status: Deep scraping properties from directories...",)))
+                        
+                        extracted_props = []
+                        for d_url in candidate_dirs[:3]:
+                            try:
+                                sub_props = extract_subproperties_from_directory(d_url, logger=self.logger, max_properties=8)
+                                for sp in sub_props:
+                                    if sp not in urls and sp not in extracted_props:
+                                        extracted_props.append(sp)
+                            except Exception as de:
+                                self.logger.warning(f"Deep directory scrape failed on {d_url}: {de}")
+                        
+                        if extracted_props:
+                            self.logger.info(f"Extracted {len(extracted_props)} individual property leads from directory pages!")
+                            urls = extracted_props + [u for u in urls if u not in extracted_props]
+                except Exception as ex:
+                    self.logger.warning(f"Deep property extraction process encountered an issue: {ex}")
+
             self.logger.info(f"AI filtered {len(results)} raw results down to {len(urls)} high-quality URLs.")
             self.ui_queue.put((self.on_discovery_complete, (raw_urls, urls, None)))
         except Exception as e:

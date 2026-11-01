@@ -97,6 +97,8 @@ The buy leads represent three distinct tiers of B2B procurement, each requiring 
 * **Sub-City Area Radius Discovery**: Area-level micro-market screening targeting specific localities inside Indian cities under XX kms (e.g. Bhiwandi Mankoli/Rahnal, Pune Chakan/Bhosari/Talegaon, Delhi NCR Okhla/Manesar, Bangalore Peenya/Nelamangala, Chennai Sriperumbudur/Oragadam).
 * **Yellowpages & Classifieds Scraping Strategy**: Real estate opportunity discovery across OLX India (olx.in), MagicBricks, 99acres, JustDial, NoBroker, Housing.com, Quikr, and IndiaMart with queries formatted as `"under {XX} km {Area} {City}"`.
 
+* **Yellowpages Deep Directory Property Extraction**: Automatically extracts multiple individual property listings from raw classifieds directory URLs (OLX, 99acres, MagicBricks, NoBroker), populating individual property leads with dedicated Rental Inquiries.
+
 ### Niche 12: Building Materials, Wooden Panels & Decorative Boards (Philippines Retail & Distribution Corridor)
 * **Plywood Panels & Marine Boards**: Commercial grade plywood, moisture-resistant (MR) and boiling waterproof (BWR/BWP) plywood, film-faced shuttering plywood, and decorative natural wood veneered panels (Teak, Gurjan, Birch, Poplar). Thicknesses from 3mm to 25mm.
 * **MDF Panels & Laminated Decorative Boards**: Plain MDF, pre-laminated MDF, Melamine Faced Panels (MFC), High-Gloss acrylic panels, textured laminates, particle boards, and decorative wall cladding for architectural joinery and furniture production.
