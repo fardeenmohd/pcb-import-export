@@ -224,9 +224,26 @@ class App(ctk.CTk):
         self.btn_suggest = ctk.CTkButton(control_frame, text="💡 Suggest", width=70, command=self.suggest_query, fg_color="#4B0082", hover_color="#300050")
         self.btn_suggest.pack(side="left", padx=5)
         
-        self.results_slider = ctk.CTkSlider(control_frame, from_=5, to=50, number_of_steps=9, width=100)
-        self.results_slider.set(15)
-        self.results_slider.pack(side="left", padx=10)
+        slider_frame = ctk.CTkFrame(control_frame, fg_color="transparent")
+        slider_frame.pack(side="left", padx=6)
+
+        self.lbl_slider_val = ctk.CTkLabel(slider_frame, text="Max: 25 URLs", font=("Arial", 11, "bold"), text_color="#3a86ff")
+        self.lbl_slider_val.pack(anchor="center", pady=(0, 2))
+
+        def on_slider_change(val):
+            val_int = int(round(val))
+            self.lbl_slider_val.configure(text=f"Max: {val_int} URLs")
+
+        self.results_slider = ctk.CTkSlider(
+            slider_frame, 
+            from_=5, 
+            to=100, 
+            number_of_steps=19, 
+            width=110,
+            command=on_slider_change
+        )
+        self.results_slider.set(25)
+        self.results_slider.pack(anchor="center")
         
         self.btn_search = ctk.CTkButton(control_frame, text="Discover URLs", command=self.start_discovery)
         self.btn_search.pack(side="left", padx=10)
@@ -1479,22 +1496,52 @@ RULES:
 
     def discover_urls_thread(self, query, max_results, region_code):
         try:
-            self.logger.info(f"Searching DuckDuckGo for: {query} [Region: {region_code}]")
+            self.logger.info(f"Searching DuckDuckGo for: {query} [Region: {region_code}, Target Max: {max_results}]")
+            results = []
+            seen_hrefs = set()
+            pages_needed = max(1, (max_results + 7) // 8)
+
             with DDGS() as ddgs:
-                try:
-                    results = list(ddgs.text(query, region=region_code, max_results=max_results))
-                except Exception as dde:
-                    self.logger.warning(f"Initial DuckDuckGo query failed: {dde}")
-                    results = []
+                for page_num in range(1, pages_needed + 1):
+                    if len(results) >= max_results:
+                        break
+                    try:
+                        page_res = list(ddgs.text(query, region=region_code, page=page_num, max_results=20))
+                        if not page_res:
+                            break
+                        for r in page_res:
+                            href = r.get('href')
+                            if href and href not in seen_hrefs:
+                                seen_hrefs.add(href)
+                                results.append(r)
+                                if len(results) >= max_results:
+                                    break
+                    except Exception as dde:
+                        self.logger.warning(f"DuckDuckGo page {page_num} search failed: {dde}")
+                        break
+
+                # If no results found and query had restrictive site filters, retry with broader query
                 if not results and "site:" in query:
                     import re
-                    clean_query = re.sub(r'\\(?site:[^\\)]+\\)?', '', query).strip()
+                    clean_query = re.sub(r'\(?site:[^\)]+\)?', '', query).strip()
                     self.logger.info(f"Retrying DuckDuckGo search with broader query: {clean_query}")
-                    try:
-                        results = list(ddgs.text(clean_query, region=region_code, max_results=max_results))
-                    except Exception as fallback_err:
-                        self.logger.warning(f"Fallback search also failed: {fallback_err}")
-                        results = []
+                    for page_num in range(1, pages_needed + 1):
+                        if len(results) >= max_results:
+                            break
+                        try:
+                            page_res = list(ddgs.text(clean_query, region=region_code, page=page_num, max_results=20))
+                            if not page_res:
+                                break
+                            for r in page_res:
+                                href = r.get('href')
+                                if href and href not in seen_hrefs:
+                                    seen_hrefs.add(href)
+                                    results.append(r)
+                                    if len(results) >= max_results:
+                                        break
+                        except Exception as fallback_err:
+                            self.logger.warning(f"Fallback search page {page_num} failed: {fallback_err}")
+                            break
             
             if not results:
                 self.ui_queue.put((self.on_discovery_complete, ([], [], None)))
