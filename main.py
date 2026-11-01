@@ -1904,9 +1904,57 @@ RULES:
         
         btn_delete_all = ctk.CTkButton(btn_frame, text="Delete All Entries", command=delete_all_cmd, width=115, fg_color="#660000", hover_color="#4d0000")
         btn_delete_all.pack(side="left", padx=6)
-        
+
+        if mode == "warehouse":
+            tab.grid_rowconfigure(1, weight=0)
+            tab.grid_rowconfigure(2, weight=1)
+
+            dist_frame = ctk.CTkFrame(tab, fg_color="#1e2229", corner_radius=6)
+            dist_frame.grid(row=1, column=0, padx=10, pady=(0, 8), sticky="ew")
+
+            lbl_ref_icon = ctk.CTkLabel(
+                dist_frame, 
+                text="📍 Reference Area / Landmark:", 
+                font=("Arial", 12, "bold"),
+                text_color="#e0e0e0"
+            )
+            lbl_ref_icon.pack(side="left", padx=(12, 6), pady=6)
+
+            self.wh_ref_area_entry = ctk.CTkEntry(
+                dist_frame, 
+                placeholder_text="Enter area or landmark (e.g. Bandra West, Cyber City, Whitefield, Okhla)...", 
+                width=340,
+                height=32
+            )
+            self.wh_ref_area_entry.pack(side="left", padx=(0, 10), pady=6)
+            self.wh_ref_area_entry.bind("<Return>", lambda event: self.start_warehouse_distance_calculation())
+
+            self.wh_calc_dist_btn = ctk.CTkButton(
+                dist_frame, 
+                text="📏 Calculate Road Distances (Gemini)", 
+                command=self.start_warehouse_distance_calculation,
+                width=245,
+                height=32,
+                fg_color="#006699",
+                hover_color="#004c73",
+                font=("Arial", 12, "bold")
+            )
+            self.wh_calc_dist_btn.pack(side="left", padx=(0, 10), pady=6)
+
+            self.wh_dist_status_lbl = ctk.CTkLabel(
+                dist_frame, 
+                text="", 
+                font=("Arial", 11, "italic"),
+                text_color="#a0a0a0"
+            )
+            self.wh_dist_status_lbl.pack(side="left", padx=(5, 10), pady=6)
+
+            frame_row = 2
+        else:
+            frame_row = 1
+
         frame = ctk.CTkFrame(tab)
-        frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+        frame.grid(row=frame_row, column=0, sticky="nsew", padx=10, pady=10)
         frame.grid_columnconfigure(0, weight=1)
         frame.grid_rowconfigure(0, weight=1)
         
@@ -2004,6 +2052,7 @@ RULES:
             proposal_cmd=self.open_supplier_inquiry_window,
             is_supplier=True
         )
+        self.load_matrix(self.sup_tree, "Suppliers_Matrix.xlsx")
         
     def setup_buy_db_tab(self):
         self.buy_tree = self.create_database_tab_ui(
@@ -2014,6 +2063,7 @@ RULES:
             proposal_cmd=self.open_proposal_window,
             is_supplier=False
         )
+        self.load_matrix(self.buy_tree, "Buyers_Matrix.xlsx")
 
     def open_proposal_window(self):
         selected_items = self.buy_tree.selection()
@@ -3213,6 +3263,12 @@ SinoMagan Indus Global Trade LLP
                         tree.column(col, width=110, minwidth=90, anchor="center")
                     elif col == "Copy URL":
                         tree.column(col, width=95, minwidth=80, anchor="center")
+                    elif col == "distance_km":
+                        tree.column(col, width=110, minwidth=90, anchor="center")
+                    elif col == "distance_from_area":
+                        tree.column(col, width=140, minwidth=110, anchor="w")
+                    elif col == "route_notes":
+                        tree.column(col, width=180, minwidth=120, anchor="w")
                     else:
                         tree.column(col, width=150, minwidth=100)
                         
@@ -3222,6 +3278,8 @@ SinoMagan Indus Global Trade LLP
                         values = ["📝 Create", "📋 Copy"] + values
                     tree.insert("", "end", values=values)
                     
+                if output_file == "Warehouses_Matrix.xlsx":
+                    self.init_warehouse_reference_area()
                 self.logger.info(f"Successfully synced {output_file} with UI.")
             except Exception as e:
                 self.logger.error(f"Failed to load matrix: {e}")
@@ -3322,6 +3380,392 @@ SinoMagan Indus Global Trade LLP
             proposal_cmd=self.open_warehouse_inquiry_window,
             mode="warehouse"
         )
+        self.load_matrix(self.wh_tree, "Warehouses_Matrix.xlsx")
+        self.init_warehouse_reference_area()
+
+    def init_warehouse_reference_area(self):
+        """Initializes the reference area text box and status label from Warehouses_Matrix.xlsx if available."""
+        matrix_file = "Warehouses_Matrix.xlsx"
+        if os.path.exists(matrix_file):
+            try:
+                import pandas as pd
+                df = pd.read_excel(matrix_file)
+                if "distance_from_area" in df.columns:
+                    valid_areas = df["distance_from_area"].dropna().astype(str).str.strip()
+                    valid_areas = valid_areas[~valid_areas.isin(["", "nan", "None"])]
+                    if not valid_areas.empty:
+                        last_area = valid_areas.iloc[0]
+                        if hasattr(self, "wh_ref_area_entry"):
+                            cur_val = self.wh_ref_area_entry.get().strip()
+                            if not cur_val:
+                                self.wh_ref_area_entry.delete(0, "end")
+                                self.wh_ref_area_entry.insert(0, last_area)
+                        if hasattr(self, "wh_dist_status_lbl"):
+                            self.wh_dist_status_lbl.configure(
+                                text=f"Last reference: '{last_area}'",
+                                text_color="#2ecc71"
+                            )
+            except Exception as e:
+                self.logger.debug(f"Could not load saved warehouse reference area: {e}")
+
+    def start_warehouse_distance_calculation(self):
+        """Initiates Gemini road distance estimation from the user-entered reference area."""
+        import tkinter.messagebox as messagebox
+        ref_area = self.wh_ref_area_entry.get().strip() if hasattr(self, "wh_ref_area_entry") else ""
+        if not ref_area:
+            messagebox.showwarning(
+                "Reference Area Required",
+                "Please enter an area name or landmark in the text box\n(e.g., 'Bandra West, Mumbai', 'Cyber City, Gurgaon', or 'Whitefield, Bangalore')."
+            )
+            return
+
+        matrix_file = "Warehouses_Matrix.xlsx"
+        if not os.path.exists(matrix_file):
+            messagebox.showinfo("Matrix Not Found", f"'{matrix_file}' was not found. Please scrape warehouse properties first.")
+            return
+
+        try:
+            import pandas as pd
+            df = pd.read_excel(matrix_file)
+        except Exception as e:
+            messagebox.showerror("Read Error", f"Could not read {matrix_file}: {e}")
+            return
+
+        if df.empty:
+            messagebox.showinfo("Matrix Empty", f"'{matrix_file}' contains no properties.")
+            return
+
+        self.wh_calc_dist_btn.configure(state="disabled", text="⏳ Calculating via Gemini...")
+        self.wh_dist_status_lbl.configure(
+            text=f"Analyzing driving distances from '{ref_area}' with Gemini AI...",
+            text_color="#ffbb33"
+        )
+        self.logger.info(f"Starting Gemini road distance calculation from reference area '{ref_area}' for {len(df)} properties...")
+
+        threading.Thread(
+            target=self._run_warehouse_distance_worker,
+            args=(ref_area, matrix_file, df),
+            daemon=True
+        ).start()
+
+    def _run_warehouse_distance_worker(self, ref_area, matrix_file, df):
+        import traceback
+        from pydantic import BaseModel, Field
+        from typing import List, Optional
+        from google.genai import types
+        from llm_fallback import generate_with_fallback
+
+        class LocationDistItem(BaseModel):
+            index: int = Field(description="The index number from the prompt list, e.g. 1, 2, 3")
+            location_area: str = Field(description="The exact location area name from the prompt")
+            city: Optional[str] = Field(default="", description="The city name from the prompt")
+            distance_km: str = Field(description="Road driving distance with unit, e.g. '35 km' or '12 km'")
+            route_notes: Optional[str] = Field(default="", description="Short route corridor hint, e.g. 'via NH48'")
+
+        class DistanceList(BaseModel):
+            items: List[LocationDistItem]
+
+        try:
+            # Group unique location_area and city pairs
+            unique_locs = []
+            loc_to_id = {}
+            for idx, row in df.iterrows():
+                loc = str(row.get('location_area', '')).strip()
+                city = str(row.get('city', '')).strip()
+                if loc in ['nan', 'None']: loc = ''
+                if city in ['nan', 'None']: city = ''
+                key = (loc.lower(), city.lower())
+                if key not in loc_to_id:
+                    unique_locs.append((loc, city, key))
+                    loc_to_id[key] = len(unique_locs)
+
+            # Build prompt
+            prompt = f"""You are an elite Indian geographic road routing and distance estimation AI.
+The user wants to measure the realistic driving road distance (in kilometers) from a reference area to warehouse locations in India.
+
+User Reference Area: "{ref_area}"
+
+List of Warehouse Locations to Measure:
+"""
+            for i, (loc, city, key) in enumerate(unique_locs, 1):
+                loc_disp = loc if loc else "Unspecified Area"
+                city_disp = city if city else "India"
+                prompt += f"[{i}] Location Area: \"{loc_disp}\" | City: \"{city_disp}\"\n"
+
+            prompt += f"""
+INSTRUCTIONS:
+1. Determine the primary city/metropolitan region of the User Reference Area "{ref_area}". (e.g. if 'Bandra', it is Mumbai; if 'Cyber City', it is Gurgaon/NCR; if 'Whitefield', it is Bangalore; if 'Okhla', it is Delhi; or use whatever city is explicitly provided in the area name).
+2. For each warehouse location:
+   - If the warehouse is in the same city or greater metropolitan region as "{ref_area}" (e.g. both in Mumbai MMR / Thane / Navi Mumbai, or both in Bengaluru, or both in Delhi NCR / Gurgaon / Noida / Faridabad):
+     Provide the realistic driving road distance in kilometers as a clean number followed by 'km' (e.g. '18 km', '35 km', '42 km').
+   - If the warehouse is in a clearly different city or state:
+     Provide the inter-city driving road distance (e.g. '140 km', '980 km', '1380 km').
+   - If the warehouse location is unspecified, invalid or unknown:
+     Set distance_km to 'N/A'.
+3. In 'route_notes', provide a concise highway corridor or major arterial road hint (e.g. 'via NH48', 'via Western Express Hwy', 'via Mumbai-Nashik Expy', 'via Outer Ring Rd').
+4. Return an entry for every indexed location matching the schema with the exact index number.
+"""
+
+            response = generate_with_fallback(
+                prompt=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=DistanceList,
+                    temperature=0.0
+                ),
+                logger=self.logger
+            )
+
+            parsed = DistanceList.model_validate_json(response.text)
+            id_to_result = {}
+            for item in parsed.items:
+                id_to_result[item.index] = (item.distance_km, item.route_notes or "")
+
+            # Build review rows for every row in df
+            review_rows = []
+            for idx, row in df.iterrows():
+                loc = str(row.get('location_area', '')).strip()
+                city = str(row.get('city', '')).strip()
+                if loc in ['nan', 'None']: loc = ''
+                if city in ['nan', 'None']: city = ''
+                key = (loc.lower(), city.lower())
+                loc_id = loc_to_id.get(key)
+                dist_val, route_val = id_to_result.get(loc_id, ("N/A", ""))
+                review_rows.append({
+                    "row_idx": idx,
+                    "property_title": str(row.get("property_title", "Commercial Property")),
+                    "location_area": loc,
+                    "city": city,
+                    "distance_km": dist_val,
+                    "route_notes": route_val,
+                    "carpet_area_sqft": str(row.get("carpet_area_sqft", "")),
+                    "monthly_rent": str(row.get("monthly_rent", ""))
+                })
+
+            self.ui_queue.put(lambda: self._on_distance_calculation_success(ref_area, matrix_file, df, review_rows))
+
+        except Exception as e:
+            self.logger.error(f"Error calculating warehouse distances: {e}\n{traceback.format_exc()}")
+            err_msg = str(e)
+            self.ui_queue.put(lambda: self._on_distance_calculation_failed(err_msg))
+
+    def _on_distance_calculation_success(self, ref_area, matrix_file, df, review_rows):
+        if hasattr(self, "wh_calc_dist_btn"):
+            self.wh_calc_dist_btn.configure(state="normal", text="📏 Calculate Road Distances (Gemini)")
+        if hasattr(self, "wh_dist_status_lbl"):
+            self.wh_dist_status_lbl.configure(
+                text=f"Review window opened for '{ref_area}'",
+                text_color="#33b5e5"
+            )
+        self.open_warehouse_distance_review_window(ref_area, matrix_file, df, review_rows)
+
+    def _on_distance_calculation_failed(self, err_msg):
+        import tkinter.messagebox as messagebox
+        if hasattr(self, "wh_calc_dist_btn"):
+            self.wh_calc_dist_btn.configure(state="normal", text="📏 Calculate Road Distances (Gemini)")
+        if hasattr(self, "wh_dist_status_lbl"):
+            self.wh_dist_status_lbl.configure(text="Distance calculation failed.", text_color="#ff4444")
+        messagebox.showerror("Calculation Error", f"Gemini distance calculation encountered an error:\n{err_msg}")
+
+    def open_warehouse_distance_review_window(self, ref_area, matrix_file, df, review_rows):
+        """Opens an interactive review dialog to inspect and edit Gemini road distance estimates before saving."""
+        import tkinter as tk
+        from tkinter import ttk
+        import tkinter.messagebox as messagebox
+
+        win = ctk.CTkToplevel(self)
+        win.title(f"Review Driving Distances from '{ref_area}'")
+        win.geometry("980x640")
+        win.attributes("-topmost", True)
+        win.focus_set()
+
+        # Header Frame
+        header = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
+        header.pack(fill="x", padx=15, pady=(15, 8))
+
+        lbl_title = ctk.CTkLabel(
+            header, 
+            text=f"📍 Review Road Distances from Reference Area: \"{ref_area}\"", 
+            font=("Arial", 16, "bold"),
+            text_color="#ffffff"
+        )
+        lbl_title.pack(anchor="w", padx=15, pady=(12, 4))
+
+        lbl_desc = ctk.CTkLabel(
+            header,
+            text=f"Gemini estimated road driving distances for {len(review_rows)} warehouse listings relative to '{ref_area}'.\n"
+                 f"Review the computed distances and route corridors below. Double-click any row to edit its distance.\n"
+                 f"Click 'Confirm & Save to Matrix' to append these distances and search term into {matrix_file}.",
+            font=("Arial", 12),
+            text_color="#a0a0a0",
+            justify="left"
+        )
+        lbl_desc.pack(anchor="w", padx=15, pady=(0, 12))
+
+        # Table Frame
+        tbl_frame = ctk.CTkFrame(win)
+        tbl_frame.pack(fill="both", expand=True, padx=15, pady=8)
+        tbl_frame.grid_columnconfigure(0, weight=1)
+        tbl_frame.grid_rowconfigure(0, weight=1)
+
+        cols = ["#", "Property Title", "Location Area", "City", "Driving Distance", "Route Corridor", "Carpet Area", "Monthly Rent"]
+        review_tree = ttk.Treeview(tbl_frame, columns=cols, show="headings", selectmode="browse")
+        
+        vsb = ttk.Scrollbar(tbl_frame, orient="vertical", command=review_tree.yview)
+        hsb = ttk.Scrollbar(tbl_frame, orient="horizontal", command=review_tree.xview)
+        review_tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+
+        review_tree.grid(row=0, column=0, sticky="nsew")
+        vsb.grid(row=0, column=1, sticky="ns")
+        hsb.grid(row=1, column=0, sticky="ew")
+
+        # Column widths & headings
+        widths = {
+            "#": 45, 
+            "Property Title": 210, 
+            "Location Area": 150, 
+            "City": 100, 
+            "Driving Distance": 120, 
+            "Route Corridor": 160, 
+            "Carpet Area": 100, 
+            "Monthly Rent": 100
+        }
+        for c in cols:
+            review_tree.heading(c, text=c, command=lambda _c=c: self.sort_tree_column(review_tree, _c, False))
+            review_tree.column(c, width=widths.get(c, 120), anchor="center" if c in ["#", "Driving Distance"] else "w")
+
+        # Insert rows
+        for i, item in enumerate(review_rows, 1):
+            review_tree.insert(
+                "", 
+                "end", 
+                iid=str(i), 
+                values=(
+                    i,
+                    item["property_title"],
+                    item["location_area"],
+                    item["city"],
+                    item["distance_km"],
+                    item["route_notes"],
+                    item["carpet_area_sqft"],
+                    item["monthly_rent"]
+                )
+            )
+
+        # Allow quick editing of distance by double click
+        def on_edit_distance(event=None):
+            sel = review_tree.selection()
+            if not sel:
+                return
+            item_id = sel[0]
+            vals = list(review_tree.item(item_id)["values"])
+            current_dist = str(vals[4])
+            prop_name = str(vals[1])
+            
+            dialog = ctk.CTkInputDialog(
+                title="Edit Distance",
+                text=f"Edit driving distance for:\n'{prop_name}'\n(e.g. '14 km' or '25 km'):"
+            )
+            dialog.geometry("460x220")
+            new_val = dialog.get_input()
+            if new_val and new_val.strip():
+                vals[4] = new_val.strip()
+                review_tree.item(item_id, values=vals)
+                row_idx = int(vals[0]) - 1
+                review_rows[row_idx]["distance_km"] = new_val.strip()
+
+        review_tree.bind("<Double-1>", on_edit_distance)
+
+        # Action Buttons Frame
+        action_frame = ctk.CTkFrame(win, fg_color="transparent")
+        action_frame.pack(fill="x", padx=15, pady=(8, 15))
+
+        def on_confirm():
+            final_distances = []
+            final_notes = []
+            for i in range(1, len(review_rows) + 1):
+                item_vals = review_tree.item(str(i))["values"]
+                final_distances.append(str(item_vals[4]))
+                final_notes.append(str(item_vals[5]))
+
+            df["distance_km"] = final_distances
+            df["distance_from_area"] = ref_area
+            df["route_notes"] = final_notes
+
+            # Position distance columns right after city
+            cols_list = list(df.columns)
+            for c in ["route_notes", "distance_from_area", "distance_km"]:
+                if c in cols_list:
+                    cols_list.remove(c)
+            if "city" in cols_list:
+                pos = cols_list.index("city") + 1
+                cols_list.insert(pos, "distance_km")
+                cols_list.insert(pos + 1, "distance_from_area")
+                cols_list.insert(pos + 2, "route_notes")
+            else:
+                cols_list.extend(["distance_km", "distance_from_area", "route_notes"])
+
+            df_ordered = df[[c for c in cols_list if c in df.columns]]
+            try:
+                df_ordered.to_excel(matrix_file, index=False)
+            except Exception as e:
+                messagebox.showerror("Save Error", f"Could not write to {matrix_file}: {e}")
+                return
+
+            # Refresh table in UI
+            self.load_matrix(self.wh_tree, matrix_file)
+
+            # Update status label & text entry
+            if hasattr(self, "wh_ref_area_entry"):
+                self.wh_ref_area_entry.delete(0, "end")
+                self.wh_ref_area_entry.insert(0, ref_area)
+            if hasattr(self, "wh_dist_status_lbl"):
+                self.wh_dist_status_lbl.configure(
+                    text=f"Last calculated from: '{ref_area}' ({len(review_rows)} properties updated)",
+                    text_color="#00cc66"
+                )
+
+            self.logger.info(f"Successfully appended driving distances from '{ref_area}' to {len(review_rows)} rows in {matrix_file}")
+            win.destroy()
+            messagebox.showinfo(
+                "Matrix Updated Successfully",
+                f"Successfully appended road driving distances and search term '{ref_area}' to {len(review_rows)} properties in {matrix_file}!"
+            )
+
+        btn_confirm = ctk.CTkButton(
+            action_frame, 
+            text="✅ Confirm & Save to Matrix", 
+            command=on_confirm, 
+            fg_color="#1f7a1f", 
+            hover_color="#145214", 
+            width=220, 
+            height=36, 
+            font=("Arial", 13, "bold")
+        )
+        btn_confirm.pack(side="left", padx=(0, 10))
+
+        btn_edit = ctk.CTkButton(
+            action_frame,
+            text="✏️ Edit Selected Distance",
+            command=on_edit_distance,
+            width=170,
+            height=36,
+            fg_color="#3a3a3a",
+            hover_color="#2b2b2b"
+        )
+        btn_edit.pack(side="left", padx=(0, 10))
+
+        btn_cancel = ctk.CTkButton(
+            action_frame, 
+            text="❌ Cancel", 
+            command=win.destroy, 
+            fg_color="#555555", 
+            hover_color="#333333", 
+            width=100, 
+            height=36
+        )
+        btn_cancel.pack(side="right")
+
 
     def setup_warehouses_tab(self):
         self.tab_warehouses.grid_columnconfigure(0, weight=1)
@@ -3375,6 +3819,9 @@ SinoMagan Indus Global Trade LLP
         url = str(data.get("url", "")).strip()
         phone = str(data.get("contact_phone", "")).strip()
         name = str(data.get("contact_name", "Property Owner / Broker")).strip()
+        dist_km = str(data.get("distance_km", "")).strip()
+        dist_ref = str(data.get("distance_from_area", "")).strip()
+        has_dist = dist_km and dist_km not in ["", "nan", "None", "N/A"]
 
         win = ctk.CTkToplevel(self)
         win.title(f"Commercial Rental Inquiry - {prop_title[:35]}")
@@ -3393,7 +3840,8 @@ SinoMagan Indus Global Trade LLP
         )
         lbl_title.pack(anchor="w", padx=15, pady=(10, 2))
 
-        sub_desc = f"Location: {loc_area}, {city}  |  Area: {sqft or 'Custom'}  |  Height: {height or 'Standard'}  |  Rent: {rent or 'On Request'}"
+        dist_str = f"  |  Distance: {dist_km} from {dist_ref}" if has_dist else ""
+        sub_desc = f"Location: {loc_area}, {city}{dist_str}  |  Area: {sqft or 'Custom'}  |  Height: {height or 'Standard'}  |  Rent: {rent or 'On Request'}"
         lbl_sub = ctk.CTkLabel(
             header_frame, 
             text=sub_desc, 
@@ -3493,7 +3941,7 @@ SinoMagan Indus Global Trade LLP
 Target Property Profile:
 - Property Title: {prop_title}
 - Property Type: {prop_type}
-- Location & City: {loc_area}, {city}
+- Location & City: {loc_area}, {city}{f" (approx. {dist_km} driving distance from {dist_ref})" if has_dist else ""}
 - Carpet Area: {sqft}
 - Clear Ceiling Height: {height}
 - Industrial Power Load: {power}
@@ -3565,6 +4013,7 @@ SinoMagan Indus Global Trade LLP
             proposal_cmd=self.open_logistics_inquiry_window,
             mode="logistics"
         )
+        self.load_matrix(self.log_tree, "Logistics_Matrix.xlsx")
 
     def setup_logs_tab(self):
         self.tab_logs.grid_columnconfigure(0, weight=1)

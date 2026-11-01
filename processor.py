@@ -411,6 +411,7 @@ def process_warehouse_urls(urls: List[str], output_excel: str, logger: logging.L
         df = pd.DataFrame(results)
         cols = [
             "property_title", "property_type", "location_area", "city", 
+            "distance_km", "distance_from_area", "route_notes",
             "carpet_area_sqft", "clear_height_ft", "power_load", "monthly_rent", 
             "deposit_terms", "road_access_container", "contact_phone", "contact_name", 
             "url", "error"
