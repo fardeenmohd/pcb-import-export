@@ -94,7 +94,8 @@ The buy leads represent three distinct tiers of B2B procurement, each requiring 
 ### Niche 13: Commercial Warehouses, Godowns & Garage Storage Spaces (India Corridor)
 * **Storage & Garage Use Cases**: Commercial storage units, logistics inventory staging, distribution godowns, private garage spaces, vehicle parking depots, and industrial sheds.
 * **Indian Metropolitan & Industrial Hubs**: Bhiwandi / Thane, Mumbai, Navi Mumbai, Pune (Chakan / Talegaon / Bhosari), Delhi NCR (Gurgaon / Manesar, Noida / Greater Noida, Faridabad, Ghaziabad), Bangalore (Peenya / Hoskote / Nelamangala), Hyderabad, Chennai (Sriperumbudur / Oragadam), Ahmedabad (Sanand / Changodar), Kolkata, Surat, Jaipur, and Nagpur.
-* **Yellowpages & Classifieds Scraping Strategy**: Real estate opportunity discovery across OLX India (olx.in), MagicBricks, 99acres, JustDial, NoBroker, Housing.com, Quikr, and IndiaMart with radius filtering (5 km to 100 km).
+* **Sub-City Area Radius Discovery**: Area-level micro-market screening targeting specific localities inside Indian cities under XX kms (e.g. Bhiwandi Mankoli/Rahnal, Pune Chakan/Bhosari/Talegaon, Delhi NCR Okhla/Manesar, Bangalore Peenya/Nelamangala, Chennai Sriperumbudur/Oragadam).
+* **Yellowpages & Classifieds Scraping Strategy**: Real estate opportunity discovery across OLX India (olx.in), MagicBricks, 99acres, JustDial, NoBroker, Housing.com, Quikr, and IndiaMart with queries formatted as `"under {XX} km {Area} {City}"`.
 
 ### Niche 12: Building Materials, Wooden Panels & Decorative Boards (Philippines Retail & Distribution Corridor)
 * **Plywood Panels & Marine Boards**: Commercial grade plywood, moisture-resistant (MR) and boiling waterproof (BWR/BWP) plywood, film-faced shuttering plywood, and decorative natural wood veneered panels (Teak, Gurjan, Birch, Poplar). Thicknesses from 3mm to 25mm.

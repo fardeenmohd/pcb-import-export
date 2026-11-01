@@ -57,6 +57,36 @@ def parse_email_response(raw_text: str, default_to: str = ""):
             
         return to_val, subj_val, sanitize_email_body(body_val)
 
+
+INDIAN_CITY_AREAS = {
+    'Mumbai': ['All Areas', 'Bhiwandi', 'Kurla', 'Andheri', 'Kanjurmarg', 'Goregaon', 'Bhandup', 'Sakinaka', 'Govandi', 'Dadar', 'Borivali'],
+    'Bhiwandi': ['All Areas', 'Mankoli', 'Rahnal', 'Vashere', 'Purna', 'Sonale', 'Anjur Phata', 'Dapode', 'Val Village', 'Kasheli'],
+    'Navi Mumbai': ['All Areas', 'Turbhe', 'Taloja', 'Mahape', 'Rabale', 'Pawane', 'Panvel', 'Nerul', 'Koparkhairane', 'Airoli', 'Dronagiri'],
+    'Thane': ['All Areas', 'Wagle Estate', 'Ghubunder Road', 'Kolshet', 'Manpada', 'Balkum', 'Kalwa', 'Majiwada'],
+    'Pune': ['All Areas', 'Chakan', 'Bhosari', 'Talegaon', 'Hinjewadi', 'Hadapsar', 'Wagholi', 'Shikrapur', 'Pimpri', 'Markal', 'Pirangut', 'Sanaswadi', 'Fursungi'],
+    'Chakan': ['All Areas', 'Chakan MIDC Phase 1', 'Chakan MIDC Phase 2', 'Mahalunge', 'Kharabwadi', 'Kuruli', 'Vasuli', 'Ambethan'],
+    'Delhi NCR': ['All Areas', 'Okhla Industrial Area', 'Udyog Vihar', 'Manesar IMT', 'Sector 37 Gurgaon', 'Greater Noida Ecotech', 'Kasna', 'Sahibabad', 'Faridabad Sector 24', 'Mohan Cooperative', 'Mayapuri', 'Patparganj', 'Kirti Nagar', 'Narela'],
+    'Gurgaon': ['All Areas', 'Udyog Vihar', 'IMT Manesar', 'Sector 37', 'Pace City', 'Sector 18', 'Kadipur', 'Daulatabad', 'Sohna Road'],
+    'Noida': ['All Areas', 'Sector 63', 'Sector 80', 'Sector 81', 'Sector 83', 'Greater Noida Ecotech', 'Kasna', 'Sector 10', 'Sector 59'],
+    'Faridabad': ['All Areas', 'Sector 24', 'Sector 25', 'Sector 58', 'Sector 59', 'Ballabhgarh', 'NH-5', 'Prithla', 'Mathura Road'],
+    'Ghaziabad': ['All Areas', 'Sahibabad Industrial Area', 'Loni Road', 'Kavi Nagar', 'Bulandshahr Road', 'Dasna', 'Mohan Nagar', 'Meerut Road'],
+    'Bangalore': ['All Areas', 'Peenya Industrial Area', 'Nelamangala', 'Hoskote', 'Bommasandra', 'Electronic City', 'Whitefield', 'Jigani', 'Attibele', 'Dobbspet', 'Yelahanka', 'Rajajinagar'],
+    'Hyderabad': ['All Areas', 'Medchal', 'Patancheru', 'Cherlapally', 'Jeedimetla', 'Uppal', 'Shamshabad', 'Kothur', 'Balanagar', 'Sanathnagar', 'Nacharam'],
+    'Chennai': ['All Areas', 'Sriperumbudur', 'Oragadam', 'Ambattur', 'Guindy', 'Madhavaram', 'Red Hills', 'Ennore', 'Maraimalai Nagar', 'Poonamallee', 'Thirumudivakkam'],
+    'Ahmedabad': ['All Areas', 'Sanand GIDC', 'Changodar', 'Aslali', 'Moraiya', 'Narol', 'Odhav', 'Vatva GIDC', 'Sarkhej', 'Bakrol', 'Kathwada'],
+    'Surat': ['All Areas', 'Sachin GIDC', 'Pandesara', 'Hazira', 'Udhna', 'Kamrej', 'Katargam', 'Kim', 'Olpad'],
+    'Kolkata': ['All Areas', 'Dankuni', 'Dhulagarh', 'Taratala', 'Kasba', 'Howrah', 'Kalyani', 'Barasat', 'Maheshtala', 'Uluberia'],
+    'Jaipur': ['All Areas', 'Sitapura Industrial Area', 'Vishwakarma VKI', 'Mansarovar', 'Bindayaka', 'Bagru', 'Jhotwara', 'Hirawala'],
+    'Indore': ['All Areas', 'Pithampur', 'Sanwer Road Industrial Area', 'Palda', 'Dewas Naka', 'Rau', 'Laxmi Bai Nagar', 'Manglia'],
+    'Nagpur': ['All Areas', 'Butibori MIDC', 'Hingna MIDC', 'MIHAN', 'Kalmeshwar', 'Wadi', 'Kamptee'],
+    'Coimbatore': ['All Areas', 'Saravanampatti', 'Peelamedu', 'Kurichi SIDCO', 'Ganapathy', 'Singanallur', 'Malumichampatti', 'Sulur'],
+    'Vadodara': ['All Areas', 'Makarpura GIDC', 'Nandesari', 'Manjusar GIDC', 'Savli GIDC', 'Waghodia', 'Gorwa', 'Ranoli'],
+    'Nashik': ['All Areas', 'Ambad MIDC', 'Satpur MIDC', 'Sinnar MIDC', 'Gonde', 'Dindori', 'Vilholi'],
+    'Chandigarh': ['All Areas', 'Industrial Area Phase 1', 'Industrial Area Phase 2', 'Mohali Phase 7', 'Mohali Phase 8', 'Panchkula Sector 19', 'Derabassi', 'Zirakpur'],
+    'Ludhiana': ['All Areas', 'Focal Point Phase 1-8', 'Industrial Area A', 'Industrial Area B', 'Sahnewal', 'Doraha', 'Gill Road', 'Transport Nagar'],
+    'Kochi': ['All Areas', 'Kalamassery', 'Eloor', 'Willingdon Island', 'Aluva', 'Angamaly', 'Kundannoor', 'Maradu', 'Kakkanad']
+}
+
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -143,6 +173,7 @@ class App(ctk.CTk):
             'Coimbatore', 'Vadodara', 'Nashik', 'Chandigarh', 'Ludhiana', 'Kochi'
         ]
         self.radius_options = ['5 km', '10 km', '15 km', '20 km', '25 km', '30 km', '50 km', '75 km', '100 km']
+        self.indian_city_areas = INDIAN_CITY_AREAS
 
         self.strategy_var = ctk.StringVar(value="Buyers")
         self.strategy_dropdown = ctk.CTkOptionMenu(
@@ -171,8 +202,18 @@ class App(ctk.CTk):
         )
         self.radius_dropdown.pack(side="left", padx=4)
         self.radius_dropdown.configure(state="disabled")
+
+        self.area_var = ctk.StringVar(value="All Areas")
+        self.area_dropdown = ctk.CTkOptionMenu(
+            control_frame,
+            values=["All Areas"],
+            variable=self.area_var, width=115,
+            command=self.on_area_change
+        )
+        self.area_dropdown.pack(side="left", padx=4)
+        self.area_dropdown.configure(state="disabled")
         
-        self.query_entry = ctk.CTkTextbox(control_frame, width=280, height=60, wrap="word")
+        self.query_entry = ctk.CTkTextbox(control_frame, width=245, height=60, wrap="word")
         self.query_entry.insert("0.0", "Enter base query...")
         self.query_entry.pack(side="left", padx=10, pady=10)
         
@@ -508,33 +549,72 @@ class App(ctk.CTk):
             self.tabview.set("Buyers Scraper")
             self.lbl_buy_status.configure(text=f"Loaded {len(self.current_hq_urls)} URLs from Discovery")
 
+    def on_area_change(self, choice):
+        strategy = self.strategy_var.get()
+        if strategy == "Warehouses":
+            city = self.region_var.get()
+            radius = self.radius_var.get()
+            queries = self.get_warehouse_starter_queries(city, radius, choice)
+            self.populate_suggested_queries(queries)
+            self.select_suggested_query(queries[0])
+
     def on_radius_change(self, choice):
         strategy = self.strategy_var.get()
         if strategy == "Warehouses":
             city = self.region_var.get()
             radius = choice
-            queries = self.get_warehouse_starter_queries(city, radius)
+            area = self.area_var.get() if hasattr(self, 'area_var') else "All Areas"
+            queries = self.get_warehouse_starter_queries(city, radius, area)
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
 
-    def get_warehouse_starter_queries(self, city, radius):
+    def get_warehouse_starter_queries(self, city, radius, area="All Areas"):
+        if area and area != "All Areas":
+            return [
+                f"warehouse for rent under {radius} {area} {city}",
+                f"garage storage space under {radius} {area} {city}",
+                f"godown on lease under {radius} {area} {city}",
+                f"industrial shed for rent under {radius} {area} {city}",
+                f"commercial storage unit under {radius} {area} olx",
+                f"warehouse for rent under {radius} {area} {city} olx",
+                f"garage for rent under {radius} {area} olx",
+                f"godown for rent under {radius} {area} 99acres",
+                f"industrial warehouse lease under {radius} {area} magicbricks",
+                f"storage space for rent under {radius} {area} nobroker",
+                f"warehouse shed on rent under {radius} {area} justdial",
+                f"logistics park warehouse lease under {radius} {area} {city}",
+                f"heavy vehicle parking garage yard under {radius} {area}",
+                f"small warehouse storage for rent under {radius} {area} olx",
+                f"RCC godown storage space under {radius} {area} {city}",
+                f"container trailer accessible warehouse under {radius} {area}"
+            ]
+
+        # All Areas: dynamically distribute across top industrial/storage areas in this city
+        city_areas = getattr(self, "indian_city_areas", INDIAN_CITY_AREAS).get(city, []) if self else INDIAN_CITY_AREAS.get(city, [])
+        sub_areas = [a for a in city_areas if a != "All Areas"]
+        if not sub_areas:
+            sub_areas = [f"{city} Industrial Area", f"{city} MIDC"]
+
+        def a(idx):
+            return sub_areas[idx % len(sub_areas)]
+
         return [
-            f"warehouse for rent {city} {radius}",
-            f"garage storage space for rent {city} {radius}",
-            f"godown on lease {city} {radius}",
-            f"industrial shed for rent {city} {radius}",
-            f"commercial storage unit for rent {city} {radius}",
-            f"warehouse for rent {city} {radius} olx",
-            f"garage for rent {city} {radius} olx",
-            f"godown for rent {city} {radius} 99acres",
-            f"industrial warehouse lease {city} {radius} magicbricks",
-            f"storage space for rent {city} {radius} nobroker",
-            f"warehouse shed on rent {city} {radius} justdial",
-            f"logistics park warehouse lease {city} {radius}",
-            f"heavy vehicle parking garage yard {city} {radius}",
-            f"small warehouse storage for rent {city} {radius} olx",
-            f"RCC godown storage space for rent {city} {radius}",
-            f"container trailer accessible warehouse {city} {radius}"
+            f"warehouse for rent under {radius} {a(0)} {city}",
+            f"garage storage space under {radius} {a(1)} {city}",
+            f"godown on lease under {radius} {a(2)} {city}",
+            f"industrial shed for rent under {radius} {a(3)} {city}",
+            f"commercial storage unit under {radius} {a(4)} olx",
+            f"warehouse for rent under {radius} {a(0)} {city} olx",
+            f"garage for rent under {radius} {a(1)} olx",
+            f"godown for rent under {radius} {a(2)} 99acres",
+            f"industrial warehouse lease under {radius} {a(3)} magicbricks",
+            f"storage space for rent under {radius} {a(4)} nobroker",
+            f"warehouse shed on rent under {radius} {a(5)} justdial",
+            f"logistics park warehouse lease under {radius} {a(0)} {city}",
+            f"heavy vehicle parking garage yard under {radius} {a(1)}",
+            f"small warehouse storage for rent under {radius} {a(2)} olx",
+            f"RCC godown storage space under {radius} {a(3)} {city}",
+            f"container trailer accessible warehouse under {radius} {a(0)}"
         ]
 
     def on_region_change(self, choice):
@@ -544,7 +624,11 @@ class App(ctk.CTk):
         if strategy == "Warehouses":
             city = choice
             radius = self.radius_var.get()
-            queries = self.get_warehouse_starter_queries(city, radius)
+            area_options = self.indian_city_areas.get(city, ["All Areas"])
+            if hasattr(self, 'area_dropdown'):
+                self.area_dropdown.configure(values=area_options)
+                self.area_var.set("All Areas")
+            queries = self.get_warehouse_starter_queries(city, radius, "All Areas")
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
             return
@@ -618,6 +702,9 @@ class App(ctk.CTk):
             self.btn_disc_prop.configure(text="🌐 Quick URL Inquiry")
             self.region_dropdown.configure(values=self.country_regions, state="disabled")
             self.radius_dropdown.configure(state="disabled")
+            if hasattr(self, 'area_dropdown'):
+                self.area_dropdown.configure(values=["All Areas"], state="disabled")
+                self.area_var.set("All Areas")
             self.btn_suggest.configure(state="normal")
             queries = [
                 "distribution transformer manufacturers India",
@@ -681,6 +768,9 @@ class App(ctk.CTk):
             if self.region_var.get() not in self.country_regions:
                 self.region_var.set("Worldwide (wt-wt)")
             self.radius_dropdown.configure(state="disabled")
+            if hasattr(self, 'area_dropdown'):
+                self.area_dropdown.configure(values=["All Areas"], state="disabled")
+                self.area_var.set("All Areas")
             self.btn_suggest.configure(state="disabled")
             dest = self.region_var.get().split(" (")[0]
             if "Worldwide" in dest or "Global" in dest:
@@ -699,10 +789,14 @@ class App(ctk.CTk):
             if self.region_var.get() not in self.indian_city_regions:
                 self.region_var.set("Mumbai")
             self.radius_dropdown.configure(state="normal")
-            self.btn_suggest.configure(state="normal")
             city = self.region_var.get()
+            area_options = self.indian_city_areas.get(city, ["All Areas"])
+            if hasattr(self, 'area_dropdown'):
+                self.area_dropdown.configure(values=area_options, state="normal")
+                self.area_var.set("All Areas")
+            self.btn_suggest.configure(state="normal")
             radius = self.radius_var.get()
-            queries = self.get_warehouse_starter_queries(city, radius)
+            queries = self.get_warehouse_starter_queries(city, radius, "All Areas")
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
         else:
@@ -711,6 +805,9 @@ class App(ctk.CTk):
             if self.region_var.get() not in self.country_regions:
                 self.region_var.set("Worldwide (wt-wt)")
             self.radius_dropdown.configure(state="disabled")
+            if hasattr(self, 'area_dropdown'):
+                self.area_dropdown.configure(values=["All Areas"], state="disabled")
+                self.area_var.set("All Areas")
             self.btn_suggest.configure(state="normal")
             dest = self.region_var.get().split(" (")[0]
             if "Worldwide" in dest or "Global" in dest:
@@ -797,7 +894,9 @@ class App(ctk.CTk):
             elif strategy == "Warehouses":
                 city_name = region if region in self.indian_city_regions else "Mumbai"
                 rad_val = self.radius_var.get() if hasattr(self, 'radius_var') else "15 km"
-                target_desc = f"commercial warehouses, godowns, industrial sheds, or garage storage spaces for rent/lease within {rad_val} of {city_name} on Indian real estate portals & classifieds like OLX, MagicBricks, 99acres, JustDial"
+                area_val = self.area_var.get() if hasattr(self, 'area_var') else "All Areas"
+                area_desc = f"in {area_val}, {city_name}" if (area_val and area_val != "All Areas") else f"across industrial areas in {city_name}"
+                target_desc = f"commercial warehouses, godowns, industrial sheds, or garage storage spaces for rent/lease under {rad_val} {area_desc} on Indian real estate portals & classifieds like OLX, MagicBricks, 99acres, JustDial"
             else:
                 region_name = region.split(" (")[0]
                 if "Worldwide" in region_name or "Global" in region_name:
@@ -941,33 +1040,40 @@ RULES:
             elif strategy == "Warehouses":
                 city_name = region if region in self.indian_city_regions else "Mumbai"
                 rad_val = self.radius_var.get() if hasattr(self, 'radius_var') else "15 km"
+                area_val = self.area_var.get() if hasattr(self, 'area_var') else "All Areas"
+                known_areas = self.indian_city_areas.get(city_name, ["MIDC", "Industrial Area"])[1:]
+                known_areas_str = ", ".join(known_areas[:8])
+                if area_val and area_val != "All Areas":
+                    area_focus = f"FOCUS SPECIFICALLY on the area/locality '{area_val}' in {city_name}."
+                else:
+                    area_focus = f"DISTRIBUTE queries across prominent industrial/storage areas inside {city_name} such as: {known_areas_str}."
+
                 prompt = f"""You are an elite Indian commercial real estate, warehousing, and industrial logistics broker.
-We are looking to lease, rent, or acquire commercial warehouses, godowns, industrial sheds, and garage storage spaces within a {rad_val} radius around {city_name}, India.
+We are looking to lease, rent, or acquire commercial warehouses, godowns, industrial sheds, and garage storage spaces under {rad_val} inside {city_name}, India.
+{area_focus}
+
 These spaces will be used for inventory storage, export container staging, packaging, light assembly, or secure garage/vehicle parking.
 We specifically utilize India's premier real estate yellowpages and classifieds: OLX India (olx.in), MagicBricks (magicbricks.com), 99acres (99acres.com), JustDial (justdial.com), NoBroker (nobroker.in), Housing.com (housing.com), Quikr (quikr.com), and IndiaMart (indiamart.com).
 
-Generate 14 to 18 short, simple, natural DuckDuckGo search queries to find real estate listings, yellowpages pages, and classifieds ads for warehouses and garage storage spaces in {city_name} within {rad_val}.
+Generate 14 to 18 short, simple, natural DuckDuckGo search queries.
 
-RULES:
-1. Each query must be short and clean (4 to 7 words).
-2. Cover diverse property types: commercial warehouse, godown, industrial shed, garage storage space, RCC storage godown, logistics park unit, container accessible warehouse.
-3. Incorporate mentions of key Indian real estate yellowpages (e.g. olx, 99acres, magicbricks, nobroker, justdial, indiamart) naturally across several queries.
-4. Examples of good queries:
-   - "warehouse for rent {city_name} {rad_val} olx"
-   - "godown on lease {city_name} {rad_val} 99acres"
-   - "garage storage space for rent {city_name}"
-   - "industrial shed for rent {city_name} {rad_val} magicbricks"
-   - "storage space for rent {city_name} {rad_val} nobroker"
-   - "warehouse shed on lease {city_name} justdial"
-   - "commercial godown for rent {city_name} olx"
-   - "logistics park warehouse lease {city_name} {rad_val}"
-   - "heavy vehicle parking garage yard {city_name}"
-   - "small warehouse storage unit {city_name} olx"
-   - "RCC warehouse for rent {city_name} {rad_val}"
-   - "container trailer accessible godown {city_name}"
-5. Do NOT use boolean operators (no AND, OR, NOT, site:).
-6. Do NOT use quotation marks or plus/minus signs.
-7. Keep queries realistic, diverse, and search-engine friendly.
+CRITICAL RULES:
+1. Every query MUST explicitly include the phrase "under {rad_val}" to restrict the radius.
+2. Every query MUST target specific areas/localities inside {city_name} (e.g. {known_areas_str}).
+3. Cover diverse property types: commercial warehouse, godown, industrial shed, garage storage space, RCC storage godown, logistics park unit, container accessible warehouse.
+4. Incorporate mentions of key Indian real estate yellowpages (e.g. olx, 99acres, magicbricks, nobroker, justdial) naturally across several queries.
+5. Examples of good queries:
+   - "warehouse for rent under {rad_val} {known_areas[0] if known_areas else 'MIDC'} {city_name} olx"
+   - "godown on lease under {rad_val} {known_areas[1] if len(known_areas) > 1 else 'Industrial Area'} 99acres"
+   - "garage storage space under {rad_val} {known_areas[0] if known_areas else 'MIDC'} {city_name}"
+   - "industrial shed for rent under {rad_val} {known_areas[2] if len(known_areas) > 2 else 'Bhosari'} magicbricks"
+   - "storage space for rent under {rad_val} {known_areas[1] if len(known_areas) > 1 else 'Chakan'} nobroker"
+   - "warehouse shed on lease under {rad_val} {known_areas[0] if known_areas else 'MIDC'} justdial"
+   - "commercial godown under {rad_val} {known_areas[0] if known_areas else 'MIDC'} olx"
+   - "small warehouse garage under {rad_val} {known_areas[1] if len(known_areas) > 1 else 'Chakan'} olx"
+6. Do NOT use boolean operators (no AND, OR, NOT, site:).
+7. Do NOT use quotation marks or plus/minus signs.
+8. Keep queries realistic, search-engine friendly, and under 8 words.
 """
             else:
                 region_name = region.split(" (")[0]
@@ -1121,7 +1227,8 @@ RULES:
                 elif strategy == "Warehouses":
                     city_name = region if region in self.indian_city_regions else "Mumbai"
                     rad_val = self.radius_var.get() if hasattr(self, 'radius_var') else "15 km"
-                    queries = self.get_warehouse_starter_queries(city_name, rad_val)
+                    area_val = self.area_var.get() if hasattr(self, 'area_var') else "All Areas"
+                    queries = self.get_warehouse_starter_queries(city_name, rad_val, area_val)
                 else:
                     dest_term = region.split(" (")[0]
                     queries = [
@@ -1220,7 +1327,8 @@ RULES:
             elif strategy == "Warehouses":
                 city_name = region if region in self.indian_city_regions else "Mumbai"
                 rad_val = self.radius_var.get() if hasattr(self, 'radius_var') else "15 km"
-                fallback_queries = self.get_warehouse_starter_queries(city_name, rad_val)
+                area_val = self.area_var.get() if hasattr(self, 'area_var') else "All Areas"
+                fallback_queries = self.get_warehouse_starter_queries(city_name, rad_val, area_val)
             else:
                 fallback_queries = [
                     f"switchgear panel distributors {fallback_dest}",
@@ -1366,7 +1474,9 @@ RULES:
             elif strategy == "Warehouses":
                 city_name = self.region_var.get()
                 rad_val = self.radius_var.get() if hasattr(self, 'radius_var') else "15 km"
-                filter_goal = f"Direct property listings, classified ads, or yellowpages entries for commercial warehouses, godowns, industrial sheds, garage storage spaces, or logistics parks available for rent or lease in and around {city_name} (within {rad_val}). KEEP listings from OLX, MagicBricks, 99acres, JustDial, NoBroker, Housing.com, Quikr, IndiaMart, and direct commercial property owners/brokers. REMOVE non-real estate articles, purely residential apartments without garage/storage, Wikipedia, and generic news."
+                area_val = self.area_var.get() if hasattr(self, 'area_var') else "All Areas"
+                loc_desc = f"{area_val}, {city_name}" if (area_val and area_val != "All Areas") else f"areas inside {city_name}"
+                filter_goal = f"Direct property listings, classified ads, or yellowpages entries for commercial warehouses, godowns, industrial sheds, garage storage spaces, or logistics parks available for rent or lease under {rad_val} in {loc_desc}. KEEP listings from OLX, MagicBricks, 99acres, JustDial, NoBroker, Housing.com, Quikr, IndiaMart, and direct commercial property owners/brokers. REMOVE non-real estate articles, purely residential apartments without garage/storage, Wikipedia, and generic news."
             elif strategy == "Suppliers":
                 filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:

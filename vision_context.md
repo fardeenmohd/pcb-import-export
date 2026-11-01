@@ -82,7 +82,15 @@ This segment addresses commercial processing machinery alongside bulk consumer k
 ### Segment G: Commercial Warehousing, Industrial Storage & Garage Leasing (India Corridor)
 This segment focuses on sourcing commercial warehouses, godowns, industrial sheds, and garage storage spaces across major Indian industrial clusters and metropolitan fringes.
 *   **Target Applications**: Secure inventory warehousing, freight container staging, export packaging depots, vehicle parking/garage facilities, self-storage units, and light fabrication/assembly workshops.
-*   **Geographical Targeting & Radius Discovery**: City-centric radius screening (5 km to 100 km) covering premier logistics hubs: Mumbai / Bhiwandi, Navi Mumbai, Pune / Chakan, Delhi NCR / Gurgaon / Noida / Faridabad / Ghaziabad, Bangalore, Hyderabad, Chennai, Ahmedabad, Surat, Jaipur, Indore, Nagpur, and Coimbatore.
+*   **Geographical Targeting & Sub-City Area Radius Discovery**: Micro-market and industrial corridor screening (under 5 km to 100 km) targeting specific areas inside major hubs:
+    *   *Mumbai / MMR*: Bhiwandi (Mankoli, Rahnal, Vashere, Purna, Sonale), Kurla, Andheri, Kanjurmarg, Turbhe, Taloja, Rabale, Panvel, Wagle Estate.
+    *   *Pune*: Chakan (MIDC Phase 1 & 2, Mahalunge, Kuruli), Bhosari, Talegaon, Hinjewadi, Hadapsar, Wagholi, Shikrapur, Pimpri, Sanaswadi.
+    *   *Delhi NCR*: Okhla Industrial Area, Udyog Vihar, IMT Manesar, Sector 37 Gurgaon, Greater Noida Ecotech, Kasna, Sahibabad, Faridabad Sector 24, Mohan Cooperative.
+    *   *Bangalore*: Peenya Industrial Area, Nelamangala, Hoskote, Bommasandra, Electronic City, Whitefield, Jigani, Attibele, Dobbspet.
+    *   *Hyderabad*: Medchal, Patancheru, Cherlapally, Jeedimetla, Uppal, Shamshabad, Kothur.
+    *   *Chennai*: Sriperumbudur, Oragadam, Ambattur, Guindy, Madhavaram, Red Hills, Ennore, Maraimalai Nagar.
+    *   *Ahmedabad*: Sanand GIDC, Changodar, Aslali, Moraiya, Narol, Odhav, Vatva GIDC, Sarkhej.
+*   **Query Radius Syntax Formulation**: Queries explicitly enforce sub-city area constraints formatted as `"under {XX} km {Area} {City}"` (e.g. `warehouse for rent under 15 km Chakan Pune olx`, `garage storage space under 5 km Andheri Mumbai olx`, `godown on lease under 10 km Mankoli Bhiwandi 99acres`).
 *   **Real Estate Yellowpages & Classifieds Strategy**: Aggressive multi-portal monitoring utilizing India's leading property yellowpages and classifieds portals: OLX India (olx.in), MagicBricks (magicbricks.com), 99acres (99acres.com), JustDial (justdial.com), NoBroker (nobroker.in), Housing.com (housing.com), Quikr (quikr.com), and IndiaMart (indiamart.com).
 *   **Operational & Facility Mandates**: Facilities must specify clear carpet area (500 sq ft to 50,000+ sq ft), clear ceiling height (12 ft to 32 ft), heavy-duty concrete flooring, wide shutter access, ground-level loading docks, 3-phase industrial power supply, water connection, 24/7 security/CCTV, and commercial container trailer (20ft/40ft) turnaround road access.
 
