@@ -3295,8 +3295,23 @@ SinoMagan Indus Global Trade LLP
                 tree.heading(c, text=clean_c, command=lambda _c=c: self.sort_tree_column(tree, _c, False))
             
     def clean_local_matrix(self, output_file, tree):
-        clean_matrix(output_file, self.logger)
+        stats = clean_matrix(output_file, self.logger)
         self.load_matrix(tree, output_file)
+        
+        import tkinter.messagebox as messagebox
+        if stats and stats.get("removed_count", 0) > 0:
+            msg = (
+                f"Successfully cleaned and deduplicated {output_file}!\n\n"
+                f"• Removed {stats['removed_count']} invalid/duplicate entries.\n"
+                f"• Retained {stats['remaining_count']} unique leads."
+            )
+            messagebox.showinfo("Matrix Cleaned & Deduplicated", msg)
+        else:
+            msg = (
+                f"{output_file} is already completely clean and deduplicated!\n"
+                f"All entries are unique and valid."
+            )
+            messagebox.showinfo("Matrix Clean", msg)
 
     def setup_wh_db_tab(self):
         self.wh_tree = self.create_database_tab_ui(

@@ -78,55 +78,124 @@ def run_pipeline(urls: List[str], logger: logging.Logger, output_file: str = "Su
         logger.error(f"Failed to save Excel file: {e}")
 
 def clean_matrix(output_file: str, logger: logging.Logger):
+    """
+    Cleans the matrix Excel file by removing scraping errors, incomplete rows,
+    and deduplicating identical URLs or duplicate entity leads.
+    Returns a dictionary with cleaning statistics.
+    """
     if not os.path.exists(output_file):
-        logger.warning('No matrix to clean.')
-        return
+        logger.warning(f"No matrix found to clean at {output_file}.")
+        return {"removed_count": 0, "initial_count": 0, "remaining_count": 0}
     try:
+        import re
         df = pd.read_excel(output_file)
         initial_count = len(df)
         
         removed_rows = []
         keep_indices = []
-        
+        seen_urls = set()
+        seen_entities = set()
+
+        def normalize_url(u):
+            if not u or pd.isna(u):
+                return ""
+            s = str(u).strip().lower()
+            s = re.sub(r'^https?://', '', s)
+            s = re.sub(r'^www\.', '', s)
+            s = s.rstrip('/')
+            s = s.split('#')[0]
+            s = re.sub(r'[?&](?:utm_[^&]+|ref=[^&]+|fbclid=[^&]+|gclid=[^&]+)', '', s)
+            return s.rstrip('?')
+
         for idx, row in df.iterrows():
             remove = False
             reason = ''
             
+            # 1. Scraping error check
             if 'error' in row and pd.notna(row['error']):
                 remove = True
                 reason = f"Scraping error: {row['error']}"
+            
+            # 2. Minimum completeness check
             elif 'property_title' in row:
                 title = str(row.get('property_title', '')).strip().lower()
-                no_title = pd.isna(row.get('property_title')) or not title or title in ['unknown', 'none']
+                no_title = pd.isna(row.get('property_title')) or not title or title in ['unknown', 'none', 'nan']
                 phone = str(row.get('contact_phone', '')).strip()
-                no_phone = pd.isna(row.get('contact_phone')) or not phone
+                no_phone = pd.isna(row.get('contact_phone')) or not phone or phone in ['unknown', 'none', 'nan']
                 area = str(row.get('location_area', '')).strip()
-                no_area = pd.isna(row.get('location_area')) or not area
+                no_area = pd.isna(row.get('location_area')) or not area or area in ['unknown', 'none', 'nan']
                 if no_title and no_phone and no_area:
                     remove = True
                     reason = 'No property title, contact phone, or location area'
-            elif ('company_name' not in row) or (pd.isna(row['company_name'])) or (str(row['company_name']).strip().lower() == 'unknown'):
-                if ('contact_emails' not in row or pd.isna(row['contact_emails']) or not str(row['contact_emails']).strip()) and ('phone_numbers' not in row or pd.isna(row['phone_numbers']) or not str(row['phone_numbers']).strip()):
+            elif ('company_name' not in row) or (pd.isna(row['company_name'])) or (str(row['company_name']).strip().lower() in ['unknown', 'none', 'nan']):
+                has_email = ('contact_emails' in row and pd.notna(row['contact_emails']) and str(row['contact_emails']).strip() and str(row['contact_emails']).strip().lower() not in ['[]', 'none', 'nan'])
+                has_phone = ('phone_numbers' in row and pd.notna(row['phone_numbers']) and str(row['phone_numbers']).strip() and str(row['phone_numbers']).strip().lower() not in ['[]', 'none', 'nan'])
+                if not has_email and not has_phone:
                     remove = True
                     reason = 'No company name and no contact info'
-                    
+            
+            # 3. Deduplication checks
+            if not remove:
+                raw_url = row.get('url', '')
+                norm_u = normalize_url(raw_url)
+                if norm_u:
+                    if norm_u in seen_urls:
+                        remove = True
+                        reason = f"Duplicate URL ({raw_url})"
+                    else:
+                        seen_urls.add(norm_u)
+                
+                # Check entity duplicates
+                if not remove:
+                    if 'property_title' in row:
+                        t = str(row.get('property_title', '')).strip().lower()
+                        p = str(row.get('contact_phone', '')).strip().lower()
+                        phone_digits = re.sub(r'\D', '', p)
+                        if t and phone_digits and len(phone_digits) >= 8 and t not in ['unknown', 'none', 'nan']:
+                            ent_key = ('warehouse', t, phone_digits)
+                            if ent_key in seen_entities:
+                                remove = True
+                                reason = f"Duplicate warehouse listing ('{row.get('property_title')}' - {row.get('contact_phone')})"
+                            else:
+                                seen_entities.add(ent_key)
+                    elif 'company_name' in row:
+                        c = str(row.get('company_name', '')).strip().lower()
+                        if c and c not in ['unknown', 'none', 'nan']:
+                            contact_sig = str(row.get('contact_emails', '')).strip().lower() + str(row.get('phone_numbers', '')).strip().lower()
+                            if contact_sig and contact_sig not in ['[]', 'none']:
+                                ent_key = ('company', c, contact_sig)
+                                if ent_key in seen_entities:
+                                    remove = True
+                                    reason = f"Duplicate company lead ('{row.get('company_name')}')"
+                                else:
+                                    seen_entities.add(ent_key)
+
             if remove:
-                url = row['url'] if 'url' in row else 'Unknown'
-                removed_rows.append(f'Removed URL: {url} - Reason: {reason}')
+                url = row['url'] if ('url' in row and pd.notna(row['url'])) else 'Unknown'
+                removed_rows.append(f"Removed: {url} - Reason: {reason}")
             else:
                 keep_indices.append(idx)
                 
+        remaining_count = len(keep_indices)
         if len(removed_rows) > 0:
             df_cleaned = df.loc[keep_indices]
             df_cleaned.to_excel(output_file, index=False)
             
-            logger.info(f'Cleaned matrix. Removed {len(removed_rows)} out of {initial_count} rows.')
+            logger.info(f"Cleaned matrix {output_file}. Removed {len(removed_rows)} invalid/duplicate rows out of {initial_count}. Retained {remaining_count} unique leads.")
             for msg in removed_rows:
-                logger.info(msg)
+                logger.info(f"  • {msg}")
         else:
-            logger.info('Matrix is already clean. No rows removed.')
+            logger.info(f"Matrix {output_file} is already clean and deduplicated. All {initial_count} rows are valid and unique.")
+
+        return {
+            "removed_count": len(removed_rows),
+            "initial_count": initial_count,
+            "remaining_count": remaining_count,
+            "removed_details": removed_rows
+        }
     except Exception as e:
-        logger.error(f'Failed to clean matrix: {e}')
+        logger.error(f"Failed to clean matrix: {e}")
+        return {"removed_count": 0, "initial_count": 0, "remaining_count": 0, "error": str(e)}
 
 
 from extractor import extract_buyer_info
