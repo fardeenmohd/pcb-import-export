@@ -4,7 +4,7 @@ import pandas as pd
 import concurrent.futures
 from typing import List, Dict
 from scraper import scrape_url
-from extractor import extract_supplier_info, extract_buyer_info, extract_logistics_info
+from extractor import extract_supplier_info, extract_buyer_info, extract_logistics_info, extract_warehouse_info
 
 def process_single_url(url: str, logger: logging.Logger) -> List[Dict]:
     logger.info(f"Processing {url}...")
@@ -95,6 +95,16 @@ def clean_matrix(output_file: str, logger: logging.Logger):
             if 'error' in row and pd.notna(row['error']):
                 remove = True
                 reason = f"Scraping error: {row['error']}"
+            elif 'property_title' in row:
+                title = str(row.get('property_title', '')).strip().lower()
+                no_title = pd.isna(row.get('property_title')) or not title or title in ['unknown', 'none']
+                phone = str(row.get('contact_phone', '')).strip()
+                no_phone = pd.isna(row.get('contact_phone')) or not phone
+                area = str(row.get('location_area', '')).strip()
+                no_area = pd.isna(row.get('location_area')) or not area
+                if no_title and no_phone and no_area:
+                    remove = True
+                    reason = 'No property title, contact phone, or location area'
             elif ('company_name' not in row) or (pd.isna(row['company_name'])) or (str(row['company_name']).strip().lower() == 'unknown'):
                 if ('contact_emails' not in row or pd.isna(row['contact_emails']) or not str(row['contact_emails']).strip()) and ('phone_numbers' not in row or pd.isna(row['phone_numbers']) or not str(row['phone_numbers']).strip()):
                     remove = True
@@ -245,3 +255,107 @@ def process_logistics_urls(urls: List[str], output_excel: str, logger: logging.L
         
         df.to_excel(output_excel, index=False)
         logger.info(f"Logistics data saved to {output_excel}")
+
+
+def process_single_warehouse_url(url: str, logger: logging.Logger) -> List[Dict]:
+    logger.info(f"Processing Warehouse {url}...")
+    from scraper import is_yellowpages_directory, extract_subproperties_from_directory
+    
+    # If the URL is a yellowpages directory search listing, deep extract individual property URLs
+    if is_yellowpages_directory(url):
+        logger.info(f"URL is a yellowpages directory. Deep extracting sub-property listings from: {url}")
+        sub_urls = extract_subproperties_from_directory(url, logger=logger, max_properties=6)
+        if sub_urls:
+            logger.info(f"Discovered {len(sub_urls)} sub-property links from directory. Scraping each...")
+            sub_results = []
+            for s_url in sub_urls:
+                try:
+                    s_text = scrape_url(s_url, logger)
+                    if s_text:
+                        s_props = extract_warehouse_info(s_text, logger)
+                        if s_props:
+                            for p in s_props:
+                                sub_results.append({
+                                    "property_title": p.property_title or "Commercial Warehouse / Shed",
+                                    "property_type": p.property_type or "Warehouse",
+                                    "location_area": p.location_area or "",
+                                    "city": p.city or "",
+                                    "carpet_area_sqft": p.carpet_area_sqft or "",
+                                    "clear_height_ft": p.clear_height_ft or "",
+                                    "power_load": p.power_load or "",
+                                    "monthly_rent": p.monthly_rent or "",
+                                    "deposit_terms": p.deposit_terms or "",
+                                    "road_access_container": p.road_access_container or "",
+                                    "contact_phone": p.contact_phone or "",
+                                    "contact_name": p.contact_name or "",
+                                    "url": s_url
+                                })
+                except Exception as sub_err:
+                    logger.warning(f"Failed to scrape sub-property {s_url}: {sub_err}")
+            if sub_results:
+                return sub_results
+
+    # Standard / Individual property page scrape
+    text = scrape_url(url, logger)
+    if not text:
+        return [{"url": url, "error": "Failed to scrape"}]
+
+    extracted_props = extract_warehouse_info(text, logger)
+    if not extracted_props:
+        return [{"url": url, "error": "Failed to extract warehouse property specifications"}]
+
+    flat_data_list = []
+    for p in extracted_props:
+        flat_data = {
+            "property_title": p.property_title or "Commercial Warehouse / Storage Space",
+            "property_type": p.property_type or "Warehouse",
+            "location_area": p.location_area or "",
+            "city": p.city or "",
+            "carpet_area_sqft": p.carpet_area_sqft or "",
+            "clear_height_ft": p.clear_height_ft or "",
+            "power_load": p.power_load or "",
+            "monthly_rent": p.monthly_rent or "",
+            "deposit_terms": p.deposit_terms or "",
+            "road_access_container": p.road_access_container or "",
+            "contact_phone": p.contact_phone or "",
+            "contact_name": p.contact_name or "",
+            "url": url
+        }
+        flat_data_list.append(flat_data)
+
+    return flat_data_list
+
+def process_warehouse_urls(urls: List[str], output_excel: str, logger: logging.Logger):
+    logger.info(f"Starting batch warehouse property processing for {len(urls)} URLs...")
+    results = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        futures = {executor.submit(process_single_warehouse_url, url, logger): url for url in urls}
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                data_list = future.result()
+                results.extend(data_list)
+            except Exception as e:
+                logger.error(f"Failed to process warehouse URL {futures[future]}: {e}")
+                results.append({"url": futures[future], "error": str(e)})
+
+    if results:
+        df = pd.DataFrame(results)
+        cols = [
+            "property_title", "property_type", "location_area", "city", 
+            "carpet_area_sqft", "clear_height_ft", "power_load", "monthly_rent", 
+            "deposit_terms", "road_access_container", "contact_phone", "contact_name", 
+            "url", "error"
+        ]
+        existing_cols = [c for c in cols if c in df.columns]
+        other_cols = [c for c in df.columns if c not in cols]
+        df = df[existing_cols + other_cols]
+
+        if os.path.exists(output_excel):
+            try:
+                existing_df = pd.read_excel(output_excel)
+                df = pd.concat([existing_df, df], ignore_index=True)
+            except Exception as e:
+                logger.error(f"Error appending to {output_excel}: {e}")
+
+        df.to_excel(output_excel, index=False)
+        logger.info(f"Warehouse properties saved to {output_excel} ({len(df)} total rows)")

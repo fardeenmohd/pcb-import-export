@@ -39,6 +39,27 @@ class LogisticsCompany(BaseModel):
     is_logistics_provider: bool = Field(description="True if this is a freight forwarder, shipping line, or logistics company capable of sending containers")
 LogisticsList.model_rebuild()
 
+class WarehousePropertyList(BaseModel):
+    properties: List['WarehouseProperty']
+
+class WarehouseProperty(BaseModel):
+    property_title: Optional[str] = Field(default="", description="Headline or title of the property listing (e.g. 15,000 Sq.ft Industrial Shed in Chakan)")
+    property_type: Optional[str] = Field(default="Warehouse", description="Type: Commercial Warehouse, Industrial Shed, Godown, Garage Storage Space, or Logistics Park")
+    location_area: Optional[str] = Field(default="", description="Specific neighborhood, industrial corridor, MIDC, or locality (e.g. Chakan, Bhosari, Mankoli, Peenya, Andheri)")
+    city: Optional[str] = Field(default="", description="City or district (e.g. Pune, Mumbai, Bangalore, Delhi NCR, Ahmedabad, etc.)")
+    carpet_area_sqft: Optional[str] = Field(default="", description="Carpet or covered area in sq ft (e.g. 15,000 sq ft, 25,000 sq ft)")
+    clear_height_ft: Optional[str] = Field(default="", description="Clear ceiling height in feet (e.g. 24 ft, 28 ft, 32 ft)")
+    power_load: Optional[str] = Field(default="", description="Electrical power load / 3-phase power supply (e.g. 50 HP, 65 kVA, 100 HP)")
+    monthly_rent: Optional[str] = Field(default="", description="Monthly rent or rate per sq ft (e.g. ₹1.5 Lakh/month, ₹25/sq ft)")
+    deposit_terms: Optional[str] = Field(default="", description="Security deposit and lease lock-in terms (e.g. 6 months deposit, 3 years lease)")
+    road_access_container: Optional[str] = Field(default="", description="Approach road width & container trailer accessibility (e.g. 40ft container trailer access)")
+    contact_phone: Optional[str] = Field(default="", description="Contact phone number or WhatsApp of the owner, broker, or agent")
+    contact_name: Optional[str] = Field(default="", description="Name of the contact person, broker, agency, or property owner")
+    is_warehouse_or_storage: bool = Field(default=True, description="True if this is a commercial warehouse, industrial shed, godown, or garage storage facility")
+
+WarehousePropertyList.model_rebuild()
+
+
 def extract_supplier_info(text: str, logger: logging.Logger = None) -> Optional[List[SupplierCapabilities]]:
     """
     Uses Gemini API to extract structured supplier data from plain text.
@@ -203,4 +224,58 @@ def extract_logistics_info(text: str, logger: logging.Logger) -> Optional[List[L
         return None
     except Exception as e:
         logger.error(f"Error in extract_logistics_info: {e}")
+        return None
+
+def extract_warehouse_info(text: str, logger: logging.Logger = None) -> Optional[List[WarehouseProperty]]:
+    """
+    Uses Gemini API to extract structured warehouse, storage space, and garage property specifications from scraped text.
+    If the page is a directory (OLX, 99acres, MagicBricks, etc.) listing multiple properties, it extracts each property as a separate item.
+    """
+    if logger is None:
+        logger = logging.getLogger("ScraperAgent")
+        
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key or api_key == "your_api_key_here":
+        logger.error("GEMINI_API_KEY is missing or invalid in environment variables.")
+        return None
+
+    try:
+        from llm_fallback import generate_with_fallback
+        prompt = f"""
+            You are an elite Indian commercial real estate and industrial warehousing extraction AI.
+            Extract all commercial warehouse, industrial shed, godown, and garage/storage space details from the following raw text.
+            
+            Look closely for:
+            1. Property Title / Headline (e.g., '15,000 Sq.ft Industrial Shed with Plot @ Nighoje Chakan')
+            2. Property Type (Commercial Warehouse, Industrial Shed, Godown, Garage Storage Space, Logistics Park)
+            3. Specific Location Area & City (e.g., Chakan, Bhosari, Mankoli, Peenya, Andheri, Okhla; City: Pune, Mumbai, Bangalore, Delhi NCR)
+            4. Carpet / Covered Area in Sq Ft (e.g., 5,000 sq ft, 15,000 sq ft)
+            5. Clear Ceiling Height in Feet (e.g., 24 ft, 28 ft, 32 ft)
+            6. Power Load / Industrial 3-Phase Connection (e.g., 50 HP, 65 kVA, 100 HP)
+            7. Monthly Rent & Security Deposit (e.g., ₹1.5 Lakh/month, ₹25/sq ft, 6 months deposit)
+            8. Road Access & Container Turnaround (e.g., 40ft Container Trailer Access, Wide Shutter)
+            9. Contact Phone / WhatsApp and Contact Name (Broker, Agency, or Owner)
+            
+            If this page is a directory or classifieds catalog (like OLX, 99acres, MagicBricks, JustDial, etc.) containing MULTIPLE properties, you MUST extract EACH property as a separate item in the list!
+            If it contains a single property, extract that single property.
+            
+            TEXT:
+            {text[:45000]}
+        """
+        response = generate_with_fallback(
+            prompt=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=WarehousePropertyList,
+                temperature=0.0
+            ),
+            logger=logger
+        )
+        if response and response.text:
+            properties = WarehousePropertyList.model_validate_json(response.text).properties
+            valid = [p for p in properties if p.is_warehouse_or_storage]
+            return valid
+        return None
+    except Exception as e:
+        logger.error(f"Error in extract_warehouse_info: {e}")
         return None

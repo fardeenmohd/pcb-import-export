@@ -116,6 +116,8 @@ class App(ctk.CTk):
         self.tab_sup_db = self.tabview.add("Suppliers Database")
         self.tab_buyers = self.tabview.add("Buyers Scraper")
         self.tab_buy_db = self.tabview.add("Buyers Database")
+        self.tab_warehouses = self.tabview.add("Warehouses Scraper")
+        self.tab_wh_db = self.tabview.add("Warehouses Database")
         self.tab_logistics = self.tabview.add("Logistics Scraper")
         self.tab_log_db = self.tabview.add("Logistics Database")
         self.tab_logs = self.tabview.add("Agent Logs")
@@ -125,6 +127,8 @@ class App(ctk.CTk):
         self.setup_sup_db_tab()
         self.setup_buyers_tab()
         self.setup_buy_db_tab()
+        self.setup_warehouses_tab()
+        self.setup_wh_db_tab()
         self.setup_logistics_tab()
         self.setup_log_db_tab()
         self.setup_logs_tab()
@@ -461,6 +465,9 @@ class App(ctk.CTk):
         if strategy == "Suppliers":
             prop_btn_text = "📝 Sourcing RFQ"
             current_mode = "supplier"
+        elif strategy == "Warehouses":
+            prop_btn_text = "🏢 Rental Inquiry"
+            current_mode = "warehouse"
         elif strategy == "Logistics":
             prop_btn_text = "📝 Freight RFQ"
             current_mode = "logistics"
@@ -578,12 +585,16 @@ class App(ctk.CTk):
             self.sup_urls_textbox.insert("0.0", urls_joined)
             self.tabview.set("Suppliers Scraper")
             self.lbl_sup_status.configure(text=f"Loaded {len(self.current_hq_urls)} URLs from Discovery")
-        elif strategy in ["Logistics", "Warehouses"]:
+        elif strategy == "Warehouses":
+            self.wh_urls_textbox.delete("0.0", "end")
+            self.wh_urls_textbox.insert("0.0", urls_joined)
+            self.tabview.set("Warehouses Scraper")
+            self.lbl_wh_status.configure(text=f"Loaded {len(self.current_hq_urls)} Warehouse URLs from Discovery")
+        elif strategy == "Logistics":
             self.log_urls_textbox.delete("0.0", "end")
             self.log_urls_textbox.insert("0.0", urls_joined)
             self.tabview.set("Logistics Scraper")
-            label_type = "Warehouses" if strategy == "Warehouses" else "Logistics"
-            self.lbl_log_status.configure(text=f"Loaded {len(self.current_hq_urls)} {label_type} URLs from Discovery")
+            self.lbl_log_status.configure(text=f"Loaded {len(self.current_hq_urls)} Logistics URLs from Discovery")
         else:
             self.buy_urls_textbox.delete("0.0", "end")
             self.buy_urls_textbox.insert("0.0", urls_joined)
@@ -1661,6 +1672,11 @@ RULES:
             self.btn_log_start.configure(state="disabled")
             self.lbl_log_status.configure(text="Status: Starting pipeline...")
             self.log_output_textbox.delete("0.0", "end")
+        elif pipeline_type == "warehouse":
+            urls_text = self.wh_urls_textbox.get("0.0", "end").strip()
+            self.btn_wh_start.configure(state="disabled")
+            self.lbl_wh_status.configure(text="Status: Starting pipeline...")
+            self.wh_output_textbox.delete("0.0", "end")
         elif pipeline_type == "supplier":
             urls_text = self.sup_urls_textbox.get("0.0", "end").strip()
             self.btn_sup_start.configure(state="disabled")
@@ -1683,6 +1699,10 @@ RULES:
             output_file = "Logistics_Matrix.xlsx"
             import processor
             processor.process_logistics_urls(urls, output_file, self.logger)
+        elif pipeline_type == "warehouse":
+            output_file = "Warehouses_Matrix.xlsx"
+            import processor
+            processor.process_warehouse_urls(urls, output_file, self.logger)
         elif pipeline_type == "supplier":
             output_file = "Suppliers_Matrix.xlsx"
             run_pipeline(urls, self.logger, output_file=output_file)
@@ -1698,6 +1718,11 @@ RULES:
             self.lbl_log_status.configure(text="Status: Completed.")
             self.load_matrix(self.log_tree, "Logistics_Matrix.xlsx")
             self.display_matrix_text(output_file, self.log_output_textbox)
+        elif pipeline_type == "warehouse":
+            self.btn_wh_start.configure(state="normal")
+            self.lbl_wh_status.configure(text="Status: Completed.")
+            self.load_matrix(self.wh_tree, "Warehouses_Matrix.xlsx")
+            self.display_matrix_text(output_file, self.wh_output_textbox)
         elif pipeline_type == "supplier":
             self.btn_sup_start.configure(state="normal")
             self.lbl_sup_status.configure(text="Status: Completed.")
@@ -1737,6 +1762,10 @@ RULES:
                 btn_prop_text = "📝 Create Freight RFQ"
                 btn_url_prop_text = "🌐 Freight RFQ from URL"
                 url_cmd = lambda: self.open_url_proposal_window(mode="logistics")
+            elif mode == "warehouse":
+                btn_prop_text = "🏢 Create Rental Inquiry"
+                btn_url_prop_text = "🌐 Rental Inquiry from URL"
+                url_cmd = lambda: self.open_url_proposal_window(mode="warehouse")
             elif mode == "supplier":
                 btn_prop_text = "📝 Create Sourcing Inquiry"
                 btn_url_prop_text = "🌐 Inquiry from URL"
@@ -2996,10 +3025,8 @@ SinoMagan Indus Global Trade LLP
                 df = pd.read_excel(output_file)
                 tree.delete(*tree.get_children())
                 
-                has_action_col = (output_file in ["Buyers_Matrix.xlsx", "Suppliers_Matrix.xlsx", "Logistics_Matrix.xlsx"])
-                if output_file == "Suppliers_Matrix.xlsx":
-                    action_col_name = "Inquiry"
-                elif output_file == "Logistics_Matrix.xlsx":
+                has_action_col = (output_file in ["Buyers_Matrix.xlsx", "Suppliers_Matrix.xlsx", "Logistics_Matrix.xlsx", "Warehouses_Matrix.xlsx"])
+                if output_file in ["Suppliers_Matrix.xlsx", "Logistics_Matrix.xlsx", "Warehouses_Matrix.xlsx"]:
                     action_col_name = "Inquiry"
                 else:
                     action_col_name = "Proposal"
@@ -3030,6 +3057,249 @@ SinoMagan Indus Global Trade LLP
     def clean_local_matrix(self, output_file, tree):
         clean_matrix(output_file, self.logger)
         self.load_matrix(tree, output_file)
+
+    def setup_wh_db_tab(self):
+        self.wh_tree = self.create_database_tab_ui(
+            self.tab_wh_db, 
+            lambda: self.load_matrix(self.wh_tree, "Warehouses_Matrix.xlsx"),
+            lambda: self.clean_local_matrix("Warehouses_Matrix.xlsx", self.wh_tree),
+            lambda: self.delete_all_entries("Warehouses_Matrix.xlsx", self.wh_tree),
+            proposal_cmd=self.open_warehouse_inquiry_window,
+            mode="warehouse"
+        )
+
+    def setup_warehouses_tab(self):
+        self.tab_warehouses.grid_columnconfigure(0, weight=1)
+        self.tab_warehouses.grid_rowconfigure(3, weight=1)
+        
+        criteria_text = "Warehouse Context: Extracting Commercial Warehouses, Industrial Sheds, Godowns, and Garage Storage Spaces across Indian Hubs (Carpet Area, Clear Height, 3-Phase Power, Monthly Rent, Road Access, Contact Info)."
+        lbl_info = ctk.CTkLabel(self.tab_warehouses, text=criteria_text, font=("Arial", 12, "italic"))
+        lbl_info.grid(row=0, column=0, pady=(10,0), sticky="w", padx=20)
+        
+        self.wh_urls_textbox = ctk.CTkTextbox(self.tab_warehouses, height=150)
+        self.wh_urls_textbox.grid(row=1, column=0, padx=20, pady=10, sticky="ew")
+        self.wh_urls_textbox.insert("0.0", "Paste Warehouse, Storage, & Yellowpages URLs here (one per line)...\n")
+        
+        btn_frame = ctk.CTkFrame(self.tab_warehouses, fg_color="transparent")
+        btn_frame.grid(row=2, column=0, padx=20, pady=5, sticky="ew")
+        
+        self.btn_wh_start = ctk.CTkButton(btn_frame, text="Start Warehouse Extraction", command=lambda: self.start_scraping("warehouse"))
+        self.btn_wh_start.pack(side="left", padx=5)
+
+        self.btn_wh_prop = ctk.CTkButton(btn_frame, text="🏢 Quick Rental Inquiry", command=lambda: self.open_url_proposal_window(mode="warehouse"), fg_color="#005b96", hover_color="#003f66")
+        self.btn_wh_prop.pack(side="left", padx=5)
+        
+        self.lbl_wh_status = ctk.CTkLabel(btn_frame, text="Status: Ready")
+        self.lbl_wh_status.pack(side="left", padx=20)
+        
+        self.wh_output_textbox = ctk.CTkTextbox(self.tab_warehouses)
+        self.wh_output_textbox.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
+
+    def open_warehouse_inquiry_window(self):
+        selected_items = self.wh_tree.selection()
+        if not selected_items:
+            import tkinter.messagebox as messagebox
+            messagebox.showinfo("Select Warehouse Property", "Please select a warehouse property from the table to generate a rental inquiry.")
+            return
+
+        selected_item = selected_items[0]
+        row_values = self.wh_tree.item(selected_item)["values"]
+        cols = list(self.wh_tree["columns"])
+        data = dict(zip(cols, row_values))
+
+        prop_title = str(data.get("property_title", "Commercial Warehouse / Shed")).strip()
+        prop_type = str(data.get("property_type", "Warehouse")).strip()
+        loc_area = str(data.get("location_area", "")).strip()
+        city = str(data.get("city", "India")).strip()
+        sqft = str(data.get("carpet_area_sqft", "")).strip()
+        height = str(data.get("clear_height_ft", "")).strip()
+        power = str(data.get("power_load", "")).strip()
+        rent = str(data.get("monthly_rent", "")).strip()
+        deposit = str(data.get("deposit_terms", "")).strip()
+        road = str(data.get("road_access_container", "")).strip()
+        url = str(data.get("url", "")).strip()
+        phone = str(data.get("contact_phone", "")).strip()
+        name = str(data.get("contact_name", "Property Owner / Broker")).strip()
+
+        win = ctk.CTkToplevel(self)
+        win.title(f"Commercial Rental Inquiry - {prop_title[:35]}")
+        win.geometry("820x720")
+        win.attributes("-topmost", True)
+        win.focus_set()
+
+        header_frame = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
+        header_frame.pack(fill="x", padx=15, pady=(15, 8))
+
+        lbl_title = ctk.CTkLabel(
+            header_frame, 
+            text=f"🏢 Rental / Lease Inquiry: {prop_title}", 
+            font=("Arial", 16, "bold"),
+            text_color="#ffffff"
+        )
+        lbl_title.pack(anchor="w", padx=15, pady=(10, 2))
+
+        sub_desc = f"Location: {loc_area}, {city}  |  Area: {sqft or 'Custom'}  |  Height: {height or 'Standard'}  |  Rent: {rent or 'On Request'}"
+        lbl_sub = ctk.CTkLabel(
+            header_frame, 
+            text=sub_desc, 
+            font=("Arial", 11),
+            text_color="#a0a0a0"
+        )
+        lbl_sub.pack(anchor="w", padx=15, pady=(0, 10))
+
+        # To Row
+        to_frame = ctk.CTkFrame(win, fg_color="transparent")
+        to_frame.pack(fill="x", padx=15, pady=(4, 3))
+        lbl_to = ctk.CTkLabel(to_frame, text="To / Contact:", width=90, anchor="w", font=("Arial", 12, "bold"))
+        lbl_to.pack(side="left")
+        entry_to = ctk.CTkEntry(to_frame, font=("Arial", 12), height=32)
+        entry_to.pack(side="left", fill="x", expand=True, padx=(0, 8))
+        to_display = f"{name} ({phone})" if phone else name
+        entry_to.insert(0, to_display)
+        btn_copy_to = ctk.CTkButton(to_frame, text="📋 Copy", width=75, height=32)
+        btn_copy_to.pack(side="right")
+
+        # Subject Row
+        subj_frame = ctk.CTkFrame(win, fg_color="transparent")
+        subj_frame.pack(fill="x", padx=15, pady=(3, 5))
+        lbl_subj = ctk.CTkLabel(subj_frame, text="Subject:", width=90, anchor="w", font=("Arial", 12, "bold"))
+        lbl_subj.pack(side="left")
+        entry_subj = ctk.CTkEntry(subj_frame, font=("Arial", 12), height=32)
+        entry_subj.pack(side="left", fill="x", expand=True, padx=(0, 8))
+        entry_subj.insert(0, "Generating Subject line...")
+        btn_copy_subj = ctk.CTkButton(subj_frame, text="📋 Copy", width=75, height=32)
+        btn_copy_subj.pack(side="right")
+
+        # Body Header Row
+        body_hdr = ctk.CTkFrame(win, fg_color="transparent")
+        body_hdr.pack(fill="x", padx=15, pady=(4, 2))
+        lbl_body = ctk.CTkLabel(body_hdr, text="Inquiry Body (Gmail Ready):", font=("Arial", 12, "bold"))
+        lbl_body.pack(side="left")
+        btn_copy_body = ctk.CTkButton(body_hdr, text="📋 Copy Body", width=105, height=28, fg_color="#1f7a1f", hover_color="#145214")
+        btn_copy_body.pack(side="right")
+
+        # Body Textbox
+        txt_body = ctk.CTkTextbox(win, wrap="word", font=("Arial", 12))
+        txt_body.pack(fill="both", expand=True, padx=15, pady=(2, 8))
+        txt_body.insert("0.0", "⏳ Generating tailored Commercial Warehouse & Garage Rental Inquiry using Gemini AI...\nPlease wait a few seconds.")
+
+        # Copy handlers
+        def copy_widget_text(widget, btn, default_txt):
+            if isinstance(widget, ctk.CTkTextbox):
+                val = widget.get("0.0", "end").strip()
+            else:
+                val = widget.get().strip()
+            if val and not val.startswith("⏳"):
+                self.clipboard_clear()
+                self.clipboard_append(val)
+                btn.configure(text="Copied! ✅")
+                win.after(1500, lambda: btn.configure(text=default_txt))
+
+        btn_copy_to.configure(command=lambda: copy_widget_text(entry_to, btn_copy_to, "📋 Copy"))
+        btn_copy_subj.configure(command=lambda: copy_widget_text(entry_subj, btn_copy_subj, "📋 Copy"))
+        btn_copy_body.configure(command=lambda: copy_widget_text(txt_body, btn_copy_body, "📋 Copy Body"))
+
+        # Bottom Bar
+        btn_bar = ctk.CTkFrame(win, fg_color="transparent")
+        btn_bar.pack(fill="x", padx=15, pady=(5, 12))
+
+        def copy_all():
+            s = entry_subj.get().strip()
+            b = txt_body.get("0.0", "end").strip()
+            if b and not b.startswith("⏳"):
+                self.clipboard_clear()
+                self.clipboard_append(f"Subject: {s}\n\n{b}")
+                btn_copy_all.configure(text="All Copied! ✅")
+                win.after(1500, lambda: btn_copy_all.configure(text="📋 Copy Subject + Body"))
+
+        btn_copy_all = ctk.CTkButton(btn_bar, text="📋 Copy Subject + Body", command=copy_all, width=170, fg_color="#005b96", hover_color="#003f66")
+        btn_copy_all.pack(side="left", padx=5)
+
+        def start_generation():
+            entry_subj.delete(0, "end")
+            entry_subj.insert(0, "Generating Subject line...")
+            txt_body.delete("0.0", "end")
+            txt_body.insert("0.0", "⏳ Generating tailored Commercial Warehouse & Garage Rental Inquiry using Gemini AI...\nPlease wait a few seconds.")
+            btn_regen.configure(state="disabled")
+
+            def generate_worker():
+                try:
+                    from google.genai import types
+                    from pydantic import BaseModel, Field
+                    from llm_fallback import generate_with_fallback
+
+                    class EmailProposal(BaseModel):
+                        to_email: str = Field(default="", description="Recipient contact email or phone note")
+                        subject: str = Field(description="Clean, compelling inquiry subject line without any markdown or quotes")
+                        body: str = Field(description="Full clean email body ready to paste directly into Gmail composer. Do NOT include markdown bold/italics (no asterisks). Use simple bullet points with • if listing parameters.")
+
+                    prompt = f"""You are Fardin Mohammed, Partner at SinoMagan Indus Global Trade LLP, writing an official Commercial Lease / Rental Inquiry for a warehouse, godown, industrial shed, or garage storage space.
+
+Target Property Profile:
+- Property Title: {prop_title}
+- Property Type: {prop_type}
+- Location & City: {loc_area}, {city}
+- Carpet Area: {sqft}
+- Clear Ceiling Height: {height}
+- Industrial Power Load: {power}
+- Quoted Monthly Rent: {rent}
+- Deposit & Lease Lock-in: {deposit}
+- Road Access: {road}
+- Contact / Broker: {name} ({phone})
+- Listing URL: {url}
+
+Your Company:
+- SinoMagan Indus Global Trade LLP (International trade, export sourcing, contract manufacturing, containerized freight operations)
+- Authorized Signatory: Fardin Mohammed, Partner
+
+PURPOSE OF THIS EMAIL (COMMERCIAL LEASING INQUIRY):
+SinoMagan Indus Global Trade LLP is actively looking to lease/rent this commercial space in {loc_area}, {city} for our export container staging, inventory storage (electrical components, power distribution equipment, solar panels, wooden panels), and vehicle/garage storage operations.
+Reach out to confirm availability, schedule an immediate site inspection, and discuss commercial leasing terms.
+
+CRITICAL INSTRUCTIONS:
+1. SUBJECT LINE: Concise professional Subject line referencing Commercial Warehouse / Godown / Garage Rental Inquiry for SinoMagan Indus Global Trade LLP - {loc_area}, {city}. No quotes or markdown.
+2. EMAIL BODY: Strict Gmail plain text (NO asterisks for bold/italics). Use clean bullet points with '• '. Polite, professional commercial principal tone.
+3. SIGN-OFF: Strict format:
+
+Warm regards,
+
+Fardin Mohammed
+Partner
+SinoMagan Indus Global Trade LLP
+"""
+                    response = generate_with_fallback(
+                        prompt=prompt,
+                        config=types.GenerateContentConfig(
+                            response_mime_type="application/json",
+                            response_schema=EmailProposal,
+                        ),
+                        logger=self.logger
+                    )
+                    from main import parse_email_response
+                    to_val, subj_val, body_val = parse_email_response(response.text)
+                    def on_done():
+                        entry_subj.delete(0, "end")
+                        entry_subj.insert(0, subj_val)
+                        txt_body.delete("0.0", "end")
+                        txt_body.insert("0.0", body_val)
+                        btn_regen.configure(state="normal")
+                    win.after(0, on_done)
+                except Exception as e:
+                    def on_err():
+                        txt_body.delete("0.0", "end")
+                        txt_body.insert("0.0", f"Error generating: {e}")
+                        btn_regen.configure(state="normal")
+                    win.after(0, on_err)
+
+            threading.Thread(target=generate_worker, daemon=True).start()
+
+        btn_regen = ctk.CTkButton(btn_bar, text="⚡ Regenerate", command=start_generation, width=110, fg_color="#1f7a1f", hover_color="#145214")
+        btn_regen.pack(side="left", padx=5)
+
+        btn_close = ctk.CTkButton(btn_bar, text="Close", command=win.destroy, width=80, fg_color="#555555", hover_color="#444444")
+        btn_close.pack(side="right", padx=5)
+
+        win.after(200, start_generation)
 
     def setup_log_db_tab(self):
         self.log_tree = self.create_database_tab_ui(
@@ -3064,6 +3334,8 @@ SinoMagan Indus Global Trade LLP
             self.lbl_sup_status.configure(text=f"Status: {message[:50]}...")
         elif active_tab == "Buyers Scraper":
             self.lbl_buy_status.configure(text=f"Status: {message[:50]}...")
+        elif active_tab == "Warehouses Scraper":
+            self.lbl_wh_status.configure(text=f"Status: {message[:50]}...")
         elif active_tab == "Logistics Scraper":
             self.lbl_log_status.configure(text=f"Status: {message[:50]}...")
         elif active_tab == "URL Discovery":
