@@ -1745,6 +1745,10 @@ RULES:
             textbox.insert("0.0", "Output file not found. Scraper may have failed.")
 
     def create_database_tab_ui(self, tab, sync_cmd, clean_cmd, delete_all_cmd, proposal_cmd=None, is_supplier=False, mode=None):
+        import tkinter as tk
+        import tkinter.messagebox as messagebox
+        import webbrowser
+
         tab.grid_columnconfigure(0, weight=1)
         tab.grid_rowconfigure(1, weight=1)
         
@@ -1754,8 +1758,8 @@ RULES:
         btn_frame = ctk.CTkFrame(tab, fg_color="transparent")
         btn_frame.grid(row=0, column=0, pady=10, padx=10, sticky="w")
         
-        btn_sync = ctk.CTkButton(btn_frame, text="Sync / Load Matrix", command=sync_cmd)
-        btn_sync.pack(side="left", padx=(0, 10))
+        btn_sync = ctk.CTkButton(btn_frame, text="Sync / Load Matrix", command=sync_cmd, width=120)
+        btn_sync.pack(side="left", padx=(0, 6))
         
         if proposal_cmd:
             if mode == "logistics":
@@ -1776,16 +1780,83 @@ RULES:
                 url_cmd = lambda: self.open_url_proposal_window(mode="buyer")
 
             btn_prop = ctk.CTkButton(btn_frame, text=btn_prop_text, command=proposal_cmd, fg_color="#1f7a1f", hover_color="#145214")
-            btn_prop.pack(side="left", padx=(0, 10))
+            btn_prop.pack(side="left", padx=(0, 6))
 
             btn_url_prop = ctk.CTkButton(btn_frame, text=btn_url_prop_text, command=url_cmd, fg_color="#005b96", hover_color="#003f66")
-            btn_url_prop.pack(side="left", padx=(0, 10))
+            btn_url_prop.pack(side="left", padx=(0, 6))
 
-        btn_clean = ctk.CTkButton(btn_frame, text="Clean Matrix", command=clean_cmd, fg_color="#b30000", hover_color="#800000")
-        btn_clean.pack(side="left")
+        def get_url_from_item(item_id):
+            if not item_id:
+                return ""
+            row_vals = tree.item(item_id)["values"]
+            cols = list(tree["columns"])
+            data = dict(zip(cols, row_vals))
+            url_val = str(data.get("url", "")).strip()
+            if url_val in ["None", "nan", ""]:
+                return ""
+            if not (url_val.startswith("http://") or url_val.startswith("https://")):
+                url_val = "https://" + url_val
+            return url_val
+
+        def copy_url_to_clipboard(url_val, feedback_btn=None):
+            if url_val:
+                self.clipboard_clear()
+                self.clipboard_append(url_val)
+                if feedback_btn:
+                    orig_text = feedback_btn.cget("text")
+                    feedback_btn.configure(text="Copied! ✅")
+                    tab.after(1500, lambda: feedback_btn.configure(text=orig_text))
+                self.logger.info(f"Copied URL to clipboard: {url_val}")
+                return True
+            return False
+
+        def on_copy_btn_clicked():
+            sel = tree.selection()
+            if not sel:
+                messagebox.showinfo("Select Row", "Please select a row from the table first to copy its URL.")
+                return
+            u = get_url_from_item(sel[0])
+            if u:
+                copy_url_to_clipboard(u, feedback_btn=btn_copy_url)
+            else:
+                messagebox.showinfo("No URL", "No URL found for the selected row.")
+
+        def on_open_btn_clicked():
+            sel = tree.selection()
+            if not sel:
+                messagebox.showinfo("Select Row", "Please select a row from the table first to open its URL.")
+                return
+            u = get_url_from_item(sel[0])
+            if u and (u.startswith("http://") or u.startswith("https://")):
+                webbrowser.open(u)
+            else:
+                messagebox.showinfo("Invalid URL", f"No valid URL found for the selected row: {u}")
+
+        btn_copy_url = ctk.CTkButton(
+            btn_frame, 
+            text="📋 Copy URL", 
+            command=on_copy_btn_clicked, 
+            width=100, 
+            fg_color="#3a3a3a", 
+            hover_color="#2b2b2b"
+        )
+        btn_copy_url.pack(side="left", padx=(0, 6))
+
+        btn_open_url = ctk.CTkButton(
+            btn_frame, 
+            text="🌐 Open URL", 
+            command=on_open_btn_clicked, 
+            width=100, 
+            fg_color="#005b96", 
+            hover_color="#003f66"
+        )
+        btn_open_url.pack(side="left", padx=(0, 6))
+
+        btn_clean = ctk.CTkButton(btn_frame, text="Clean Matrix", command=clean_cmd, width=100, fg_color="#b30000", hover_color="#800000")
+        btn_clean.pack(side="left", padx=(0, 6))
         
-        btn_delete_all = ctk.CTkButton(btn_frame, text="Delete All Entries", command=delete_all_cmd, fg_color="#660000", hover_color="#4d0000")
-        btn_delete_all.pack(side="left", padx=10)
+        btn_delete_all = ctk.CTkButton(btn_frame, text="Delete All Entries", command=delete_all_cmd, width=115, fg_color="#660000", hover_color="#4d0000")
+        btn_delete_all.pack(side="left", padx=6)
         
         frame = ctk.CTkFrame(tab)
         frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
@@ -1808,18 +1879,72 @@ RULES:
         vsb.grid(row=0, column=1, sticky='ns')
         hsb.grid(row=1, column=0, sticky='ew')
 
+        def on_tree_click(event):
+            region = tree.identify("region", event.x, event.y)
+            if region == "cell":
+                col_id = tree.identify_column(event.x)
+                item = tree.identify_row(event.y)
+                if item:
+                    tree.selection_set(item)
+                    if col_id == "#1":
+                        if proposal_cmd:
+                            proposal_cmd()
+                    elif col_id == "#2":
+                        u = get_url_from_item(item)
+                        if u:
+                            copy_url_to_clipboard(u, feedback_btn=btn_copy_url)
+                        else:
+                            messagebox.showinfo("No URL", "No URL found for this property.")
+                    else:
+                        # Check if user clicked directly on the "url" data column
+                        try:
+                            col_idx = int(col_id.replace("#", "")) - 1
+                            cols = list(tree["columns"])
+                            if 0 <= col_idx < len(cols) and cols[col_idx].lower() == "url":
+                                u = get_url_from_item(item)
+                                if u:
+                                    copy_url_to_clipboard(u, feedback_btn=btn_copy_url)
+                        except Exception:
+                            pass
+
+        tree.bind("<ButtonRelease-1>", on_tree_click)
+
         if proposal_cmd:
-            def on_tree_click(event):
+            def on_tree_double_click(event):
                 region = tree.identify("region", event.x, event.y)
                 if region == "cell":
-                    col = tree.identify_column(event.x)
-                    if col == "#1":
-                        item = tree.identify_row(event.y)
-                        if item:
-                            tree.selection_set(item)
-                            proposal_cmd()
-            tree.bind("<ButtonRelease-1>", on_tree_click)
-            tree.bind("<Double-1>", lambda event: proposal_cmd())
+                    col_id = tree.identify_column(event.x)
+                    if col_id == "#2":
+                        return
+                proposal_cmd()
+            tree.bind("<Double-1>", on_tree_double_click)
+
+        # Right-click context menu
+        menu = tk.Menu(tab, tearoff=0)
+        menu.add_command(label="📋 Copy Property URL", command=on_copy_btn_clicked)
+        menu.add_command(label="🌐 Open URL in Browser", command=on_open_btn_clicked)
+        if proposal_cmd:
+            menu.add_separator()
+            if mode == "warehouse":
+                prop_label = "🏢 Create Rental Inquiry"
+            elif mode == "logistics":
+                prop_label = "📝 Create Freight RFQ"
+            elif mode == "supplier":
+                prop_label = "📝 Create Sourcing Inquiry"
+            else:
+                prop_label = "📝 Create Proposal"
+            menu.add_command(label=prop_label, command=proposal_cmd)
+
+        def on_tree_right_click(event):
+            item = tree.identify_row(event.y)
+            if item:
+                tree.selection_set(item)
+                try:
+                    menu.tk_popup(event.x_root, event.y_root)
+                finally:
+                    menu.grab_release()
+
+        tree.bind("<Button-3>", on_tree_right_click)
 
         return tree
 
@@ -3032,20 +3157,22 @@ SinoMagan Indus Global Trade LLP
                     action_col_name = "Proposal"
                 cols = list(df.columns)
                 if has_action_col:
-                    cols = [action_col_name] + cols
+                    cols = [action_col_name, "Copy URL"] + cols
                     
                 tree["columns"] = cols
                 for col in cols:
                     tree.heading(col, text=col)
                     if col in ["Proposal", "Inquiry"]:
-                        tree.column(col, width=120, minwidth=100, anchor="center")
+                        tree.column(col, width=110, minwidth=90, anchor="center")
+                    elif col == "Copy URL":
+                        tree.column(col, width=95, minwidth=80, anchor="center")
                     else:
                         tree.column(col, width=150, minwidth=100)
                         
                 for _, row in df.iterrows():
                     values = list(row)
                     if has_action_col:
-                        values = ["📝 Create"] + values
+                        values = ["📝 Create", "📋 Copy"] + values
                     tree.insert("", "end", values=values)
                     
                 self.logger.info(f"Successfully synced {output_file} with UI.")
