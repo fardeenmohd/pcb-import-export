@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 import os
 import logging
 import resource_util
@@ -15,10 +17,11 @@ def generate_with_fallback(prompt, config=None, logger=None):
     
     # Priority list of models to try
     fallback_models = [
-        "gemini-flash-latest",
-        "gemini-2.5-flash",
-        "gemini-3.5-flash",
         "gemini-flash-lite-latest",
+        "gemini-3.5-flash-lite",
+        "gemini-flash-latest",
+        "gemini-3.5-flash",
+        "gemini-3.8-flash",
         "gemini-pro-latest"
     ]
     
