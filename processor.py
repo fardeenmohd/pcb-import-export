@@ -127,6 +127,12 @@ def clean_matrix(output_file: str, logger: logging.Logger):
                 if no_title and no_phone and no_area:
                     remove = True
                     reason = 'No property title, contact phone, or location area'
+            elif 'Product Name' in row or 'product_name' in row:
+                col_name = 'Product Name' if 'Product Name' in row else 'product_name'
+                pname = str(row.get(col_name, '')).strip().lower()
+                if pd.isna(row.get(col_name)) or not pname or pname in ['unknown', 'none', 'nan']:
+                    remove = True
+                    reason = 'No product name'
             elif ('company_name' not in row) or (pd.isna(row['company_name'])) or (str(row['company_name']).strip().lower() in ['unknown', 'none', 'nan']):
                 has_email = ('contact_emails' in row and pd.notna(row['contact_emails']) and str(row['contact_emails']).strip() and str(row['contact_emails']).strip().lower() not in ['[]', 'none', 'nan'])
                 has_phone = ('phone_numbers' in row and pd.notna(row['phone_numbers']) and str(row['phone_numbers']).strip() and str(row['phone_numbers']).strip().lower() not in ['[]', 'none', 'nan'])
@@ -158,6 +164,20 @@ def clean_matrix(output_file: str, logger: logging.Logger):
                                 reason = f"Duplicate warehouse listing ('{row.get('property_title')}' - {row.get('contact_phone')})"
                             else:
                                 seen_entities.add(ent_key)
+                    elif 'Product Name' in row or 'product_name' in row:
+                        col_p = 'Product Name' if 'Product Name' in row else 'product_name'
+                        col_r = 'Target Region' if 'Target Region' in row else 'target_region'
+                        col_s = 'Supplier Type' if 'Supplier Type' in row else 'supplier_type'
+                        p = str(row.get(col_p, '')).strip().lower()
+                        r = str(row.get(col_r, '')).strip().lower()
+                        s_type = str(row.get(col_s, '')).strip().lower()
+                        if p and p not in ['unknown', 'none', 'nan']:
+                            ent_key = ('product', p, r, s_type)
+                            if ent_key in seen_entities:
+                                remove = True
+                                reason = f"Duplicate product ('{row.get(col_p)}' - {row.get(col_r)})"
+                            else:
+                                seen_entities.add(ent_key)
                     elif 'company_name' in row:
                         c = str(row.get('company_name', '')).strip().lower()
                         if c and c not in ['unknown', 'none', 'nan']:
@@ -171,8 +191,19 @@ def clean_matrix(output_file: str, logger: logging.Logger):
                                     seen_entities.add(ent_key)
 
             if remove:
-                url = row['url'] if ('url' in row and pd.notna(row['url'])) else 'Unknown'
-                removed_rows.append(f"Removed: {url} - Reason: {reason}")
+                if 'url' in row and pd.notna(row['url']) and str(row['url']).strip():
+                    item_label = str(row['url']).strip()
+                elif 'Product Name' in row and pd.notna(row['Product Name']):
+                    item_label = str(row['Product Name']).strip()
+                elif 'product_name' in row and pd.notna(row['product_name']):
+                    item_label = str(row['product_name']).strip()
+                elif 'property_title' in row and pd.notna(row['property_title']):
+                    item_label = str(row['property_title']).strip()
+                elif 'company_name' in row and pd.notna(row['company_name']):
+                    item_label = str(row['company_name']).strip()
+                else:
+                    item_label = 'Unknown Entry'
+                removed_rows.append(f"Removed: {item_label} - Reason: {reason}")
             else:
                 keep_indices.append(idx)
                 

@@ -112,6 +112,7 @@ class App(ctk.CTk):
         self.tabview.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
         
         self.tab_discovery = self.tabview.add("URL Discovery")
+        self.tab_prod_sourcing = self.tabview.add("Product Sourcing")
         self.tab_suppliers = self.tabview.add("Suppliers Scraper")
         self.tab_sup_db = self.tabview.add("Suppliers Database")
         self.tab_buyers = self.tabview.add("Buyers Scraper")
@@ -123,6 +124,7 @@ class App(ctk.CTk):
         self.tab_logs = self.tabview.add("Agent Logs")
         
         self.setup_discovery_tab()
+        self.setup_prod_sourcing_tab()
         self.setup_suppliers_tab()
         self.setup_sup_db_tab()
         self.setup_buyers_tab()
@@ -3357,6 +3359,30 @@ SinoMagan Indus Global Trade LLP
                         tree.column(col, width=110, minwidth=90, anchor="center")
                     elif col == "Copy URL":
                         tree.column(col, width=95, minwidth=80, anchor="center")
+                    elif col in ["Product Name", "product_name"]:
+                        tree.column(col, width=190, minwidth=130)
+                    elif col in ["Niche", "niche"]:
+                        tree.column(col, width=175, minwidth=120)
+                    elif col in ["Target Region", "target_region"]:
+                        tree.column(col, width=125, minwidth=90)
+                    elif col in ["Supplier Type", "supplier_type"]:
+                        tree.column(col, width=130, minwidth=90, anchor="center")
+                    elif col in ["Supplier Country", "supplier_country"]:
+                        tree.column(col, width=110, minwidth=80, anchor="center")
+                    elif col in ["HS Code", "hs_code"]:
+                        tree.column(col, width=90, minwidth=70, anchor="center")
+                    elif col in ["Key Specifications", "specifications"]:
+                        tree.column(col, width=240, minwidth=150)
+                    elif col in ["Export Potential", "export_potential"]:
+                        tree.column(col, width=110, minwidth=85, anchor="center")
+                    elif col in ["Indian Manufacturing Hubs", "indian_manufacturing_hubs"]:
+                        tree.column(col, width=180, minwidth=120)
+                    elif col in ["Foreign Competitors / Notes", "foreign_competitors_notes"]:
+                        tree.column(col, width=190, minwidth=120)
+                    elif col in ["Source Reference", "source_reference"]:
+                        tree.column(col, width=140, minwidth=100)
+                    elif col in ["Date Added", "date_added"]:
+                        tree.column(col, width=95, minwidth=80, anchor="center")
                     elif col == "distance_km":
                         tree.column(col, width=110, minwidth=90, anchor="center")
                     elif col == "distance_from_area":
@@ -3464,6 +3490,661 @@ SinoMagan Indus Global Trade LLP
                 f"All entries are unique and valid."
             )
             messagebox.showinfo("Matrix Clean", msg)
+
+    # =========================================================================
+    # PRODUCT SOURCING TAB IMPLEMENTATION
+    # =========================================================================
+
+    def setup_prod_sourcing_tab(self):
+        """Sets up the Product Sourcing tab with region selector, foreign suppliers toggle, niche filter, and product matrix."""
+        import tkinter as tk
+        from tkinter import ttk
+        import tkinter.messagebox as messagebox
+
+        self.tab_prod_sourcing.grid_columnconfigure(0, weight=1)
+        self.tab_prod_sourcing.grid_rowconfigure(2, weight=1)
+
+        # 1. Top Control / Search Bar (Row 0)
+        search_frame = ctk.CTkFrame(self.tab_prod_sourcing)
+        search_frame.grid(row=0, column=0, padx=10, pady=(10, 6), sticky="ew")
+
+        lbl_region = ctk.CTkLabel(search_frame, text="🌍 Target Region (Supply from India):", font=("Arial", 12, "bold"))
+        lbl_region.pack(side="left", padx=(10, 4), pady=8)
+
+        self.prod_region_var = ctk.StringVar(value="Worldwide (wt-wt)")
+        self.prod_region_dropdown = ctk.CTkOptionMenu(
+            search_frame, 
+            values=self.country_regions, 
+            variable=self.prod_region_var, 
+            width=140
+        )
+        self.prod_region_dropdown.pack(side="left", padx=4, pady=8)
+
+        self.prod_foreign_sup_var = ctk.BooleanVar(value=False)
+        self.prod_foreign_sup_check = ctk.CTkCheckBox(
+            search_frame, 
+            text="Foreign Suppliers", 
+            variable=self.prod_foreign_sup_var,
+            font=("Arial", 11, "bold"),
+            fg_color="#005b96",
+            hover_color="#003f66"
+        )
+        self.prod_foreign_sup_check.pack(side="left", padx=(10, 10), pady=8)
+
+        lbl_niche = ctk.CTkLabel(search_frame, text="📦 Niche:", font=("Arial", 12, "bold"))
+        lbl_niche.pack(side="left", padx=(6, 4), pady=8)
+
+        self.industrial_niches_list = [
+            "All 13 Niches",
+            "Niche 1: Electrical & Electronic Components",
+            "Niche 2: Wires & Cables",
+            "Niche 3: Power Distribution & Protection Relays",
+            "Niche 4: HVAC, Fans, Pumps & Actuators",
+            "Niche 5: Batteries, Solar Energy & Renewable Scrap",
+            "Niche 6: Industrial Generators",
+            "Niche 7: LED Lighting & Lighting Controls",
+            "Niche 8: Commercial Appliances",
+            "Niche 9: Sensors & Testing",
+            "Niche 10: Electric Vehicles & EV Infrastructure",
+            "Niche 11: Printed Circuit Boards (PCB) & PCBA",
+            "Niche 12: Building Materials & Wooden Panels",
+            "Niche 13: Automotive & Car Parts / Auto Components"
+        ]
+        self.prod_niche_var = ctk.StringVar(value="All 13 Niches")
+        self.prod_niche_dropdown = ctk.CTkOptionMenu(
+            search_frame, 
+            values=self.industrial_niches_list, 
+            variable=self.prod_niche_var, 
+            width=210
+        )
+        self.prod_niche_dropdown.pack(side="left", padx=4, pady=8)
+
+        self.prod_keyword_entry = ctk.CTkEntry(
+            search_frame, 
+            placeholder_text="Keyword / Specific Product...", 
+            width=165
+        )
+        self.prod_keyword_entry.pack(side="left", padx=4, pady=8)
+        self.prod_keyword_entry.bind("<Return>", lambda event: self.start_product_sourcing_search())
+
+        self.btn_prod_search = ctk.CTkButton(
+            search_frame, 
+            text="✨ Find Products (AI)", 
+            command=self.start_product_sourcing_search,
+            width=150,
+            fg_color="#1f7a1f",
+            hover_color="#145214",
+            font=("Arial", 12, "bold")
+        )
+        self.btn_prod_search.pack(side="left", padx=(6, 10), pady=8)
+
+        self.lbl_prod_status = ctk.CTkLabel(
+            search_frame, 
+            text="", 
+            font=("Arial", 11, "italic"),
+            text_color="#2ecc71"
+        )
+        self.lbl_prod_status.pack(side="left", padx=4, pady=8)
+
+        # 2. Action Buttons Bar (Row 1)
+        btn_bar = ctk.CTkFrame(self.tab_prod_sourcing, fg_color="transparent")
+        btn_bar.grid(row=1, column=0, padx=10, pady=(0, 6), sticky="w")
+
+        btn_sync = ctk.CTkButton(
+            btn_bar, 
+            text="🔄 Sync Matrix", 
+            command=lambda: self.load_matrix(self.prod_tree, "Products_Matrix.xlsx"), 
+            width=110
+        )
+        btn_sync.pack(side="left", padx=(0, 6))
+
+        btn_add = ctk.CTkButton(
+            btn_bar, 
+            text="➕ Add Custom Product", 
+            command=self.open_add_product_window, 
+            width=150, 
+            fg_color="#1f7a1f", 
+            hover_color="#145214"
+        )
+        btn_add.pack(side="left", padx=(0, 6))
+
+        btn_copy = ctk.CTkButton(
+            btn_bar, 
+            text="📋 Copy Details", 
+            command=self.copy_selected_product_details, 
+            width=110, 
+            fg_color="#3a3a3a", 
+            hover_color="#2b2b2b"
+        )
+        btn_copy.pack(side="left", padx=(0, 6))
+
+        btn_source = ctk.CTkButton(
+            btn_bar, 
+            text="🔍 Source in URL Discovery", 
+            command=self.source_selected_product_in_discovery, 
+            width=175, 
+            fg_color="#005b96", 
+            hover_color="#003f66"
+        )
+        btn_source.pack(side="left", padx=(0, 6))
+
+        btn_open_excel = ctk.CTkButton(
+            btn_bar, 
+            text="📂 Open Excel", 
+            command=lambda: self.open_excel_file("Products_Matrix.xlsx"), 
+            width=100, 
+            fg_color="#2d572c", 
+            hover_color="#1f3d1e"
+        )
+        btn_open_excel.pack(side="left", padx=(0, 6))
+
+        btn_clean = ctk.CTkButton(
+            btn_bar, 
+            text="🧹 Clean Matrix", 
+            command=lambda: self.clean_local_matrix("Products_Matrix.xlsx", self.prod_tree), 
+            width=100, 
+            fg_color="#b30000", 
+            hover_color="#800000"
+        )
+        btn_clean.pack(side="left", padx=(0, 6))
+
+        btn_delete_all = ctk.CTkButton(
+            btn_bar, 
+            text="🗑️ Delete All", 
+            command=lambda: self.delete_all_entries("Products_Matrix.xlsx", self.prod_tree), 
+            width=100, 
+            fg_color="#660000", 
+            hover_color="#4d0000"
+        )
+        btn_delete_all.pack(side="left", padx=6)
+
+        # 3. Interactive Treeview Frame (Row 2)
+        tree_frame = ctk.CTkFrame(self.tab_prod_sourcing)
+        tree_frame.grid(row=2, column=0, sticky="nsew", padx=10, pady=(0, 10))
+        tree_frame.grid_columnconfigure(0, weight=1)
+        tree_frame.grid_rowconfigure(0, weight=1)
+
+        style = ttk.Style()
+        style.theme_use("default")
+        style.configure("Treeview", background="#2b2b2b", foreground="white", fieldbackground="#2b2b2b", borderwidth=0)
+        style.map('Treeview', background=[('selected', '#1f538d')])
+        style.configure("Treeview.Heading", background="#565b5e", foreground="white", relief="flat")
+        style.map("Treeview.Heading", background=[('active', '#343638')])
+
+        self.prod_tree = ttk.Treeview(tree_frame, show='headings')
+        vsb = ttk.Scrollbar(tree_frame, orient="vertical", command=self.prod_tree.yview)
+        hsb = ttk.Scrollbar(tree_frame, orient="horizontal", command=self.prod_tree.xview)
+        self.prod_tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+
+        self.prod_tree.grid(row=0, column=0, sticky='nsew')
+        vsb.grid(row=0, column=1, sticky='ns')
+        hsb.grid(row=1, column=0, sticky='ew')
+
+        # Double click to inspect or source product
+        def on_prod_double_click(event):
+            sel = self.prod_tree.selection()
+            if sel:
+                self.copy_selected_product_details()
+        self.prod_tree.bind("<Double-1>", on_prod_double_click)
+
+        # Right click context menu
+        prod_menu = tk.Menu(self.tab_prod_sourcing, tearoff=0)
+        prod_menu.add_command(label="📋 Copy Product Details", command=self.copy_selected_product_details)
+        prod_menu.add_command(label="🔍 Source Suppliers in URL Discovery", command=self.source_selected_product_in_discovery)
+        prod_menu.add_separator()
+        prod_menu.add_command(label="📂 Open Products_Matrix.xlsx", command=lambda: self.open_excel_file("Products_Matrix.xlsx"))
+
+        def on_prod_right_click(event):
+            item = self.prod_tree.identify_row(event.y)
+            if item:
+                self.prod_tree.selection_set(item)
+                try:
+                    prod_menu.tk_popup(event.x_root, event.y_root)
+                finally:
+                    prod_menu.grab_release()
+
+        self.prod_tree.bind("<Button-3>", on_prod_right_click)
+
+        # 4. Initialize and load Products_Matrix.xlsx
+        self.ensure_products_matrix_exists()
+        self.load_matrix(self.prod_tree, "Products_Matrix.xlsx")
+
+    def ensure_products_matrix_exists(self):
+        """Ensures Products_Matrix.xlsx exists and is pre-seeded with all 13 industrial niches."""
+        matrix_file = "Products_Matrix.xlsx"
+        if not os.path.exists(matrix_file):
+            try:
+                import pandas as pd
+                from datetime import datetime
+                today_str = datetime.now().strftime("%Y-%m-%d")
+                baseline_data = [
+                    # Niche 1
+                    {"Product Name": "Illuminated Big Rocker Power Switches (16A/20A, CQC/CE/RoHS)", "Niche": "Niche 1: Electrical & Electronic Components", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "853650", "Key Specifications": "Round and rectangular rocker power switches, 16A/20A 250VAC, illuminated red/green buttons, snap-in panel mount, CQC/TUV/CE/RoHS certified", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Gujarat, Maharashtra, Bangalore", "Foreign Competitors / Notes": "Competes with Chinese manufacturers; Indian manufacturers offer high endurance rating (50k cycles) and RoHS compliance", "Source Reference": "EEPC India / Industrial Electrical Catalog", "Date Added": today_str},
+                    {"Product Name": "Brass Cable Glands & Compression Terminal Lugs", "Niche": "Niche 1: Electrical & Electronic Components", "Target Region": "UAE & Middle East", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "853690", "Key Specifications": "Metric (M20-M75) & PG threads, nickel plated brass, IP68 ingress protection, weatherproof sealing for armored XLPE industrial cables", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Jamnagar (Gujarat), Mumbai", "Foreign Competitors / Notes": "Jamnagar brass hub is globally price-competitive with Turkey and Germany; high GCC export volume", "Source Reference": "Jamnagar Brass Association / DGFT Export Matrix", "Date Added": today_str},
+                    {"Product Name": "Real-Time Clock IC Modules (Epson RA-8565SA Compatible)", "Niche": "Niche 1: Electrical & Electronic Components", "Target Region": "Worldwide", "Supplier Type": "Foreign Supplier", "Supplier Country": "Japan / Taiwan", "HS Code": "854200", "Key Specifications": "I2C-bus interface RTC, 32.768 kHz built-in crystal unit, ultra-low current consumption (0.45 uA), SOP-14 package", "Export Potential": "High (Sourcing)", "Indian Manufacturing Hubs": "Bangalore / Hyderabad (Distribution & PCB Assembly)", "Foreign Competitors / Notes": "Key foreign component for Indian PCBA exports; sourced via authorized semiconductor channels", "Source Reference": "Semiconductor Component Directory", "Date Added": today_str},
+                    # Niche 2
+                    {"Product Name": "Armored Low/Medium Voltage XLPE Power Cables (1.1kV - 33kV)", "Niche": "Niche 2: Wires & Cables", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "854449", "Key Specifications": "Stranded electrolytic copper / aluminum conductors, cross-linked polyethylene (XLPE) insulation, galvanized steel strip armoring, flame retardant PVC sheath", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Gujarat, Silvassa, Maharashtra", "Foreign Competitors / Notes": "India is a major global exporter of copper & aluminum power cables; competes with Turkey and UAE mills", "Source Reference": "IEEMA / Indian Cable Manufacturers Association", "Date Added": today_str},
+                    {"Product Name": "Submersible 3-Core Flat Copper Pump Cables", "Niche": "Niche 2: Wires & Cables", "Target Region": "USA & North America", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "854411", "Key Specifications": "99.97% pure bright annealed copper conductors, flexible water-resistant PVC/rubber insulation, high abrasion resistance for deep-well submersible pumps", "Export Potential": "High", "Indian Manufacturing Hubs": "Coimbatore (Tamil Nadu), Gujarat", "Foreign Competitors / Notes": "High agricultural and industrial borehole pump replacement market in North America and Australia", "Source Reference": "Coimbatore Pump & Cable Cluster", "Date Added": today_str},
+                    # Niche 3
+                    {"Product Name": "Numerical Protection Relays & Feeder Management Relays", "Niche": "Niche 3: Power Distribution & Protection Relays", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "853649", "Key Specifications": "Microprocessor-based multi-function overcurrent, earth fault, arc-flash detection (SEL-751 compatible), IEC 61850 substation communication", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Vadodara (Gujarat), Bangalore, Nashik", "Foreign Competitors / Notes": "Schweitzer (USA), Siemens (Germany), ABB (Switzerland); Indian switchgear OEMs offer highly cost-effective CRP integration", "Source Reference": "Vadodara Power Equipment Hub", "Date Added": today_str},
+                    {"Product Name": "Substation Control and Relay Panels (CRP) 11kV - 132kV", "Niche": "Niche 3: Power Distribution & Protection Relays", "Target Region": "Saudi Arabia & GCC", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "853710", "Key Specifications": "Simplex / Duplex control and relay panels, wired with numerical relays, mimic diagrams, test blocks, and annunciators for power transmission substations", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Gujarat, Maharashtra, Chennai", "Foreign Competitors / Notes": "High demand in Middle Eastern grid expansions; Indian panel builders have SEC / DEWA pre-qualifications", "Source Reference": "Central Power Research Institute (CPRI) Certified", "Date Added": today_str},
+                    # Niche 4
+                    {"Product Name": "Hydraulic Actuators & Speed Regulating Motors (Groschopp Compatible)", "Niche": "Niche 4: HVAC, Fans, Pumps & Actuators", "Target Region": "Germany & Europe", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "850110", "Key Specifications": "Fractional horsepower PMDC / brushless motor governors, precision speed control, heavy duty die-cast aluminum housing, WK0920702 equivalent", "Export Potential": "High", "Indian Manufacturing Hubs": "Pune, Coimbatore, Bangalore", "Foreign Competitors / Notes": "Groschopp (Germany), Maxon (Switzerland); Indian precision motor manufacturers provide 35% lower BOM cost", "Source Reference": "Precision Actuator Trade Analysis", "Date Added": today_str},
+                    {"Product Name": "Stainless Steel Submersible Multistage Borehole Pumps", "Niche": "Niche 4: HVAC, Fans, Pumps & Actuators", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "841370", "Key Specifications": "SS 304/316 impellers and diffusers, 50Hz/60Hz rewound motors, discharge heads up to 450m, capacity up to 120 m3/h", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Coimbatore (Tamil Nadu), Ahmedabad", "Foreign Competitors / Notes": "Competes directly with Italian (Grundfos/DAB) and Chinese pump manufacturers; Coimbatore hub is world-renowned", "Source Reference": "Coimbatore District Small Industries Association", "Date Added": today_str},
+                    # Niche 5
+                    {"Product Name": "Monocrystalline TOPCon Bifacial Solar PV Modules (550W - 700W)", "Niche": "Niche 5: Batteries, Solar Energy & Renewable Scrap", "Target Region": "USA & North America", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "854143", "Key Specifications": "N-Type TOPCon cells, 16BB, dual-glass bifacial (up to 80% bifaciality), 22.5%+ module efficiency, Tier-1 ALMM / IEC / UL certified", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Gujarat (Mundra, Surat), Bangalore, Noida", "Foreign Competitors / Notes": "Indian solar modules enjoy strong demand in US due to AD/CVD and UFLPA restrictions on Chinese solar panels", "Source Reference": "National Solar Energy Federation of India (NSEFI)", "Date Added": today_str},
+                    {"Product Name": "Decommissioned Solar PV Module Scrap (500 MT Container Lots)", "Niche": "Niche 5: Batteries, Solar Energy & Renewable Scrap", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "854800", "Key Specifications": "Decommissioned silicon solar panels, sorted by cell type, baled / palletized for secondary silicon, silver, and copper recycling", "Export Potential": "High", "Indian Manufacturing Hubs": "Nhava Sheva, Mundra, Kandla port regions", "Foreign Competitors / Notes": "Global circular economy recycling demand in Europe, Japan, and Southeast Asia", "Source Reference": "Renewable Material Recovery Network", "Date Added": today_str},
+                    {"Product Name": "LiFePO4 Energy Storage Battery Packs (48V / 100Ah - 200Ah)", "Niche": "Niche 5: Batteries, Solar Energy & Renewable Scrap", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "850760", "Key Specifications": "Prismatic LiFePO4 cells, 6000+ deep cycles, integrated smart BMS with RS485/CAN communication, telecom and residential solar ESS", "Export Potential": "High", "Indian Manufacturing Hubs": "Pune, Bangalore, Manesar", "Foreign Competitors / Notes": "China (CATL, BYD); Indian battery pack assemblers offer local customization, BIS, and export warranties", "Source Reference": "India Energy Storage Alliance (IESA)", "Date Added": today_str},
+                    # Niche 6
+                    {"Product Name": "Silent Containerized Diesel Generator Sets (25kVA - 500kVA)", "Niche": "Niche 6: Industrial Generators", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "850211", "Key Specifications": "Heavy duty 4-stroke diesel engine (Cummins/Kirloskar), acoustic weatherproof soundproof enclosure (<75 dBA at 1m), digital auto-mains failure (AMF) controller", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Pune, Kolhapur, Faridabad", "Foreign Competitors / Notes": "Perkins (UK), Caterpillar (USA); India is a major exporter of diesel power gensets across Africa, Middle East, and APAC", "Source Reference": "Indian Diesel Engine Manufacturers", "Date Added": today_str},
+                    # Niche 7
+                    {"Product Name": "Centralized Smart Streetlight Monitoring & Dimming Systems", "Niche": "Niche 7: LED Lighting & Lighting Controls", "Target Region": "United Kingdom & Europe", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "853710", "Key Specifications": "LoRaWAN / GSM wireless telemetry, DALI & 0-10V automated dimming controllers, astronomical timer, cloud SCADA energy monitoring", "Export Potential": "High", "Indian Manufacturing Hubs": "Delhi NCR, Bangalore, Pune", "Foreign Competitors / Notes": "Signify (Netherlands), Telensa (UK); Indian smart city lighting controllers offer open protocols and lower software license fees", "Source Reference": "Smart Lighting Export Consortium", "Date Added": today_str},
+                    {"Product Name": "Industrial High-Bay LED Luminaires & Floodlights (100W - 400W)", "Niche": "Niche 7: LED Lighting & Lighting Controls", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "940542", "Key Specifications": "High-pressure die-cast aluminum housing, 140-160 lm/W high efficacy, Meanwell / Philips drivers, IP66 / IK08 surge protection 10kV", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Delhi NCR, Mumbai, Gujarat", "Foreign Competitors / Notes": "China LED lighting hubs; Indian luminaires have superior thermal dissipation for hot climate applications", "Source Reference": "ELCOMA India Lighting Trade Directory", "Date Added": today_str},
+                    # Niche 8
+                    {"Product Name": "Commercial Ride-On & Walk-Behind Floor Scrubber Dryers", "Niche": "Niche 8: Commercial Appliances", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "847989", "Key Specifications": "Heavy duty rotomolded polyethylene recovery tanks, parabolic squeegee, twin counter-rotating disc brushes, battery powered traction drive", "Export Potential": "High", "Indian Manufacturing Hubs": "Coimbatore, Pune, Delhi NCR", "Foreign Competitors / Notes": "Kärcher (Germany), Nilfisk (Denmark), Tennant (USA); Indian machines provide rugged reliability at 40% lower initial cost", "Source Reference": "Commercial Cleaning Equipment Council", "Date Added": today_str},
+                    # Niche 9
+                    {"Product Name": "Industrial PIR Motion & Daylight Sensors (IP65 Outdoor)", "Niche": "Niche 9: Sensors & Testing", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "853650", "Key Specifications": "Pyroelectric dual-element sensor, 360-degree coverage, 15m detection radius, zero-crossing switching for LED capacitive loads", "Export Potential": "High", "Indian Manufacturing Hubs": "Delhi NCR, Bangalore", "Foreign Competitors / Notes": "Germany (Theben, Steinel); Indian building automation sensors offer competitive pricing for retrofit projects", "Source Reference": "Building Automation Sensor Trade Network", "Date Added": today_str},
+                    {"Product Name": "Transformer Turns Ratio & Winding Resistance Test Benches", "Niche": "Niche 9: Sensors & Testing", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "903089", "Key Specifications": "Automated turns ratio range 0.8 to 10,000, 4-wire Kelvin micro-ohmmeter, built-in thermal printer and USB interface for utility testing", "Export Potential": "High", "Indian Manufacturing Hubs": "Vadodara, Bangalore, Mumbai", "Foreign Competitors / Notes": "Haefely (Switzerland), Megger (UK); Indian electrical test instrument makers have high credibility across Asian and African utilities", "Source Reference": "CPRI Electrical Testing Standards", "Date Added": today_str},
+                    # Niche 10
+                    {"Product Name": "Dual-Gun DC Fast EV Charging Stations (60kW - 180kW)", "Niche": "Niche 10: Electric Vehicles & EV Infrastructure", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "850440", "Key Specifications": "Dual CCS2 connectors, dynamic load balancing, OCPP 1.6J/2.0.1, 7-inch sunlight readable touchscreen, IP54 outdoor ingress protection", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Bangalore, Pune, Gurgaon", "Foreign Competitors / Notes": "ABB (Switzerland), Tritium (Australia), Chinese EVSE; Indian EV chargers provide certified European standards at lower costs", "Source Reference": "Society of Indian Automobile Manufacturers (SIAM)", "Date Added": today_str},
+                    {"Product Name": "Type 2 to Type 2 EV Charging Cables (32A 3-Phase 22kW)", "Niche": "Niche 10: Electric Vehicles & EV Infrastructure", "Target Region": "Germany & Europe", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "854442", "Key Specifications": "TPU jacket flexible cable, silver plated copper alloy terminals, IP55 mated, CE & TUV certified according to IEC 62196-2", "Export Potential": "High", "Indian Manufacturing Hubs": "Pune, Gurgaon", "Foreign Competitors / Notes": "Phoenix Contact (Germany), Mennekes (Germany); high aftermarket and OEM bundle demand across Europe", "Source Reference": "Automotive Component Manufacturers Association (ACMA)", "Date Added": today_str},
+                    # Niche 11
+                    {"Product Name": "Multi-Layer Rigid FR4 PCBs (4 to 16 Layers)", "Niche": "Niche 11: Printed Circuit Boards (PCB) & PCBA", "Target Region": "USA & North America", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "853400", "Key Specifications": "TG170/TG180 FR4 material, ENIG / Lead-Free HASL surface finish, controlled impedance +/-10%, IPC-A-600 Class 2/3 certified", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Bangalore, Gandhinagar (Gujarat), Chennai", "Foreign Competitors / Notes": "China (Shennan, Kinwong); Indian PCB fabricators are gaining significant market share under China+1 diversification strategies", "Source Reference": "IPCA (Indian Printed Circuit Association)", "Date Added": today_str},
+                    {"Product Name": "Turnkey SMT PCBA Assembly & Electronics Manufacturing Services (EMS)", "Niche": "Niche 11: Printed Circuit Boards (PCB) & PCBA", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "853400", "Key Specifications": "High-speed SMT lines handling 01005 passives, BGA 0.4mm pitch, 3D SPI & AOI, conformal coating, automated functional testing", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Bangalore, Noida, Chennai, Sriperumbudur", "Foreign Competitors / Notes": "Vietnam, Taiwan, China; Indian EMS facilities have ISO 13485, AS9100, and IATF 16949 international accreditations", "Source Reference": "ELCINA (Electronic Industries Association of India)", "Date Added": today_str},
+                    {"Product Name": "Metal Core Aluminum MCPCBs (Thermal Conductivity 2.0W/mK)", "Niche": "Niche 11: Printed Circuit Boards (PCB) & PCBA", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "853400", "Key Specifications": "1.5mm aluminum base alloy 5052, high dielectric strength dielectric layer, 1oz/2oz copper foil, white reflective solder mask for automotive LED lighting", "Export Potential": "High", "Indian Manufacturing Hubs": "Gujarat, Bangalore", "Foreign Competitors / Notes": "China; Indian MCPCBs serve global automotive LED headlamp and industrial luminaire manufacturers", "Source Reference": "IPCA / Automotive Lighting Standards", "Date Added": today_str},
+                    # Niche 12
+                    {"Product Name": "Commercial Marine Grade Plywood (IS 710 BWP Hardwood)", "Niche": "Niche 12: Building Materials & Wooden Panels", "Target Region": "UAE & Middle East", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "441233", "Key Specifications": "100% calibrated hardwood core, unextended phenol formaldehyde (BWP) synthetic resin, 72 hours boiling water proof, borer and termite proof", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Yamunanagar (Haryana), Perumbavoor (Kerala), Gandhidham (Gujarat)", "Foreign Competitors / Notes": "Indonesia, Russia, Vietnam; Indian marine plywood is the gold standard across GCC construction and interior decoration", "Source Reference": "Federation of All India Timber Merchants", "Date Added": today_str},
+                    {"Product Name": "Melamine Faced Laminated MDF & Decorative Particle Boards", "Niche": "Niche 12: Building Materials & Wooden Panels", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "441114", "Key Specifications": "E1 low formaldehyde emission grade, scratch-resistant suede/woodgrain textured melamine paper, thickness 6mm to 25mm, size 8ft x 4ft", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Yamunanagar, Gujarat, Chennai", "Foreign Competitors / Notes": "Kronospan (Germany), Kastamonu (Turkey), China; Indian panel boards offer superior moisture resistance", "Source Reference": "Indian Plywood Industries Research and Training Institute (IPIRTI)", "Date Added": today_str},
+                    # Niche 13
+                    {"Product Name": "Ceramic Low-Metallic Brake Pads & Ventilated Brake Discs", "Niche": "Niche 13: Automotive & Car Parts / Auto Components", "Target Region": "USA & North America", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "870830", "Key Specifications": "ECE R90 certified, copper-free ceramic formulation, low noise & low dust, precision CNC balanced ventilated rotors with anti-rust coating", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Pune, Chennai, Aurangabad", "Foreign Competitors / Notes": "Bosch (Germany), Brembo (Italy), China; India is a premier global hub for OEM friction materials and aftermarket brake systems", "Source Reference": "Automotive Component Manufacturers Association (ACMA)", "Date Added": today_str},
+                    {"Product Name": "Hydraulic Suspension Shock Absorbers & MacPherson Struts", "Niche": "Niche 13: Automotive & Car Parts / Auto Components", "Target Region": "Germany & Europe", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "870880", "Key Specifications": "Twin-tube gas pressurized, hard chrome plated micro-crack piston rod, multi-lip Japanese NOK oil seal, precision damping valves for passenger vehicles", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Pune, Gurgaon, Rajkot", "Foreign Competitors / Notes": "KYB (Japan), Monroe (USA), Bilstein (Germany); Indian auto tier-1 suppliers export millions of units to European car platforms", "Source Reference": "ACMA Automotive Sourcing Directory", "Date Added": today_str},
+                    {"Product Name": "Automotive Wiring Harnesses & Engine Sensors", "Niche": "Niche 13: Automotive & Car Parts / Auto Components", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "854430", "Key Specifications": "Thin-wall FLRY automotive copper cables, ultrasonic wire splicing, waterproof sealed connector assemblies, temperature range -40°C to +125°C", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Gurgaon, Pune, Noida, Chennai", "Foreign Competitors / Notes": "Yazaki (Japan), Sumitomo (Japan), Leoni (Germany); Motherson and Indian tier-1 harness makers have global market leadership", "Source Reference": "Motherson / ACMA Supply Chain Index", "Date Added": today_str},
+                    {"Product Name": "Aluminum Brazed Car Radiators & Intercoolers (Controlled Atmosphere Brazing)", "Niche": "Niche 13: Automotive & Car Parts / Auto Components", "Target Region": "Worldwide", "Supplier Type": "Indian Supplier (Supply from India)", "Supplier Country": "India", "HS Code": "870891", "Key Specifications": "CAB aluminum core with louvered fins, PA66 GF30 glass-reinforced polyamide tanks, burst pressure tested to 3.5 bar, high heat exchange efficiency", "Export Potential": "Very High", "Indian Manufacturing Hubs": "Chennai, Coimbatore, Delhi NCR", "Foreign Competitors / Notes": "Denso (Japan), Valeo (France), China; Indian cooling system plants supply major European and Japanese carmakers", "Source Reference": "ACMA Engine Cooling Systems Group", "Date Added": today_str}
+                ]
+                df = pd.DataFrame(baseline_data)
+                df.to_excel(matrix_file, index=False)
+                self.logger.info(f"Initialized {matrix_file} with {len(df)} products across all 13 niches.")
+            except Exception as e:
+                self.logger.error(f"Failed to initialize {matrix_file}: {e}")
+
+    def start_product_sourcing_search(self):
+        """Initiates AI export product sourcing search in a background thread."""
+        import tkinter.messagebox as messagebox
+        import threading
+
+        region = self.prod_region_var.get()
+        include_foreign = self.prod_foreign_sup_var.get()
+        niche = self.prod_niche_var.get()
+        keyword = self.prod_keyword_entry.get().strip()
+
+        region_name = region.split(" (")[0].strip()
+        self.btn_prod_search.configure(state="disabled")
+        self.lbl_prod_status.configure(
+            text=f"⏳ Finding export products for {region_name} via Gemini...",
+            text_color="#f39c12"
+        )
+
+        threading.Thread(
+            target=self.product_sourcing_search_thread,
+            args=(region_name, include_foreign, niche, keyword),
+            daemon=True
+        ).start()
+
+    def product_sourcing_search_thread(self, region_name, include_foreign, niche, keyword):
+        """Background worker that calls Gemini to discover export products to supply from India."""
+        try:
+            import pandas as pd
+            from datetime import datetime
+            from google.genai import types
+            from pydantic import BaseModel, Field
+            from typing import List
+            from llm_fallback import generate_with_fallback
+
+            class ProductItem(BaseModel):
+                product_name: str = Field(description="Specific technical product name")
+                niche: str = Field(description="One of the 13 industrial niches")
+                target_region: str = Field(default=region_name, description="Target destination market")
+                supplier_type: str = Field(description="'Indian Supplier (Supply from India)' or 'Foreign Supplier'")
+                supplier_country: str = Field(description="'India' or foreign country like China, Germany, USA, Japan")
+                hs_code: str = Field(description="Valid 6-digit HS tariff code")
+                specifications: str = Field(description="1-2 sentences of key technical specifications, standards, or ratings")
+                export_potential: str = Field(description="'Very High', 'High', or 'Growing'")
+                indian_manufacturing_hubs: str = Field(description="Indian industrial clusters (e.g. Pune, Gujarat, Jamnagar, Coimbatore, Yamunanagar)")
+                foreign_competitors_notes: str = Field(description="Foreign competitor countries and Indian competitive advantage")
+                source_reference: str = Field(description="Market intelligence source or trade council")
+
+            class ProductListResponse(BaseModel):
+                products: List[ProductItem]
+
+            foreign_instruction = (
+                "INCLUDE BOTH Indian manufacturing export products AND competitive foreign suppliers (e.g. China, Germany, Japan, USA) "
+                "that supply this destination market, highlighting opportunities for Indian manufacturers to substitute them."
+                if include_foreign else
+                "FOCUS EXCLUSIVELY on high-potential products that can be manufactured and supplied from India to this target market."
+            )
+
+            prompt = f"""You are an elite international trade intelligence and export product sourcing consultant for Indian B2B trade.
+Our company sources and exports industrial goods from Indian manufacturing hubs to global markets across these 13 core niches:
+Niche 1: Electrical & Electronic Components
+Niche 2: Wires & Cables
+Niche 3: Power Distribution & Protection Relays
+Niche 4: HVAC, Fans, Pumps & Actuators
+Niche 5: Batteries, Solar Energy & Renewable Scrap
+Niche 6: Industrial Generators
+Niche 7: LED Lighting & Lighting Controls
+Niche 8: Commercial Appliances
+Niche 9: Sensors & Testing
+Niche 10: Electric Vehicles & EV Infrastructure
+Niche 11: Printed Circuit Boards (PCB) & PCBA
+Niche 12: Building Materials & Wooden Panels
+Niche 13: Automotive & Car Parts / Auto Components
+
+Target Destination Market: {region_name}
+Foreign Suppliers Mode: {foreign_instruction}
+Niche Filter: {niche}
+Optional Keyword / Specific Sub-product: {keyword or 'None (Analyze top high-margin export products)'}
+
+Analyze international trade demand in {region_name} and India's manufacturing strengths (Gujarat, Maharashtra, Bangalore, Pune, Coimbatore, Jamnagar, Yamunanagar, Chennai, Delhi NCR).
+Generate 6 to 10 actionable, specific, real-world product supply opportunities.
+Ensure each product maps cleanly to one of the 13 niches above, provides a realistic 6-digit HS code, and details key technical specifications.
+"""
+
+            response = generate_with_fallback(
+                prompt=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=ProductListResponse,
+                    temperature=0.2
+                ),
+                logger=self.logger
+            )
+
+            new_products = []
+            if hasattr(response, 'parsed') and response.parsed and hasattr(response.parsed, 'products'):
+                for item in response.parsed.products:
+                    new_products.append(item.model_dump())
+            elif response and response.text:
+                import json
+                cleaned_text = response.text.strip()
+                if cleaned_text.startswith("```json"):
+                    cleaned_text = cleaned_text[7:]
+                if cleaned_text.endswith("```"):
+                    cleaned_text = cleaned_text[:-3]
+                data = json.loads(cleaned_text.strip())
+                if isinstance(data, dict) and "products" in data:
+                    new_products = data["products"]
+                elif isinstance(data, list):
+                    new_products = data
+
+            matrix_file = "Products_Matrix.xlsx"
+            self.ensure_products_matrix_exists()
+            df_existing = pd.read_excel(matrix_file)
+
+            today_str = datetime.now().strftime("%Y-%m-%d")
+            added_count = 0
+
+            # Normalize column names in existing df
+            existing_keys = set()
+            col_p = 'Product Name' if 'Product Name' in df_existing.columns else 'product_name'
+            col_r = 'Target Region' if 'Target Region' in df_existing.columns else 'target_region'
+            for _, r in df_existing.iterrows():
+                p_val = str(r.get(col_p, '')).strip().lower()
+                r_val = str(r.get(col_r, '')).strip().lower()
+                if p_val:
+                    existing_keys.add((p_val, r_val))
+
+            rows_to_add = []
+            for p in new_products:
+                p_name = p.get("product_name", "").strip()
+                p_reg = p.get("target_region", region_name).strip()
+                if not p_name:
+                    continue
+                key = (p_name.lower(), p_reg.lower())
+                if key not in existing_keys:
+                    existing_keys.add(key)
+                    rows_to_add.append({
+                        "Product Name": p_name,
+                        "Niche": p.get("niche", niche if niche != "All 13 Niches" else "Niche 1: Electrical & Electronic Components"),
+                        "Target Region": p_reg,
+                        "Supplier Type": p.get("supplier_type", "Indian Supplier (Supply from India)"),
+                        "Supplier Country": p.get("supplier_country", "India"),
+                        "HS Code": str(p.get("hs_code", "")).strip(),
+                        "Key Specifications": p.get("specifications", ""),
+                        "Export Potential": p.get("export_potential", "High"),
+                        "Indian Manufacturing Hubs": p.get("indian_manufacturing_hubs", "Gujarat, Maharashtra, Bangalore"),
+                        "Foreign Competitors / Notes": p.get("foreign_competitors_notes", ""),
+                        "Source Reference": p.get("source_reference", "Gemini Export Intelligence"),
+                        "Date Added": today_str
+                    })
+                    added_count += 1
+
+            if rows_to_add:
+                df_new = pd.DataFrame(rows_to_add)
+                df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+                df_combined.to_excel(matrix_file, index=False)
+                self.logger.info(f"Appended {added_count} new product opportunities to {matrix_file}.")
+
+            self.ui_queue.put((self.on_product_search_completed, (added_count, region_name)))
+
+        except Exception as e:
+            self.logger.error(f"Product sourcing search failed: {e}")
+            self.ui_queue.put((self.on_product_search_failed, (str(e), region_name)))
+
+    def on_product_search_completed(self, added_count, region_name):
+        """Called on main thread when product discovery search completes."""
+        self.btn_prod_search.configure(state="normal")
+        if added_count > 0:
+            self.lbl_prod_status.configure(
+                text=f"✅ Added {added_count} products for {region_name}! (Matrix Updated)",
+                text_color="#2ecc71"
+            )
+        else:
+            self.lbl_prod_status.configure(
+                text=f"ℹ️ Found products already exist in matrix.",
+                text_color="#3498db"
+            )
+        self.load_matrix(self.prod_tree, "Products_Matrix.xlsx")
+
+    def on_product_search_failed(self, err_msg, region_name):
+        """Called on main thread when product discovery search encounters an error."""
+        self.btn_prod_search.configure(state="normal")
+        self.lbl_prod_status.configure(
+            text=f"❌ Error: {err_msg[:45]}...",
+            text_color="#e74c3c"
+        )
+
+    def open_excel_file(self, filename):
+        """Cross-platform helper to open an Excel file directly in default application."""
+        import tkinter.messagebox as messagebox
+        if not os.path.exists(filename):
+            messagebox.showinfo("File Not Found", f"'{filename}' was not found. Please sync or create matrix first.")
+            return
+        try:
+            if sys.platform == 'win32':
+                os.startfile(filename)
+            elif sys.platform == 'darwin':
+                import subprocess
+                subprocess.Popen(['open', filename])
+            else:
+                import subprocess
+                subprocess.Popen(['xdg-open', filename])
+            self.logger.info(f"Opened {filename} in default application.")
+        except Exception as e:
+            self.logger.error(f"Failed to open {filename}: {e}")
+            messagebox.showerror("Error", f"Could not open file: {e}")
+
+    def copy_selected_product_details(self):
+        """Copies the selected product row's full details to the clipboard."""
+        import tkinter.messagebox as messagebox
+        sel = self.prod_tree.selection()
+        if not sel:
+            messagebox.showinfo("Select Product", "Please select a product from the table first.")
+            return
+        item_id = sel[0]
+        row_vals = self.prod_tree.item(item_id)["values"]
+        cols = list(self.prod_tree["columns"])
+        data = dict(zip(cols, row_vals))
+
+        lines = [f"=== {data.get('Product Name', 'Product Details')} ==="]
+        for k, v in data.items():
+            if str(v).strip() and str(v).strip() not in ['None', 'nan']:
+                lines.append(f"{k}: {v}")
+        summary_text = "\n".join(lines)
+
+        self.clipboard_clear()
+        self.clipboard_append(summary_text)
+        self.lbl_prod_status.configure(
+            text="📋 Copied product details to clipboard!",
+            text_color="#2ecc71"
+        )
+        self.tab_prod_sourcing.after(2500, lambda: self.lbl_prod_status.configure(text=""))
+
+    def source_selected_product_in_discovery(self):
+        """Takes the selected product from the matrix, populates URL Discovery query, and switches tabs."""
+        import tkinter.messagebox as messagebox
+        sel = self.prod_tree.selection()
+        if not sel:
+            messagebox.showinfo("Select Product", "Please select a product from the table first.")
+            return
+        item_id = sel[0]
+        row_vals = self.prod_tree.item(item_id)["values"]
+        cols = list(self.prod_tree["columns"])
+        data = dict(zip(cols, row_vals))
+
+        pname = str(data.get("Product Name", "")).strip()
+        stype = str(data.get("Supplier Type", "")).strip()
+        country = str(data.get("Supplier Country", "India")).strip()
+        if not pname:
+            messagebox.showinfo("No Product", "Selected row does not have a valid product name.")
+            return
+
+        # Configure URL Discovery tab for this product
+        self.strategy_var.set("Suppliers")
+        self.on_strategy_change("Suppliers")
+
+        if "Indian" in stype or country.lower() == "india":
+            search_query = f"{pname} manufacturers India"
+            # Ensure India is chosen in discovery region
+            for r in self.country_regions:
+                if "India" in r:
+                    self.region_var.set(r)
+                    break
+        else:
+            search_query = f"{pname} manufacturers {country}"
+            for r in self.country_regions:
+                if country.lower() in r.lower():
+                    self.region_var.set(r)
+                    break
+
+        self.query_entry.delete("0.0", "end")
+        self.query_entry.insert("0.0", search_query)
+        self.tabview.set("URL Discovery")
+        self.lbl_disc_status.configure(
+            text=f"Loaded product sourcing query from Product Sourcing tab.",
+            text_color="#2ecc71"
+        )
+        self.logger.info(f"Loaded '{search_query}' into URL Discovery for scraping.")
+
+    def open_add_product_window(self):
+        """Opens a modal dialog to manually add a custom product to Products_Matrix.xlsx."""
+        import tkinter.messagebox as messagebox
+        from datetime import datetime
+
+        win = ctk.CTkToplevel(self)
+        win.title("➕ Add Custom Product to Sourcing Matrix")
+        win.geometry("640x680")
+        win.attributes("-topmost", True)
+        win.focus_set()
+
+        hdr = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
+        hdr.pack(fill="x", padx=15, pady=(15, 10))
+
+        lbl_t = ctk.CTkLabel(hdr, text="Add New Product to Products_Matrix.xlsx", font=("Arial", 15, "bold"), text_color="#ffffff")
+        lbl_t.pack(anchor="w", padx=15, pady=(10, 2))
+        lbl_sub = ctk.CTkLabel(hdr, text="Define product specs, niche classification, target export markets, and manufacturing hubs.", font=("Arial", 11), text_color="#a0a0a0")
+        lbl_sub.pack(anchor="w", padx=15, pady=(0, 10))
+
+        content = ctk.CTkScrollableFrame(win, height=480)
+        content.pack(fill="both", expand=True, padx=15, pady=5)
+
+        def make_field(label, default=""):
+            f = ctk.CTkFrame(content, fg_color="transparent")
+            f.pack(fill="x", pady=4)
+            lbl = ctk.CTkLabel(f, text=label, width=170, anchor="w", font=("Arial", 12, "bold"))
+            lbl.pack(side="left")
+            entry = ctk.CTkEntry(f, height=30)
+            entry.pack(side="left", fill="x", expand=True)
+            if default:
+                entry.insert(0, default)
+            return entry
+
+        def make_option(label, values, default=None):
+            f = ctk.CTkFrame(content, fg_color="transparent")
+            f.pack(fill="x", pady=4)
+            lbl = ctk.CTkLabel(f, text=label, width=170, anchor="w", font=("Arial", 12, "bold"))
+            lbl.pack(side="left")
+            var = ctk.StringVar(value=default or values[0])
+            opt = ctk.CTkOptionMenu(f, values=values, variable=var, height=30)
+            opt.pack(side="left", fill="x", expand=True)
+            return var
+
+        entry_name = make_field("Product Name *:", "")
+        var_niche = make_option("Industrial Niche *:", self.industrial_niches_list[1:], self.industrial_niches_list[1])
+        entry_reg = make_field("Target Region:", "Worldwide")
+        var_stype = make_option("Supplier Type:", ["Indian Supplier (Supply from India)", "Foreign Supplier"], "Indian Supplier (Supply from India)")
+        entry_country = make_field("Supplier Country:", "India")
+        entry_hscode = make_field("HS Tariff Code:", "")
+        entry_specs = make_field("Key Specifications:", "")
+        var_potential = make_option("Export Potential:", ["Very High", "High", "Growing", "Medium"], "Very High")
+        entry_hubs = make_field("Indian Hubs:", "Gujarat, Maharashtra, Bangalore")
+        entry_foreign = make_field("Foreign Notes / Competitors:", "")
+        entry_source = make_field("Source Reference:", "Manual Entry")
+
+        btn_bar = ctk.CTkFrame(win, fg_color="transparent")
+        btn_bar.pack(fill="x", padx=15, pady=12)
+
+        def save_product():
+            pname = entry_name.get().strip()
+            if not pname:
+                messagebox.showwarning("Product Name Required", "Please enter a product name.")
+                return
+
+            new_row = {
+                "Product Name": pname,
+                "Niche": var_niche.get(),
+                "Target Region": entry_reg.get().strip() or "Worldwide",
+                "Supplier Type": var_stype.get(),
+                "Supplier Country": entry_country.get().strip() or "India",
+                "HS Code": entry_hscode.get().strip(),
+                "Key Specifications": entry_specs.get().strip(),
+                "Export Potential": var_potential.get(),
+                "Indian Manufacturing Hubs": entry_hubs.get().strip(),
+                "Foreign Competitors / Notes": entry_foreign.get().strip(),
+                "Source Reference": entry_source.get().strip() or "Manual Entry",
+                "Date Added": datetime.now().strftime("%Y-%m-%d")
+            }
+
+            try:
+                import pandas as pd
+                matrix_file = "Products_Matrix.xlsx"
+                self.ensure_products_matrix_exists()
+                df = pd.read_excel(matrix_file)
+                df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+                df.to_excel(matrix_file, index=False)
+                self.load_matrix(self.prod_tree, matrix_file)
+                self.lbl_prod_status.configure(
+                    text=f"✅ Added '{pname}' to Products_Matrix.xlsx!",
+                    text_color="#2ecc71"
+                )
+                win.destroy()
+            except Exception as e:
+                messagebox.showerror("Save Error", f"Could not save product: {e}")
+
+        btn_save = ctk.CTkButton(btn_bar, text="💾 Save to Matrix", command=save_product, fg_color="#1f7a1f", hover_color="#145214", width=140)
+        btn_save.pack(side="right", padx=5)
+
+        btn_cancel = ctk.CTkButton(btn_bar, text="Cancel", command=win.destroy, fg_color="#565b5e", hover_color="#343638", width=90)
+        btn_cancel.pack(side="right", padx=5)
 
     def setup_wh_db_tab(self):
         self.wh_tree = self.create_database_tab_ui(
@@ -4138,6 +4819,9 @@ SinoMagan Indus Global Trade LLP
             self.lbl_log_status.configure(text=f"Status: {message[:50]}...")
         elif active_tab == "URL Discovery":
             self.lbl_disc_status.configure(text=f"Status: {message[:50]}...")
+        elif active_tab == "Product Sourcing":
+            if hasattr(self, 'lbl_prod_status'):
+                self.lbl_prod_status.configure(text=f"Status: {message[:50]}...")
 
     def setup_logistics_tab(self):
         self.tab_logistics.grid_columnconfigure(0, weight=1)
