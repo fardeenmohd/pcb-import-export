@@ -162,13 +162,14 @@ class App(ctk.CTk):
         control_frame.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         
         self.country_regions = [
-            'Worldwide (wt-wt)', 'Australia (au-en)', 'Poland (pl-pl)', 'Netherlands (nl-nl)', 
-            'Malaysia (my-en)', 'USA (us-en)', 'Canada (ca-en)', 'Germany (de-de)', 'France (fr-fr)', 
-            'Spain (es-es)', 'United Kingdom (uk-en)', 'UAE (ae-en)', 'Saudi Arabia (sa-ar)', 
-            'Qatar (qa-en)', 'Kuwait (kw-en)', 'Oman (om-en)', 'Bahrain (bh-en)', 'Singapore (sg-en)', 
-            'Hong Kong (hk-en)', 'Vietnam (vn-en)', 'Indonesia (id-en)', 'Philippines (ph-en)', 
-            'Thailand (th-en)', 'South Korea (kr-kr)', 'China (cn-zh)', 'India (in-en)', 
-            'South Africa (za-en)', 'Romania (ro-ro)', 'Finland (fi-fi)', 'Albania (al-al)', 'Moldova (md-ro)'
+            'Worldwide (wt-wt)', 'India (in-en)', 'USA (us-en)', 'Germany (de-de)', 
+            'China (cn-zh)', 'United Kingdom (uk-en)', 'UAE (ae-en)', 'Saudi Arabia (sa-ar)', 
+            'Australia (au-en)', 'Canada (ca-en)', 'Japan (jp-jp)', 'South Korea (kr-kr)',
+            'Vietnam (vn-en)', 'Singapore (sg-en)', 'Hong Kong (hk-en)', 'Malaysia (my-en)', 
+            'Indonesia (id-en)', 'Philippines (ph-en)', 'Thailand (th-en)', 'Poland (pl-pl)', 
+            'Netherlands (nl-nl)', 'France (fr-fr)', 'Spain (es-es)', 'Qatar (qa-en)', 
+            'Kuwait (kw-en)', 'Oman (om-en)', 'Bahrain (bh-en)', 'South Africa (za-en)', 
+            'Romania (ro-ro)', 'Finland (fi-fi)', 'Albania (al-al)', 'Moldova (md-ro)'
         ]
         self.indian_city_regions = [
             'Mumbai', 'Bhiwandi', 'Navi Mumbai', 'Thane', 'Pune', 'Chakan', 'Delhi NCR', 
@@ -646,6 +647,113 @@ class App(ctk.CTk):
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
 
+    def get_supplier_starter_queries(self, dest):
+        """Returns 13-niche starter queries for suppliers tailored to the chosen region (India, specific country, or Worldwide)."""
+        dest_clean = dest.strip()
+        if dest_clean.lower() == "india":
+            return [
+                "distribution transformer manufacturers India",
+                "numerical protection relay suppliers India",
+                "substation control and relay panel CRP manufacturers Gujarat",
+                "power distribution equipment manufacturers India",
+                "electrical contactors circuit breaker factories Gujarat",
+                "switchgear panel factories Gujarat",
+                "industrial power control panel makers Maharashtra",
+                "centralized lighting control system manufacturers India",
+                "automated lighting controllers dimming modules factories India",
+                "streetlight monitoring control panel makers India",
+                "copper wire cable manufacturers India",
+                "solar panel PV module manufacturers Gujarat",
+                "monocrystalline TOPCon solar panel factories India",
+                "Tier 1 solar panel exporters India",
+                "photovoltaic module manufacturers Bangalore",
+                "solar panel scrap suppliers exporters",
+                "PV module scrap suppliers 500 MT",
+                "lithium battery pack makers Bangalore",
+                "HVAC components suppliers Maharashtra",
+                "circuit breaker factories India",
+                "diesel generator manufacturers Pune",
+                "brass cable glands manufacturers Jamnagar",
+                "RF remote control switch manufacturers India",
+                "gate automation transmitter receiver factories India",
+                "electronic displays LCD OLED module suppliers India",
+                "toggle switches push button manufacturers India",
+                "illuminated rocker switch manufacturers India",
+                "power switches 16A 20A CQC CE factories India",
+                "round square rocker switch makers Gujarat",
+                "electrolytic ceramic capacitor manufacturers Gujarat",
+                "fan motor air cooler pump manufacturers Coimbatore",
+                "hydraulic actuator motor manufacturers India",
+                "speed regulating motor governor factories Pune",
+                "fractional horsepower electric motor manufacturers Coimbatore",
+                "integrated circuit IC component distributors India",
+                "electronic component authorized distributors Bangalore",
+                "Epson timing devices RTC distributors India",
+                "plywood panel MDF board manufacturers Yamunanagar",
+                "decorative laminated sheets manufacturers Gujarat",
+                "commercial marine plywood factories Kerala",
+                "MDF panel particle board suppliers India",
+                "LED streetlight luminaire factories India",
+                "industrial pump motor manufacturers Coimbatore",
+                "floor scrubber cleaning machine suppliers India",
+                "sensor testing equipment manufacturers Delhi NCR",
+                "EV charging station manufacturers India",
+                "electric vehicle battery pack manufacturers Pune",
+                "printed circuit board PCB manufacturers India",
+                "PCB assembly SMT PCBA factories Bangalore",
+                "multi layer FR4 PCB board factories Gujarat",
+                "copper clad laminate CCL suppliers India",
+                "metal core aluminum MCPCB makers India",
+                "automotive brake pads brake discs manufacturers India",
+                "car suspension shock absorber factories Pune",
+                "auto component precision CNC machined parts Rajkot",
+                "automotive wiring harness manufacturers Gurgaon",
+                "car radiator cooling fan factories Chennai",
+                "automotive filter oil air fuel manufacturers Delhi NCR",
+                "car steering rack tie rod ball joint factories Coimbatore",
+                "automotive ignition coil starter motor manufacturers India",
+                "clutch plate friction disc factories Aurangabad",
+                "aftermarket car spare parts exporters India"
+            ]
+        else:
+            return [
+                f"distribution transformer manufacturers {dest_clean}",
+                f"numerical protection relay suppliers {dest_clean}",
+                f"power distribution equipment manufacturers {dest_clean}",
+                f"switchgear panel manufacturers {dest_clean}",
+                f"electrical contactor circuit breaker factories {dest_clean}",
+                f"power cables wiring manufacturers {dest_clean}",
+                f"centralized lighting control system manufacturers {dest_clean}",
+                f"automated lighting controllers dimming modules factories {dest_clean}",
+                f"solar panel PV module manufacturers {dest_clean}",
+                f"commercial solar energy systems factories {dest_clean}",
+                f"lithium battery pack manufacturers {dest_clean}",
+                f"industrial diesel generator manufacturers {dest_clean}",
+                f"cable glands terminal blocks manufacturers {dest_clean}",
+                f"electronic components display LCD OLED suppliers {dest_clean}",
+                f"rocker power switches 16A 20A factories {dest_clean}",
+                f"hydraulic actuator speed regulating motor manufacturers {dest_clean}",
+                f"integrated circuit IC semiconductor makers {dest_clean}",
+                f"plywood panel MDF board manufacturers {dest_clean}",
+                f"floor scrubber cleaning equipment manufacturers {dest_clean}",
+                f"PIR sensor testing equipment manufacturers {dest_clean}",
+                f"EV charging station manufacturers {dest_clean}",
+                f"electric vehicle battery pack factories {dest_clean}",
+                f"printed circuit board PCB manufacturers {dest_clean}",
+                f"PCB assembly SMT PCBA turnkey factories {dest_clean}",
+                f"multi layer FR4 PCB board factories {dest_clean}",
+                f"automotive brake pads brake discs manufacturers {dest_clean}",
+                f"car suspension shock absorber factories {dest_clean}",
+                f"auto component precision CNC machined parts {dest_clean}",
+                f"car radiator cooling fan factories {dest_clean}",
+                f"automotive wiring harness manufacturers {dest_clean}",
+                f"automotive filter oil air fuel factories {dest_clean}",
+                f"car steering rack tie rod ball joint factories {dest_clean}",
+                f"automotive ignition coil starter motor manufacturers {dest_clean}",
+                f"clutch plate friction disc factories {dest_clean}",
+                f"aftermarket car spare parts manufacturers {dest_clean}"
+            ]
+
     def get_warehouse_starter_queries(self, city, radius, area="All Areas"):
         if area and area != "All Areas":
             return [
@@ -698,6 +806,10 @@ class App(ctk.CTk):
     def on_region_change(self, choice):
         strategy = self.strategy_var.get()
         if strategy == "Suppliers":
+            dest = choice.split(" (")[0].strip()
+            queries = self.get_supplier_starter_queries(dest)
+            self.populate_suggested_queries(queries)
+            self.select_suggested_query(queries[0])
             return
         if strategy == "Warehouses":
             city = choice
@@ -787,76 +899,16 @@ class App(ctk.CTk):
     def on_strategy_change(self, choice):
         if choice == "Suppliers":
             self.btn_disc_prop.configure(text="🌐 Quick URL Inquiry")
-            self.region_dropdown.configure(values=self.country_regions, state="disabled")
+            self.region_dropdown.configure(values=self.country_regions, state="normal")
+            if self.region_var.get() not in self.country_regions:
+                self.region_var.set("India (in-en)")
             self.radius_dropdown.configure(state="disabled")
             if hasattr(self, 'area_dropdown'):
                 self.area_dropdown.configure(values=["All Areas"], state="disabled")
                 self.area_var.set("All Areas")
             self.btn_suggest.configure(state="normal")
-            queries = [
-                "distribution transformer manufacturers India",
-                "numerical protection relay suppliers India",
-                "substation control and relay panel CRP manufacturers Gujarat",
-                "power distribution equipment manufacturers India",
-                "electrical contactors circuit breaker factories Gujarat",
-                "switchgear panel factories Gujarat",
-                "industrial power control panel makers Maharashtra",
-                "centralized lighting control system manufacturers India",
-                "automated lighting controllers dimming modules factories India",
-                "streetlight monitoring control panel makers India",
-                "copper wire cable manufacturers India",
-                "solar panel PV module manufacturers Gujarat",
-                "monocrystalline TOPCon solar panel factories India",
-                "Tier 1 solar panel exporters India",
-                "photovoltaic module manufacturers Bangalore",
-                "solar panel scrap suppliers exporters",
-                "PV module scrap suppliers 500 MT",
-                "lithium battery pack makers Bangalore",
-                "HVAC components suppliers Maharashtra",
-                "circuit breaker factories India",
-                "diesel generator manufacturers Pune",
-                "brass cable glands manufacturers Jamnagar",
-                "RF remote control switch manufacturers India",
-                "gate automation transmitter receiver factories India",
-                "electronic displays LCD OLED module suppliers India",
-                "toggle switches push button manufacturers India",
-                "illuminated rocker switch manufacturers India",
-                "power switches 16A 20A CQC CE factories India",
-                "round square rocker switch makers Gujarat",
-                "electrolytic ceramic capacitor manufacturers Gujarat",
-                "fan motor air cooler pump manufacturers Coimbatore",
-                "hydraulic actuator motor manufacturers India",
-                "speed regulating motor governor factories Pune",
-                "fractional horsepower electric motor manufacturers Coimbatore",
-                "integrated circuit IC component distributors India",
-                "electronic component authorized distributors Bangalore",
-                "Epson timing devices RTC distributors India",
-                "plywood panel MDF board manufacturers Yamunanagar",
-                "decorative laminated sheets manufacturers Gujarat",
-                "commercial marine plywood factories Kerala",
-                "MDF panel particle board suppliers India",
-                "LED streetlight luminaire factories India",
-                "industrial pump motor manufacturers Coimbatore",
-                "floor scrubber cleaning machine suppliers India",
-                "sensor testing equipment manufacturers Delhi NCR",
-                "EV charging station manufacturers India",
-                "electric vehicle battery pack manufacturers Pune",
-                "printed circuit board PCB manufacturers India",
-                "PCB assembly SMT PCBA factories Bangalore",
-                "multi layer FR4 PCB board factories Gujarat",
-                "copper clad laminate CCL suppliers India",
-                "metal core aluminum MCPCB makers India",
-                "automotive brake pads brake discs manufacturers India",
-                "car suspension shock absorber factories Pune",
-                "auto component precision CNC machined parts Rajkot",
-                "automotive wiring harness manufacturers Gurgaon",
-                "car radiator cooling fan factories Chennai",
-                "automotive filter oil air fuel manufacturers Delhi NCR",
-                "car steering rack tie rod ball joint factories Coimbatore",
-                "automotive ignition coil starter motor manufacturers India",
-                "clutch plate friction disc factories Aurangabad",
-                "aftermarket car spare parts exporters India"
-            ]
+            dest = self.region_var.get().split(" (")[0].strip()
+            queries = self.get_supplier_starter_queries(dest)
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
         elif choice == "Logistics":
@@ -991,7 +1043,13 @@ class App(ctk.CTk):
     def generate_from_spec_thread(self, spec_text, strategy, region):
         try:
             if strategy == "Suppliers":
-                target_desc = "MANUFACTURERS and FACTORIES across ALL of India"
+                region_name = region.split(" (")[0].strip()
+                if "Worldwide" in region_name or "Global" in region_name:
+                    target_desc = "global / international MANUFACTURERS and FACTORIES worldwide"
+                elif region_name.lower() == "india":
+                    target_desc = "MANUFACTURERS and FACTORIES across ALL of India"
+                else:
+                    target_desc = f"MANUFACTURERS, FACTORIES, and OEM MAKERS in {region_name}"
             elif strategy == "Logistics":
                 dest = region.split(" (")[0]
                 if "Worldwide" in dest or "Global" in dest:
@@ -1061,8 +1119,22 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
                 queries: List[str]
 
             if strategy == "Suppliers":
-                prompt = """You are an elite B2B sourcing expert for Indian export-import trade.
-Our company sources from Indian manufacturers across these 13 core industrial niches:
+                region_name = region.split(" (")[0].strip()
+                if "Worldwide" in region_name or "Global" in region_name:
+                    region_target = "global / international MANUFACTURERS, FACTORIES, and OEM MAKERS worldwide"
+                    region_kw = "worldwide"
+                    hub_guidance = "Rotate between diverse international manufacturing countries (e.g. Germany, USA, China, Vietnam, Poland, Japan, India, South Korea)."
+                elif region_name.lower() == "india":
+                    region_target = "Indian MANUFACTURERS and FACTORIES across India"
+                    region_kw = "India"
+                    hub_guidance = "Rotate between different Indian industrial hubs (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu, Coimbatore, Pune, Jamnagar, Yamunanagar, Kerala, Rajkot, Gurgaon, Chennai, Aurangabad)."
+                else:
+                    region_target = f"MANUFACTURERS, FACTORIES, and OEM MAKERS in {region_name}"
+                    region_kw = region_name
+                    hub_guidance = f"Focus specifically on reputable industrial manufacturers, production plants, and factories located in {region_name}."
+
+                prompt = f"""You are an elite B2B sourcing expert for international trade.
+Our company sources from direct manufacturers, factories, and OEM suppliers across these 13 core industrial niches:
 
 NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, rocker switches (round/square big rocker power switches, 6A-20A, illuminated red/green buttons, CQC/TUV/CE/RoHS, HS 853650), toggle/push switches, LCD/LED/OLED display modules, capacitors, battery holders, fan motors, integrated circuits (ICs, Real-Time Clocks like Epson RA-8565SA PURE SN, microcontrollers, semiconductors, HS 854200), remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 853650, 8542, 853690, 8528, 8532)
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
@@ -1078,48 +1150,35 @@ NICHE 11 - Printed Circuit Boards (PCB) & PCBA: Multi-layer rigid FR4 PCBs, flex
 NICHE 12 - Building Materials & Wooden Panels: Plywood panels, MDF panels, particle boards, laminated boards, decorative panels, melamine faced boards, marine plywood, veneered panels (HS 441299, 4411)
 NICHE 13 - Automotive & Car Parts / Auto Components: Brake pads, brake discs & rotors, brake drums, shock absorbers, struts, suspension wishbones, control arms, ball joints, tie rod ends, steering racks, automotive filters (oil, fuel, air, cabin), radiators, intercoolers, cooling fans, water pumps, spark plugs, glow plugs, ignition coils, automotive wiring harness, auto sensors (oxygen, MAP, MAF, ABS, crankshaft, throttle), car lighting, headlamps, tail lamps, LED car bulbs, alternators, starter motors, clutch kits, pressure plates, flywheel, engine valves, pistons, piston rings, cylinder liners, gaskets, automotive precision CNC machined parts, aluminum die castings, automotive stampings (HS 8708, 8409, 8511, 8512, 854430)
 
-Generate 14 to 18 short, simple, natural DuckDuckGo search queries to find Indian MANUFACTURERS and FACTORIES across India (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu, Coimbatore, Pune, Jamnagar, Yamunanagar, Kerala, Rajkot, Gurgaon, Chennai, Aurangabad).
+Generate 14 to 18 short, simple, natural DuckDuckGo search queries to find {region_target}.
 
 RULES:
 1. Each query must be short and clean (3 to 6 words only).
    Examples of good queries:
-   - "distribution transformer manufacturers India"
-   - "numerical protection relay suppliers India"
-   - "substation control and relay panel CRP factories Gujarat"
-   - "power distribution equipment manufacturers India"
-   - "electrical contactors circuit breaker factories Gujarat"
-   - "switchgear panel factories Gujarat"
-   - "brass cable glands manufacturers Jamnagar"
-   - "RF remote control switch manufacturers India"
-   - "gate automation transmitter factories India"
-   - "electronic displays LCD OLED module suppliers India"
-   - "toggle switch push button manufacturers India"
-   - "illuminated rocker switch manufacturers India"
-   - "power switches 16A 20A CQC CE factories India"
-   - "hydraulic actuator motor manufacturers India"
-   - "speed regulating motor governor factories Pune"
-   - "integrated circuit IC component distributors India"
-   - "Epson timing devices RTC distributors India"
-   - "plywood panel MDF board manufacturers Yamunanagar"
-   - "decorative laminated sheets manufacturers Gujarat"
-   - "solar panel PV module manufacturers Gujarat"
-   - "Tier 1 solar panel exporters India"
-   - "solar panel scrap suppliers exporters"
-   - "PV module scrap suppliers 500 MT"
-   - "diesel generator manufacturers Pune"
-   - "centralized lighting control manufacturers India"
-   - "automated lighting controllers dimming modules factories India"
-   - "streetlight monitoring control panel makers India"
-   - "LED streetlight factories India"
-   - "floor scrubber machine suppliers India"
-   - "PIR sensor manufacturers Delhi NCR"
-   - "EV charging station manufacturers India"
-   - "electric vehicle battery pack makers Pune"
-   - "multi layer FR4 PCB manufacturers India"
-   - "PCB assembly SMT PCBA factories Bangalore"
-   - "copper clad laminate CCL suppliers India"
-2. CRITICAL: You MUST cover ALL 13 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 12 are covered.
-3. Rotate between different Indian industrial hubs (Gujarat, Maharashtra, Tamil Nadu, Karnataka, Delhi NCR, etc.).
+   - "distribution transformer manufacturers {region_kw}"
+   - "numerical protection relay suppliers {region_kw}"
+   - "switchgear panel factories {region_kw}"
+   - "power distribution equipment manufacturers {region_kw}"
+   - "electrical contactors circuit breaker factories {region_kw}"
+   - "brass cable glands manufacturers {region_kw}"
+   - "electronic displays LCD OLED module suppliers {region_kw}"
+   - "power switches 16A 20A CQC CE factories {region_kw}"
+   - "hydraulic actuator motor manufacturers {region_kw}"
+   - "integrated circuit IC component distributors {region_kw}"
+   - "plywood panel MDF board manufacturers {region_kw}"
+   - "solar panel PV module manufacturers {region_kw}"
+   - "diesel generator manufacturers {region_kw}"
+   - "centralized lighting control manufacturers {region_kw}"
+   - "EV charging station manufacturers {region_kw}"
+   - "multi layer FR4 PCB manufacturers {region_kw}"
+   - "PCB assembly SMT PCBA factories {region_kw}"
+   - "automotive brake pads manufacturers {region_kw}"
+   - "car suspension shock absorber factories {region_kw}"
+   - "car radiator cooling fan factories {region_kw}"
+   - "auto component precision CNC parts {region_kw}"
+   - "automotive wiring harness makers {region_kw}"
+2. CRITICAL: You MUST cover ALL 13 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 13 are covered.
+3. {hub_guidance}
 4. Do NOT use boolean operators (no AND, OR, NOT, site:).
 5. Do NOT use quotation marks or plus/minus signs.
 6. Keep queries realistic, diverse, and search-engine friendly.
@@ -1298,32 +1357,8 @@ RULES:
 
             if not queries:
                 if strategy == "Suppliers":
-                    queries = [
-                        "distribution transformer manufacturers India",
-                        "switchgear panel factories Gujarat",
-                        "copper wire cable manufacturers India",
-                        "lithium battery pack makers Bangalore",
-                        "HVAC components suppliers Maharashtra",
-                        "plywood panel MDF board manufacturers Yamunanagar",
-                        "decorative laminated sheets manufacturers Gujarat",
-                        "plywood panel MDF board manufacturers Yamunanagar",
-                    "decorative laminated sheets manufacturers Gujarat",
-                    "integrated circuit IC component distributors India",
-                    "circuit breaker factories India",
-                        "diesel generator manufacturers Pune",
-                        "brass cable glands manufacturers Jamnagar",
-                        "LED streetlight luminaire factories India",
-                        "industrial pump motor manufacturers Coimbatore",
-                        "floor scrubber cleaning machine suppliers India",
-                        "sensor testing equipment manufacturers Delhi NCR",
-                        "EV charging station manufacturers India",
-                        "electric vehicle battery pack manufacturers Pune",
-                        "printed circuit board PCB manufacturers India",
-                        "PCB assembly SMT PCBA factories Bangalore",
-                        "multi layer FR4 PCB board factories Gujarat",
-                        "copper clad laminate CCL suppliers India",
-                        "metal core aluminum MCPCB makers India"
-                    ]
+                    dest_term = region.split(" (")[0].strip()
+                    queries = self.get_supplier_starter_queries(dest_term)
                 elif strategy == "Logistics":
                     dest_term = region.split(" (")[0]
                     queries = [
@@ -1502,9 +1537,18 @@ RULES:
             return
             
         strategy = self.strategy_var.get()
+        selected_region_val = self.region_var.get()
+        try:
+            selected_region_code = selected_region_val.split(" (")[1].replace(")", "")
+            selected_country_name = selected_region_val.split(" (")[0].strip()
+        except Exception:
+            selected_region_code = "in-en"
+            selected_country_name = "India"
+
         if strategy == "Suppliers":
-            query += " (site:indiamart.com OR site:tradeindia.com OR site:justdial.com OR site:exportersindia.com)"
-            region_code = "in-en"
+            region_code = selected_region_code
+            if selected_country_name.lower() == "india" and "site:" not in query.lower():
+                query += " (site:indiamart.com OR site:tradeindia.com OR site:justdial.com OR site:exportersindia.com)"
         elif strategy == "Warehouses":
             region_code = "in-en"
             if "site:" not in query.lower():
@@ -1512,7 +1556,7 @@ RULES:
         elif strategy == "Logistics":
             region_code = "in-en"
         else:
-            region_code = self.region_var.get().split(" (")[1].replace(")", "")
+            region_code = selected_region_code
             
         max_results = int(self.results_slider.get())
         
@@ -1616,7 +1660,18 @@ RULES:
                 loc_desc = f"{area_val}, {city_name}" if (area_val and area_val != "All Areas") else f"areas inside {city_name}"
                 filter_goal = f"Direct property listings, classified ads, or yellowpages entries for commercial warehouses, godowns, industrial sheds, garage storage spaces, or logistics parks available for rent or lease under {rad_val} in {loc_desc}. KEEP listings from OLX, MagicBricks, 99acres, JustDial, NoBroker, Housing.com, Quikr, IndiaMart, and direct commercial property owners/brokers. REMOVE non-real estate articles, purely residential apartments without garage/storage, Wikipedia, and generic news."
             elif strategy == "Suppliers":
-                filter_goal = "Manufacturers across all of India (nationwide) of Automotive & Car Parts (Brake Pads/Discs, Shock Absorbers, Suspension Parts, Steering Racks, Auto Filters, Radiators, Water Pumps, Spark Plugs, Ignition Coils, Wiring Harnesses, Auto Sensors, Headlamps, Alternators, Starter Motors, Clutch Kits, Engine Valves, Pistons, CNC Machined Auto Parts), Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                region_name = self.region_var.get().split(" (")[0].strip()
+                if "Worldwide" in region_name or "Global" in region_name:
+                    loc_target = "worldwide / internationally"
+                    dir_hint = "KEEP legitimate B2B factory directories and direct manufacturing company portals."
+                elif region_name.lower() == "india":
+                    loc_target = "across all of India (nationwide)"
+                    dir_hint = "KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                else:
+                    loc_target = f"in {region_name}"
+                    dir_hint = f"KEEP direct manufacturer websites and reputable industrial supplier directories in {region_name}."
+
+                filter_goal = f"Direct manufacturers, factories, and OEM makers {loc_target} of Automotive & Car Parts (Brake Pads/Discs, Shock Absorbers, Suspension Parts, Steering Racks, Auto Filters, Radiators, Water Pumps, Spark Plugs, Ignition Coils, Wiring Harnesses, Auto Sensors, Headlamps, Alternators, Starter Motors, Clutch Kits, Engine Valves, Pistons, CNC Machined Auto Parts), Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. {dir_hint}"
             else:
                 filter_goal = "Actual company websites for buyers/distributors/OEMs of Automotive & Car Parts (Car Parts Wholesalers, Aftermarket Auto Spares Distributors, Brake Pads/Discs, Shock Absorbers, Suspension & Steering Parts, Auto Filters, Radiators, Water Pumps, Spark Plugs, Ignition Coils, Wiring Harnesses, Auto Sensors, Car Lighting/Headlamps, Alternators, Starter Motors, Clutch Kits, Engine Components, Precision Auto CNC Parts), Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
