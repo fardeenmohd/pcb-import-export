@@ -58,6 +58,115 @@ def parse_email_response(raw_text: str, default_to: str = ""):
         return to_val, subj_val, sanitize_email_body(body_val)
 
 
+# Complete 13 Core Industrial Niches Metadata for Product Sourcing Portfolio
+NICHES_METADATA = [
+    {
+        "id": 1,
+        "key": "Niche 1: Electrical & Electronic Components",
+        "title": "Niche 1: Electrical & Components",
+        "icon": "⚡",
+        "subproducts": "Rocker Switches, Cable Glands, RTC ICs, Terminal Lugs",
+        "hubs": "Gujarat, Maharashtra, Bangalore"
+    },
+    {
+        "id": 2,
+        "key": "Niche 2: Wires & Cables",
+        "title": "Niche 2: Wires & Cables",
+        "icon": "🔌",
+        "subproducts": "Armored XLPE Cables, Submersible Flat, Copper Winding",
+        "hubs": "Gujarat, Silvassa, Coimbatore"
+    },
+    {
+        "id": 3,
+        "key": "Niche 3: Power Distribution & Protection Relays",
+        "title": "Niche 3: Power & Relays",
+        "icon": "🛡️",
+        "subproducts": "Numerical Relays (SEL), CRP Panels, VCB Switchgear",
+        "hubs": "Vadodara, Bangalore, Nashik"
+    },
+    {
+        "id": 4,
+        "key": "Niche 4: HVAC, Fans, Pumps & Actuators",
+        "title": "Niche 4: HVAC & Actuators",
+        "icon": "🌀",
+        "subproducts": "Hydraulic Actuators, Speed Motors, Submersible Pumps",
+        "hubs": "Pune, Coimbatore, Bangalore"
+    },
+    {
+        "id": 5,
+        "key": "Niche 5: Batteries, Solar Energy & Renewable Scrap",
+        "title": "Niche 5: Solar & Batteries",
+        "icon": "☀️",
+        "subproducts": "TOPCon PV Modules, LiFePO4 ESS, Solar Scrap 500MT",
+        "hubs": "Gujarat, Bangalore, Nhava Sheva"
+    },
+    {
+        "id": 6,
+        "key": "Niche 6: Industrial Generators",
+        "title": "Niche 6: Industrial Gensets",
+        "icon": "⚙️",
+        "subproducts": "Cummins Silent Diesel Gensets, Containerized Power",
+        "hubs": "Pune, Kolhapur, Faridabad"
+    },
+    {
+        "id": 7,
+        "key": "Niche 7: LED Lighting & Lighting Controls",
+        "title": "Niche 7: LED & Smart Controls",
+        "icon": "💡",
+        "subproducts": "Smart Streetlight SCADA, High-Bay LEDs, Dimming",
+        "hubs": "Delhi NCR, Mumbai, Bangalore"
+    },
+    {
+        "id": 8,
+        "key": "Niche 8: Commercial Appliances",
+        "title": "Niche 8: Commercial Appliances",
+        "icon": "🧼",
+        "subproducts": "Ride-On Floor Scrubbers, Industrial Dehumidifiers",
+        "hubs": "Coimbatore, Pune, Delhi NCR"
+    },
+    {
+        "id": 9,
+        "key": "Niche 9: Sensors & Testing",
+        "title": "Niche 9: Sensors & Testing",
+        "icon": "📡",
+        "subproducts": "PIR Motion Sensors, Transformer Test Benches",
+        "hubs": "Vadodara, Bangalore, Delhi NCR"
+    },
+    {
+        "id": 10,
+        "key": "Niche 10: Electric Vehicles & EV Infrastructure",
+        "title": "Niche 10: EV & Charging Infra",
+        "icon": "🚗",
+        "subproducts": "Fast DC Dual-Gun Chargers, Type 2 Cables, EV Battery",
+        "hubs": "Bangalore, Pune, Gurgaon"
+    },
+    {
+        "id": 11,
+        "key": "Niche 11: Printed Circuit Boards (PCB) & PCBA",
+        "title": "Niche 11: PCBs & SMT PCBA",
+        "icon": "📟",
+        "subproducts": "Multi-Layer FR4 PCBs, Turnkey PCBA, Aluminum MCPCB",
+        "hubs": "Bangalore, Gandhinagar, Chennai"
+    },
+    {
+        "id": 12,
+        "key": "Niche 12: Building Materials & Wooden Panels",
+        "title": "Niche 12: Building & Panels",
+        "icon": "🪵",
+        "subproducts": "Marine Hardwood Plywood, Laminated MDF, Particle",
+        "hubs": "Yamunanagar, Perumbavoor, Gujarat"
+    },
+    {
+        "id": 13,
+        "key": "Niche 13: Automotive & Car Parts / Auto Components",
+        "title": "Niche 13: Automotive & Car Parts",
+        "icon": "🏎️",
+        "subproducts": "Brake Pads/Discs, Shock Absorbers, Wiring, Radiators",
+        "hubs": "Pune, Chennai, Gurgaon, Rajkot"
+    }
+]
+
+
 INDIAN_CITY_AREAS = {
     'Mumbai': ['All Areas', 'Bhiwandi', 'Kurla', 'Andheri', 'Kanjurmarg', 'Goregaon', 'Bhandup', 'Sakinaka', 'Govandi', 'Dadar', 'Borivali'],
     'Bhiwandi': ['All Areas', 'Mankoli', 'Rahnal', 'Vashere', 'Purna', 'Sonale', 'Anjur Phata', 'Dapode', 'Val Village', 'Kasheli'],
@@ -3496,20 +3605,23 @@ SinoMagan Indus Global Trade LLP
     # =========================================================================
 
     def setup_prod_sourcing_tab(self):
-        """Sets up the Product Sourcing tab with region selector, foreign suppliers toggle, niche filter, and product matrix."""
+        """Sets up the Product Sourcing tab with region selector, foreign suppliers toggle, niche filter, interactive niche grid, and product matrix."""
         import tkinter as tk
         from tkinter import ttk
         import tkinter.messagebox as messagebox
 
         self.tab_prod_sourcing.grid_columnconfigure(0, weight=1)
-        self.tab_prod_sourcing.grid_rowconfigure(2, weight=1)
+        self.tab_prod_sourcing.grid_rowconfigure(0, weight=0)
+        self.tab_prod_sourcing.grid_rowconfigure(1, weight=0)
+        self.tab_prod_sourcing.grid_rowconfigure(2, weight=0)
+        self.tab_prod_sourcing.grid_rowconfigure(3, weight=1)
 
         # 1. Top Control / Search Bar (Row 0)
         search_frame = ctk.CTkFrame(self.tab_prod_sourcing)
-        search_frame.grid(row=0, column=0, padx=10, pady=(10, 6), sticky="ew")
+        search_frame.grid(row=0, column=0, padx=10, pady=(10, 4), sticky="ew")
 
         lbl_region = ctk.CTkLabel(search_frame, text="🌍 Target Region (Supply from India):", font=("Arial", 12, "bold"))
-        lbl_region.pack(side="left", padx=(10, 4), pady=8)
+        lbl_region.pack(side="left", padx=(10, 4), pady=7)
 
         self.prod_region_var = ctk.StringVar(value="Worldwide (wt-wt)")
         self.prod_region_dropdown = ctk.CTkOptionMenu(
@@ -3518,7 +3630,7 @@ SinoMagan Indus Global Trade LLP
             variable=self.prod_region_var, 
             width=140
         )
-        self.prod_region_dropdown.pack(side="left", padx=4, pady=8)
+        self.prod_region_dropdown.pack(side="left", padx=4, pady=7)
 
         self.prod_foreign_sup_var = ctk.BooleanVar(value=False)
         self.prod_foreign_sup_check = ctk.CTkCheckBox(
@@ -3529,42 +3641,28 @@ SinoMagan Indus Global Trade LLP
             fg_color="#005b96",
             hover_color="#003f66"
         )
-        self.prod_foreign_sup_check.pack(side="left", padx=(10, 10), pady=8)
+        self.prod_foreign_sup_check.pack(side="left", padx=(10, 10), pady=7)
 
         lbl_niche = ctk.CTkLabel(search_frame, text="📦 Niche:", font=("Arial", 12, "bold"))
-        lbl_niche.pack(side="left", padx=(6, 4), pady=8)
+        lbl_niche.pack(side="left", padx=(6, 4), pady=7)
 
-        self.industrial_niches_list = [
-            "All 13 Niches",
-            "Niche 1: Electrical & Electronic Components",
-            "Niche 2: Wires & Cables",
-            "Niche 3: Power Distribution & Protection Relays",
-            "Niche 4: HVAC, Fans, Pumps & Actuators",
-            "Niche 5: Batteries, Solar Energy & Renewable Scrap",
-            "Niche 6: Industrial Generators",
-            "Niche 7: LED Lighting & Lighting Controls",
-            "Niche 8: Commercial Appliances",
-            "Niche 9: Sensors & Testing",
-            "Niche 10: Electric Vehicles & EV Infrastructure",
-            "Niche 11: Printed Circuit Boards (PCB) & PCBA",
-            "Niche 12: Building Materials & Wooden Panels",
-            "Niche 13: Automotive & Car Parts / Auto Components"
-        ]
+        self.industrial_niches_list = ["All 13 Niches"] + [m["key"] for m in NICHES_METADATA]
         self.prod_niche_var = ctk.StringVar(value="All 13 Niches")
         self.prod_niche_dropdown = ctk.CTkOptionMenu(
             search_frame, 
             values=self.industrial_niches_list, 
             variable=self.prod_niche_var, 
+            command=self.on_niche_filter_changed,
             width=210
         )
-        self.prod_niche_dropdown.pack(side="left", padx=4, pady=8)
+        self.prod_niche_dropdown.pack(side="left", padx=4, pady=7)
 
         self.prod_keyword_entry = ctk.CTkEntry(
             search_frame, 
             placeholder_text="Keyword / Specific Product...", 
             width=165
         )
-        self.prod_keyword_entry.pack(side="left", padx=4, pady=8)
+        self.prod_keyword_entry.pack(side="left", padx=4, pady=7)
         self.prod_keyword_entry.bind("<Return>", lambda event: self.start_product_sourcing_search())
 
         self.btn_prod_search = ctk.CTkButton(
@@ -3576,7 +3674,7 @@ SinoMagan Indus Global Trade LLP
             hover_color="#145214",
             font=("Arial", 12, "bold")
         )
-        self.btn_prod_search.pack(side="left", padx=(6, 10), pady=8)
+        self.btn_prod_search.pack(side="left", padx=(6, 10), pady=7)
 
         self.lbl_prod_status = ctk.CTkLabel(
             search_frame, 
@@ -3584,16 +3682,74 @@ SinoMagan Indus Global Trade LLP
             font=("Arial", 11, "italic"),
             text_color="#2ecc71"
         )
-        self.lbl_prod_status.pack(side="left", padx=4, pady=8)
+        self.lbl_prod_status.pack(side="left", padx=4, pady=7)
 
-        # 2. Action Buttons Bar (Row 1)
+        # 2. CURRENT SELECTED NICHES GRID SECTION (Row 1)
+        self.niche_grid_visible = True
+        self.niche_grid_container = ctk.CTkFrame(self.tab_prod_sourcing, fg_color="#181b20", corner_radius=8, border_width=1, border_color="#282e36")
+        self.niche_grid_container.grid(row=1, column=0, padx=10, pady=(2, 6), sticky="ew")
+
+        # Grid Section Header Bar
+        grid_hdr = ctk.CTkFrame(self.niche_grid_container, fg_color="transparent")
+        grid_hdr.pack(fill="x", padx=10, pady=(6, 4))
+
+        lbl_grid_title = ctk.CTkLabel(
+            grid_hdr, 
+            text="🏷️ Current Selected Niches & Trade Portfolio (What We Have For Now):", 
+            font=("Arial", 12, "bold"), 
+            text_color="#ffffff"
+        )
+        lbl_grid_title.pack(side="left")
+
+        self.lbl_niche_summary = ctk.CTkLabel(
+            grid_hdr, 
+            text="13 Industrial Niches | Loading Matrix...", 
+            font=("Arial", 11, "italic"), 
+            text_color="#58a6ff"
+        )
+        self.lbl_niche_summary.pack(side="left", padx=(12, 10))
+
+        btn_show_all_niches = ctk.CTkButton(
+            grid_hdr, 
+            text="🌟 Show All Niches", 
+            command=lambda: self.on_niche_filter_changed("All 13 Niches"), 
+            width=120, 
+            height=24, 
+            fg_color="#005b96", 
+            hover_color="#003f66",
+            font=("Arial", 11, "bold")
+        )
+        btn_show_all_niches.pack(side="right", padx=(6, 0))
+
+        self.btn_toggle_grid = ctk.CTkButton(
+            grid_hdr, 
+            text="👁️ Hide Grid", 
+            command=self.toggle_niche_grid, 
+            width=90, 
+            height=24, 
+            fg_color="#3a3a3a", 
+            hover_color="#2b2b2b",
+            font=("Arial", 11)
+        )
+        self.btn_toggle_grid.pack(side="right", padx=4)
+
+        # Grid of Niche Cards (5 columns x 3 rows = 15 tiles)
+        self.niche_cards_frame = ctk.CTkFrame(self.niche_grid_container, fg_color="transparent")
+        self.niche_cards_frame.pack(fill="x", padx=8, pady=(2, 8))
+        for col_idx in range(5):
+            self.niche_cards_frame.grid_columnconfigure(col_idx, weight=1, uniform="niche_col")
+
+        self.niche_cards = {}
+        self.build_niche_cards_grid()
+
+        # 3. Action Buttons Bar (Row 2)
         btn_bar = ctk.CTkFrame(self.tab_prod_sourcing, fg_color="transparent")
-        btn_bar.grid(row=1, column=0, padx=10, pady=(0, 6), sticky="w")
+        btn_bar.grid(row=2, column=0, padx=10, pady=(2, 6), sticky="w")
 
         btn_sync = ctk.CTkButton(
             btn_bar, 
             text="🔄 Sync Matrix", 
-            command=lambda: self.load_matrix(self.prod_tree, "Products_Matrix.xlsx"), 
+            command=lambda: self.load_products_matrix(self.prod_niche_var.get()), 
             width=110
         )
         btn_sync.pack(side="left", padx=(0, 6))
@@ -3658,9 +3814,9 @@ SinoMagan Indus Global Trade LLP
         )
         btn_delete_all.pack(side="left", padx=6)
 
-        # 3. Interactive Treeview Frame (Row 2)
+        # 4. Interactive Treeview Frame (Row 3)
         tree_frame = ctk.CTkFrame(self.tab_prod_sourcing)
-        tree_frame.grid(row=2, column=0, sticky="nsew", padx=10, pady=(0, 10))
+        tree_frame.grid(row=3, column=0, sticky="nsew", padx=10, pady=(0, 10))
         tree_frame.grid_columnconfigure(0, weight=1)
         tree_frame.grid_rowconfigure(0, weight=1)
 
@@ -3705,9 +3861,262 @@ SinoMagan Indus Global Trade LLP
 
         self.prod_tree.bind("<Button-3>", on_prod_right_click)
 
-        # 4. Initialize and load Products_Matrix.xlsx
+        # 5. Initialize and load Products_Matrix.xlsx
         self.ensure_products_matrix_exists()
-        self.load_matrix(self.prod_tree, "Products_Matrix.xlsx")
+        self.load_products_matrix(self.prod_niche_var.get())
+
+    def toggle_niche_grid(self):
+        """Toggles the visibility of the Niches Grid section to maximize datatable space when desired."""
+        if self.niche_grid_visible:
+            self.niche_cards_frame.pack_forget()
+            self.btn_toggle_grid.configure(text="👁️ Show Grid")
+            self.niche_grid_visible = False
+        else:
+            self.niche_cards_frame.pack(fill="x", padx=8, pady=(2, 8))
+            self.btn_toggle_grid.configure(text="👁️ Hide Grid")
+            self.niche_grid_visible = True
+
+    def build_niche_cards_grid(self):
+        """Constructs the interactive 5-column grid of niche cards displaying current portfolio status."""
+        # Tile 0: All Niches Card (Row 0, Col 0)
+        self.create_niche_card(
+            grid_row=0, grid_col=0,
+            niche_key="All 13 Niches",
+            icon="🌟",
+            title="All 13 Niches",
+            subtext="Complete Export Catalog Portfolio",
+            hubs="Nationwide Indian Hubs"
+        )
+
+        # Tiles 1 to 13
+        for idx, item in enumerate(NICHES_METADATA):
+            slot = idx + 1
+            r = slot // 5
+            c = slot % 5
+            self.create_niche_card(
+                grid_row=r, grid_col=c,
+                niche_key=item["key"],
+                icon=item["icon"],
+                title=item["title"],
+                subtext=item["subproducts"],
+                hubs=item["hubs"]
+            )
+
+        # Tile 14 (Row 2, Col 4): Summary Card
+        card_sum = ctk.CTkFrame(
+            self.niche_cards_frame, 
+            fg_color="#1c2128", 
+            corner_radius=6, 
+            border_width=1, 
+            border_color="#30363d", 
+            height=54
+        )
+        card_sum.grid(row=2, column=4, padx=3, pady=3, sticky="nsew")
+
+        top_f = ctk.CTkFrame(card_sum, fg_color="transparent")
+        top_f.pack(fill="x", padx=6, pady=(3, 1))
+        lbl_sum_t = ctk.CTkLabel(top_f, text="📊 Trade Sourcing Stats", font=("Arial", 11, "bold"), text_color="#f39c12", anchor="w")
+        lbl_sum_t.pack(side="left")
+
+        lbl_sum_sub = ctk.CTkLabel(card_sum, text="13 Core Niches Across India Clusters", font=("Arial", 9), text_color="#8b949e", anchor="w")
+        lbl_sum_sub.pack(fill="x", padx=6, pady=(0, 3))
+
+    def create_niche_card(self, grid_row, grid_col, niche_key, icon, title, subtext, hubs):
+        """Creates an individual interactive niche card in the grid with click filtering and dynamic counts."""
+        card = ctk.CTkFrame(
+            self.niche_cards_frame, 
+            fg_color="#22272e", 
+            corner_radius=6, 
+            border_width=1, 
+            border_color="#30363d", 
+            height=54
+        )
+        card.grid(row=grid_row, column=grid_col, padx=3, pady=3, sticky="nsew")
+
+        top_f = ctk.CTkFrame(card, fg_color="transparent")
+        top_f.pack(fill="x", padx=6, pady=(3, 1))
+
+        lbl_title = ctk.CTkLabel(
+            top_f, 
+            text=f"{icon} {title}", 
+            font=("Arial", 11, "bold"), 
+            text_color="#e6edf3", 
+            anchor="w"
+        )
+        lbl_title.pack(side="left", fill="x", expand=True)
+
+        lbl_count = ctk.CTkLabel(
+            top_f, 
+            text="(0)", 
+            font=("Arial", 10, "bold"), 
+            text_color="#3498db"
+        )
+        lbl_count.pack(side="right", padx=(4, 0))
+
+        lbl_sub = ctk.CTkLabel(
+            card, 
+            text=subtext, 
+            font=("Arial", 9), 
+            text_color="#8b949e", 
+            anchor="w"
+        )
+        lbl_sub.pack(fill="x", padx=6, pady=(0, 3))
+
+        # Click interaction: clicking anywhere on the card or labels selects that niche
+        def on_click(event=None):
+            self.on_niche_filter_changed(niche_key)
+
+        card.bind("<Button-1>", on_click)
+        top_f.bind("<Button-1>", on_click)
+        lbl_title.bind("<Button-1>", on_click)
+        lbl_count.bind("<Button-1>", on_click)
+        lbl_sub.bind("<Button-1>", on_click)
+
+        # Store widgets for dynamic updates
+        self.niche_cards[niche_key] = {
+            "card": card,
+            "lbl_title": lbl_title,
+            "lbl_count": lbl_count,
+            "lbl_sub": lbl_sub,
+            "icon": icon,
+            "title": title
+        }
+
+    def on_niche_filter_changed(self, choice):
+        """Called when a niche is selected via the dropdown or by clicking a niche card in the grid."""
+        if hasattr(self, 'prod_niche_var') and self.prod_niche_var.get() != choice:
+            self.prod_niche_var.set(choice)
+
+        # Highlight active card in grid
+        self.highlight_active_niche_card(choice)
+
+        # Filter the treeview table
+        self.load_products_matrix(niche_filter=choice)
+
+    def highlight_active_niche_card(self, active_choice):
+        """Updates the visual border and background highlight on the selected niche card in the grid."""
+        for key, w in self.niche_cards.items():
+            card = w["card"]
+            lbl_count = w["lbl_count"]
+            cur_txt = lbl_count.cget("text").replace("✓ ", "")
+            if key == active_choice:
+                card.configure(border_color="#00d26a", border_width=2, fg_color="#162a3d")
+                lbl_count.configure(text_color="#00e676", text=f"✓ {cur_txt}")
+            else:
+                card.configure(border_color="#30363d", border_width=1, fg_color="#22272e")
+                lbl_count.configure(text_color="#3498db", text=cur_txt)
+
+    def load_products_matrix(self, niche_filter=None):
+        """Loads and filters Products_Matrix.xlsx into the treeview and updates niche grid product counts."""
+        matrix_file = "Products_Matrix.xlsx"
+        if not os.path.exists(matrix_file):
+            return
+
+        try:
+            import pandas as pd
+            df = pd.read_excel(matrix_file)
+
+            # Apply niche filter if selected
+            if niche_filter and niche_filter != "All 13 Niches":
+                niche_num = niche_filter.split(":")[0].strip()
+                df_filtered = df[df['Niche'].astype(str).str.contains(niche_num, case=False, na=False)]
+            else:
+                df_filtered = df
+
+            self.prod_tree.delete(*self.prod_tree.get_children())
+            cols = list(df.columns)
+            self.prod_tree["columns"] = cols
+
+            for col in cols:
+                self.prod_tree.heading(col, text=col, command=lambda _c=col: self.sort_tree_column(self.prod_tree, _c, False))
+                if col in ["Product Name", "product_name"]:
+                    self.prod_tree.column(col, width=190, minwidth=130)
+                elif col in ["Niche", "niche"]:
+                    self.prod_tree.column(col, width=175, minwidth=120)
+                elif col in ["Target Region", "target_region"]:
+                    self.prod_tree.column(col, width=125, minwidth=90)
+                elif col in ["Supplier Type", "supplier_type"]:
+                    self.prod_tree.column(col, width=130, minwidth=90, anchor="center")
+                elif col in ["Supplier Country", "supplier_country"]:
+                    self.prod_tree.column(col, width=110, minwidth=80, anchor="center")
+                elif col in ["HS Code", "hs_code"]:
+                    self.prod_tree.column(col, width=90, minwidth=70, anchor="center")
+                elif col in ["Key Specifications", "specifications"]:
+                    self.prod_tree.column(col, width=240, minwidth=150)
+                elif col in ["Export Potential", "export_potential"]:
+                    self.prod_tree.column(col, width=110, minwidth=85, anchor="center")
+                elif col in ["Indian Manufacturing Hubs", "indian_manufacturing_hubs"]:
+                    self.prod_tree.column(col, width=180, minwidth=120)
+                elif col in ["Foreign Competitors / Notes", "foreign_competitors_notes"]:
+                    self.prod_tree.column(col, width=190, minwidth=120)
+                elif col in ["Source Reference", "source_reference"]:
+                    self.prod_tree.column(col, width=140, minwidth=100)
+                elif col in ["Date Added", "date_added"]:
+                    self.prod_tree.column(col, width=95, minwidth=80, anchor="center")
+                else:
+                    self.prod_tree.column(col, width=150, minwidth=100)
+
+            for _, row in df_filtered.iterrows():
+                self.prod_tree.insert("", "end", values=list(row))
+
+            # Update counts on all niche grid cards
+            self.update_niche_grid_counts(df, niche_filter or "All 13 Niches")
+
+            if hasattr(self, 'lbl_prod_status'):
+                if niche_filter and niche_filter != "All 13 Niches":
+                    self.lbl_prod_status.configure(
+                        text=f"Showing {len(df_filtered)} products for {niche_filter.split(':')[0]} (Total: {len(df)})",
+                        text_color="#3498db"
+                    )
+                else:
+                    self.lbl_prod_status.configure(
+                        text=f"Showing all {len(df_filtered)} products across all 13 niches",
+                        text_color="#2ecc71"
+                    )
+
+        except Exception as e:
+            self.logger.error(f"Failed to load products matrix: {e}")
+
+    def update_niche_grid_counts(self, df, active_filter):
+        """Refreshes product count badges across all cards in the Niches Grid section."""
+        total_products = len(df)
+        counts_by_niche = df['Niche'].astype(str).value_counts().to_dict()
+
+        # Update Tile 0: All Niches
+        if "All 13 Niches" in self.niche_cards:
+            w = self.niche_cards["All 13 Niches"]
+            is_active = (active_filter == "All 13 Niches")
+            prefix = "✓ " if is_active else ""
+            w["lbl_count"].configure(
+                text=f"{prefix}({total_products})",
+                text_color="#00e676" if is_active else "#3498db"
+            )
+
+        # Update Tiles 1 to 13
+        for item in NICHES_METADATA:
+            key = item["key"]
+            if key in self.niche_cards:
+                w = self.niche_cards[key]
+                niche_num = key.split(":")[0].strip()
+                # Find matching count
+                c_val = 0
+                for n_name, c in counts_by_niche.items():
+                    if niche_num in n_name:
+                        c_val += c
+                is_active = (active_filter == key)
+                prefix = "✓ " if is_active else ""
+                w["lbl_count"].configure(
+                    text=f"{prefix}({c_val})",
+                    text_color="#00e676" if is_active else "#3498db"
+                )
+
+        # Update Summary Label
+        if hasattr(self, 'lbl_niche_summary'):
+            clean_active = active_filter.split(":")[0].strip() if ":" in active_filter else active_filter
+            self.lbl_niche_summary.configure(
+                text=f"13 Niches | {total_products} Products Stored | Active: {clean_active}",
+                text_color="#58a6ff"
+            )
 
     def ensure_products_matrix_exists(self):
         """Ensures Products_Matrix.xlsx exists and is pre-seeded with all 13 industrial niches."""
@@ -3943,7 +4352,7 @@ Ensure each product maps cleanly to one of the 13 niches above, provides a reali
                 text=f"ℹ️ Found products already exist in matrix.",
                 text_color="#3498db"
             )
-        self.load_matrix(self.prod_tree, "Products_Matrix.xlsx")
+        self.load_products_matrix(self.prod_niche_var.get())
 
     def on_product_search_failed(self, err_msg, region_name):
         """Called on main thread when product discovery search encounters an error."""
