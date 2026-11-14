@@ -342,7 +342,7 @@ class App(ctk.CTk):
         self.current_hq_urls = []
         self.populate_hq_urls([])
 
-        # Initial starter queries (covering all 11 product niches including PCBs & Electric Vehicles)
+        # Initial starter queries (covering all 13 product niches including Car Parts, PCBs & Electric Vehicles)
         starter_queries = [
             "switchgear panel distributors USA",
             "commercial lighting importers UAE",
@@ -404,7 +404,16 @@ class App(ctk.CTk):
             "PCB assembly PCBA turnkey services Germany",
             "printed circuit board distributors USA",
             "rigid multi layer FR4 PCB board importers UK",
-            "flexible PCB FPC distributors Canada"
+            "flexible PCB FPC distributors Canada",
+            "automotive brake pads discs distributors USA",
+            "car suspension shock absorber wholesalers UAE",
+            "automotive spare parts distributors Qatar",
+            "car engine components auto parts importers Germany",
+            "automotive filters oil air fuel wholesalers Saudi Arabia",
+            "car radiators cooling system distributors UK",
+            "automotive ignition coil spark plug importers Australia",
+            "car steering suspension parts distributors Canada",
+            "aftermarket auto parts wholesale distributors USA"
         ]
         self.populate_suggested_queries(starter_queries)
         self.select_suggested_query(starter_queries[0])
@@ -761,7 +770,16 @@ class App(ctk.CTk):
                 f"PCB assembly PCBA turnkey services {dest}",
                 f"printed circuit board distributors {dest}",
                 f"rigid multi layer FR4 PCB importers {dest}",
-                f"flexible PCB FPC manufacturers {dest}"
+                f"flexible PCB FPC manufacturers {dest}",
+                f"automotive spare parts distributors {dest}",
+                f"car brake pads brake discs importers {dest}",
+                f"automotive suspension shock absorber wholesalers {dest}",
+                f"car engine components auto parts dealers {dest}",
+                f"automotive filters oil air fuel distributors {dest}",
+                f"car radiators cooling fans importers {dest}",
+                f"auto electronics sensors wiring harness wholesalers {dest}",
+                f"car steering tie rod ball joint distributors {dest}",
+                f"aftermarket auto parts wholesale distributors {dest}"
             ]
         self.populate_suggested_queries(queries)
         self.select_suggested_query(queries[0])
@@ -827,7 +845,17 @@ class App(ctk.CTk):
                 "PCB assembly SMT PCBA factories Bangalore",
                 "multi layer FR4 PCB board factories Gujarat",
                 "copper clad laminate CCL suppliers India",
-                "metal core aluminum MCPCB makers India"
+                "metal core aluminum MCPCB makers India",
+                "automotive brake pads brake discs manufacturers India",
+                "car suspension shock absorber factories Pune",
+                "auto component precision CNC machined parts Rajkot",
+                "automotive wiring harness manufacturers Gurgaon",
+                "car radiator cooling fan factories Chennai",
+                "automotive filter oil air fuel manufacturers Delhi NCR",
+                "car steering rack tie rod ball joint factories Coimbatore",
+                "automotive ignition coil starter motor manufacturers India",
+                "clutch plate friction disc factories Aurangabad",
+                "aftermarket car spare parts exporters India"
             ]
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
@@ -928,7 +956,16 @@ class App(ctk.CTk):
                 f"PCB assembly PCBA turnkey services {dest}",
                 f"printed circuit board distributors {dest}",
                 f"rigid multi layer FR4 PCB importers {dest}",
-                f"flexible PCB FPC manufacturers {dest}"
+                f"flexible PCB FPC manufacturers {dest}",
+                f"automotive spare parts distributors {dest}",
+                f"car brake pads brake discs importers {dest}",
+                f"automotive suspension shock absorber wholesalers {dest}",
+                f"car engine components auto parts dealers {dest}",
+                f"automotive filters oil air fuel distributors {dest}",
+                f"car radiators cooling fans importers {dest}",
+                f"auto electronics sensors wiring harness wholesalers {dest}",
+                f"car steering tie rod ball joint distributors {dest}",
+                f"aftermarket auto parts wholesale distributors {dest}"
             ]
             self.populate_suggested_queries(queries)
             self.select_suggested_query(queries[0])
@@ -1025,7 +1062,7 @@ Do not include quotes, explanations, or markdown. Return ONLY the raw query stri
 
             if strategy == "Suppliers":
                 prompt = """You are an elite B2B sourcing expert for Indian export-import trade.
-Our company sources from Indian manufacturers across these 12 core industrial niches:
+Our company sources from Indian manufacturers across these 13 core industrial niches:
 
 NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, rocker switches (round/square big rocker power switches, 6A-20A, illuminated red/green buttons, CQC/TUV/CE/RoHS, HS 853650), toggle/push switches, LCD/LED/OLED display modules, capacitors, battery holders, fan motors, integrated circuits (ICs, Real-Time Clocks like Epson RA-8565SA PURE SN, microcontrollers, semiconductors, HS 854200), remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 853650, 8542, 853690, 8528, 8532)
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
@@ -1039,8 +1076,9 @@ NICHE 9 - Sensors & Testing: PIR sensors, float switches, transformer test bench
 NICHE 10 - Electric Vehicles & EV Infrastructure: EV chargers (AC wallbox, DC fast chargers), EV charging cables, Type 2 & CCS2 connectors, EV battery packs (2W/3W/4W LiFePO4), BMS controllers, EV charging stations
 NICHE 11 - Printed Circuit Boards (PCB) & PCBA: Multi-layer rigid FR4 PCBs, flexible FPC, aluminum MCPCB, turn-key SMT PCBA assembly, electronic EMS manufacturing, copper clad laminates (CCL)
 NICHE 12 - Building Materials & Wooden Panels: Plywood panels, MDF panels, particle boards, laminated boards, decorative panels, melamine faced boards, marine plywood, veneered panels (HS 441299, 4411)
+NICHE 13 - Automotive & Car Parts / Auto Components: Brake pads, brake discs & rotors, brake drums, shock absorbers, struts, suspension wishbones, control arms, ball joints, tie rod ends, steering racks, automotive filters (oil, fuel, air, cabin), radiators, intercoolers, cooling fans, water pumps, spark plugs, glow plugs, ignition coils, automotive wiring harness, auto sensors (oxygen, MAP, MAF, ABS, crankshaft, throttle), car lighting, headlamps, tail lamps, LED car bulbs, alternators, starter motors, clutch kits, pressure plates, flywheel, engine valves, pistons, piston rings, cylinder liners, gaskets, automotive precision CNC machined parts, aluminum die castings, automotive stampings (HS 8708, 8409, 8511, 8512, 854430)
 
-Generate 14 to 18 short, simple, natural DuckDuckGo search queries to find Indian MANUFACTURERS and FACTORIES across India (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu, Coimbatore, Pune, Jamnagar, Yamunanagar, Kerala).
+Generate 14 to 18 short, simple, natural DuckDuckGo search queries to find Indian MANUFACTURERS and FACTORIES across India (e.g. Gujarat, Maharashtra, Delhi NCR, Bangalore, Tamil Nadu, Coimbatore, Pune, Jamnagar, Yamunanagar, Kerala, Rajkot, Gurgaon, Chennai, Aurangabad).
 
 RULES:
 1. Each query must be short and clean (3 to 6 words only).
@@ -1080,7 +1118,7 @@ RULES:
    - "multi layer FR4 PCB manufacturers India"
    - "PCB assembly SMT PCBA factories Bangalore"
    - "copper clad laminate CCL suppliers India"
-2. CRITICAL: You MUST cover ALL 12 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 12 are covered.
+2. CRITICAL: You MUST cover ALL 13 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 12 are covered.
 3. Rotate between different Indian industrial hubs (Gujarat, Maharashtra, Tamil Nadu, Karnataka, Delhi NCR, etc.).
 4. Do NOT use boolean operators (no AND, OR, NOT, site:).
 5. Do NOT use quotation marks or plus/minus signs.
@@ -1154,7 +1192,7 @@ CRITICAL RULES:
                     region_kw = region_name
 
                 prompt = f"""You are an elite B2B export sales director.
-We are an Indian manufacturer and exporter supplying international buyers across these 12 core industrial niches:
+We are an Indian manufacturer and exporter supplying international buyers across these 13 core industrial niches:
 
 NICHE 1 - Electrical & Electronic Components: Cable glands, crimping lugs, terminal blocks, rocker switches (round/square big rocker power switches, 6A-20A, illuminated red/green buttons, CQC/TUV/CE/RoHS, HS 853650), toggle/push switches, LCD/LED/OLED display modules, capacitors, battery holders, fan motors, integrated circuits (ICs, Real-Time Clocks like Epson RA-8565SA PURE SN, microcontrollers, semiconductors, HS 854200), remote switches (CAME TOP-433EE), EV plugs, wiring sockets (HS 853650, 8542, 853690, 8528, 8532)
 NICHE 2 - Wires & Cables: LV/MV/HV power cables, armored XLPE cables, submersible cables, binding wires, hose reels
@@ -1168,6 +1206,7 @@ NICHE 9 - Sensors & Testing: PIR sensors, float switches, transformer test bench
 NICHE 10 - Electric Vehicles & EV Infrastructure: EV chargers (AC wallbox, DC fast chargers), EV charging cables, Type 2 & CCS2 connectors, EV battery packs (2W/3W/4W LiFePO4), BMS controllers, EV charging stations
 NICHE 11 - Printed Circuit Boards (PCB) & PCBA: Multi-layer rigid FR4 PCBs, flexible FPC, aluminum MCPCB, turn-key SMT PCBA assembly, electronic EMS manufacturing, copper clad laminates (CCL)
 NICHE 12 - Building Materials & Wooden Panels: Plywood panels, MDF panels, particle boards, laminated decorative boards, melamine faced boards, marine plywood, veneered panels, retailer distribution (HS 441299, 4411)
+NICHE 13 - Automotive & Car Parts / Auto Components: Brake systems (pads, discs, calipers), suspension & steering (shock absorbers, control arms, tie rods, ball joints, steering racks), engine & cooling (radiators, cooling fans, water pumps, thermostats, pistons, engine valves), filters (air, oil, fuel, cabin), electrical & sensors (alternators, starter motors, ignition coils, spark plugs, wiring harnesses, oxygen/ABS sensors), automotive lighting (headlights, tail lamps, fog lamps, LED bulbs), transmission & driveline (clutch kits, CV joints, drive shafts), precision CNC machined parts & stampings (HS 8708, 8409, 8511, 8512)
 
 Generate 14 to 18 short, simple, natural DuckDuckGo search queries to find real B2B BUYERS, DISTRIBUTORS, IMPORTERS, WHOLESALERS, or CONTRACTORS in {region_target}.
 
@@ -1216,7 +1255,7 @@ RULES:
    - "printed circuit board distributors {region_kw}"
    - "rigid multi layer FR4 PCB importers {region_kw}"
    - "flexible PCB FPC manufacturers {region_kw}"
-2. CRITICAL: You MUST cover ALL 12 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 12 are covered.
+2. CRITICAL: You MUST cover ALL 13 niches above. Pick a DIFFERENT specific sub-product from each niche. Do NOT repeat the same niche twice until all 12 are covered.
 3. Use varied buyer types (distributors, importers, wholesalers, dealers, contractors, suppliers).
 4. Do NOT use boolean operators (no AND, OR, NOT, site:).
 5. Do NOT use quotation marks or plus/minus signs.
@@ -1577,9 +1616,9 @@ RULES:
                 loc_desc = f"{area_val}, {city_name}" if (area_val and area_val != "All Areas") else f"areas inside {city_name}"
                 filter_goal = f"Direct property listings, classified ads, or yellowpages entries for commercial warehouses, godowns, industrial sheds, garage storage spaces, or logistics parks available for rent or lease under {rad_val} in {loc_desc}. KEEP listings from OLX, MagicBricks, 99acres, JustDial, NoBroker, Housing.com, Quikr, IndiaMart, and direct commercial property owners/brokers. REMOVE non-real estate articles, purely residential apartments without garage/storage, Wikipedia, and generic news."
             elif strategy == "Suppliers":
-                filter_goal = "Manufacturers across all of India (nationwide) of Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
+                filter_goal = "Manufacturers across all of India (nationwide) of Automotive & Car Parts (Brake Pads/Discs, Shock Absorbers, Suspension Parts, Steering Racks, Auto Filters, Radiators, Water Pumps, Spark Plugs, Ignition Coils, Wiring Harnesses, Auto Sensors, Headlamps, Alternators, Starter Motors, Clutch Kits, Engine Valves, Pistons, CNC Machined Auto Parts), Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. KEEP directories like IndiaMart or TradeIndia if they lead to suppliers."
             else:
-                filter_goal = "Actual company websites for buyers/distributors/OEMs of Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
+                filter_goal = "Actual company websites for buyers/distributors/OEMs of Automotive & Car Parts (Car Parts Wholesalers, Aftermarket Auto Spares Distributors, Brake Pads/Discs, Shock Absorbers, Suspension & Steering Parts, Auto Filters, Radiators, Water Pumps, Spark Plugs, Ignition Coils, Wiring Harnesses, Auto Sensors, Car Lighting/Headlamps, Alternators, Starter Motors, Clutch Kits, Engine Components, Precision Auto CNC Parts), Power Distribution Equipment, Hydraulic Actuators & Speed Regulating Motors (Groschopp WK0920702, Motor Governors, HS 850110), Solar Panels (Photovoltaic Energy Panels, PV Modules, HS 854143), Wooden Panels (Plywood, MDF, Laminated Decorative Boards, HS 441299), Integrated Circuits (ICs, Epson RA-8565SA, Microcontrollers, HS 8542), Remote Control Switches, Displays (LCD/OLED), Capacitors, Rocker Switches & Power Switches (6A-20A, CQC/TUV/CE, HS 853650), Toggle Switches, Fan Motors, Battery Holders, Numerical Protection Relays (SEL-751, SEL-787, SEL-700G), Electrical Control Equipment (Circuit Breakers, Contactors, Transformers), Cables, Switchgear, Lighting Control Systems (centralized/automated controls, dimming modules, streetlight monitoring), HVAC Parts, Batteries, Solar Panel Scrap (PV module scrap), Solar Inverters, Generators, LED Lighting, Appliances, PCBs/PCBA, or Testing Equipment. REMOVE news articles, Wikipedia, Amazon, PDFs, and generic directories."
                 
             prompt = "You are an expert lead generation AI.\nThe user is searching for: " + filter_goal + "\n\nHere are the raw search results from DuckDuckGo:\n" + search_context + "\n\nFilter the list based on the goal. Return ONLY the URLs that strongly match."
                 
@@ -1664,7 +1703,7 @@ RULES:
         self.tab_suppliers.grid_columnconfigure(0, weight=1)
         self.tab_suppliers.grid_rowconfigure(3, weight=1)
         
-        criteria_text = "Supplier Context: Extracting Manufacturers, Factories, Capabilities, MOQs, & Certifications across all 11 Industrial Niches (Lighting Controls, PCBs, PCBA, Electrical, Cables, Switchgear, Batteries, HVAC, Electric Vehicles, etc.)."
+        criteria_text = "Supplier Context: Extracting Manufacturers, Factories, Capabilities, MOQs, & Certifications across all 13 Industrial Niches (Car Parts & Auto Components, Lighting Controls, PCBs, PCBA, Electrical, Cables, Switchgear, Batteries, HVAC, Electric Vehicles, etc.)."
         lbl_criteria = ctk.CTkLabel(self.tab_suppliers, text=criteria_text, font=("Arial", 12, "bold"))
         lbl_criteria.grid(row=0, column=0, padx=10, pady=10, sticky="w")
         
@@ -1691,7 +1730,7 @@ RULES:
         self.tab_buyers.grid_columnconfigure(0, weight=1)
         self.tab_buyers.grid_rowconfigure(3, weight=1)
         
-        criteria_text = "Buyer Context: Extracting Target Products, Industry, Size, and filtering for true OEMs."
+        criteria_text = "Buyer Context: Extracting Target Products, Industry, Size, and filtering for true OEMs & Distributors across all 13 Industrial Niches (Car Parts, Electronics, PCBs, Electrical, Energy, etc.)."
         lbl_criteria = ctk.CTkLabel(self.tab_buyers, text=criteria_text, font=("Arial", 12, "bold"))
         lbl_criteria.grid(row=0, column=0, padx=10, pady=10, sticky="w")
         
@@ -2206,7 +2245,7 @@ Target Client Details:
 - Known Contact Emails: {contact_emails}
 
 Your Company:
-- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management)
+- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management across Automotive Components, Power Electronics, PCBs, Solar, and Industrial Equipment)
 - Authorized Signatory: Fardin Mohammed, Partner
 
 CRITICAL INSTRUCTIONS FOR GMAIL-READY PLAIN TEXT:
@@ -2429,7 +2468,7 @@ Supplier Profile:
 - Contact Email: {contact_emails}
 
 Your Company:
-- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management)
+- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management across Automotive Components, Power Electronics, PCBs, Solar, and Industrial Equipment)
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL:
@@ -2657,7 +2696,7 @@ Your Company:
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL (FREIGHT CARGO & SERVICE EXTENT INQUIRY):
-SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as hydraulic actuators & speed regulating motors (Groschopp WK0920702 motor governors), photovoltaic solar panels (monocrystalline & TOPCon PV modules for solar energy systems), wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, illuminated rocker & power switches 6A-20A, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
+SinoMagan Indus Global Trade LLP regularly moves commercial export containerized freight (such as car parts & auto components (brake pads, brake discs, shock absorbers, suspension parts, automotive filters, radiators, engine components), hydraulic actuators & speed regulating motors (Groschopp WK0920702 motor governors), photovoltaic solar panels (monocrystalline & TOPCon PV modules for solar energy systems), wooden panels (plywood, MDF, decorative laminated boards), integrated circuits (brand new original ICs, microcontrollers, RTCs), consolidated electronic components (displays, capacitors, illuminated rocker & power switches 6A-20A, battery holders, fan motors), remote control switches, power distribution equipment, numerical protection relays & substation automation, electrical control gear, circuit breakers, contactors, transformers, switchgear, centralized lighting control systems & dimming modules, solar panel scrap (PV module scrap for industrial recycling), cables, battery storage systems, HVAC equipment, and industrial hardware) from major Indian ports (e.g. Nhava Sheva / JNPT, Mundra, Chennai) to international destinations (including GCC / Middle East, Europe, North America, Southeast Asia, and Africa).
 We are reaching out to inquire in detail about:
 1. The full EXTENT OF LOGISTICS SERVICES they provide (e.g. Ocean FCL & LCL, Air Cargo, Customs Clearance / CHA in India, Inland Transportation / CFS handling, Warehousing, Door-to-Door DDP/DAP vs Port-to-Port FOB/CIF, Cargo Marine Insurance).
 2. The specific LOCATIONS AND DESTINATIONS THEY SUPPORT for sending our freight cargo (origin ports in India, supported destination discharge ports, inland delivery capabilities).
@@ -3102,7 +3141,7 @@ Known Scraped Email: {scraped_email}
 {content_block}
 
 Your Company:
-- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management)
+- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management across Automotive Components, Power Electronics, PCBs, Solar, and Industrial Equipment)
 - Authorized Signatory: Fardin Mohammed, Partner
 
 PURPOSE OF THIS EMAIL:
@@ -3154,7 +3193,7 @@ Known Scraped Email: {scraped_email}
 {content_block}
 
 Your Company:
-- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management)
+- SinoMagan Indus Global Trade LLP (Global sourcing, contract manufacturing, export & logistics management across Automotive Components, Power Electronics, PCBs, Solar, and Industrial Equipment)
 - Authorized Signatory: Fardin Mohammed, Partner
 
 CRITICAL INSTRUCTIONS FOR GMAIL-READY PLAIN TEXT:
