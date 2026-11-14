@@ -3904,13 +3904,23 @@ SinoMagan Indus Global Trade LLP
 
         btn_source = ctk.CTkButton(
             btn_bar, 
-            text="🔍 Source in URL Discovery", 
+            text="🔍 Source Suppliers", 
             command=self.source_selected_product_in_discovery, 
-            width=175, 
+            width=140, 
             fg_color="#005b96", 
             hover_color="#003f66"
         )
         btn_source.pack(side="left", padx=(0, 6))
+
+        btn_source_buyers = ctk.CTkButton(
+            btn_bar, 
+            text="🌐 Source Buyers", 
+            command=self.source_selected_product_buyers_in_discovery, 
+            width=130, 
+            fg_color="#1b4d3e", 
+            hover_color="#12352b"
+        )
+        btn_source_buyers.pack(side="left", padx=(0, 6))
 
         btn_open_excel = ctk.CTkButton(
             btn_bar, 
@@ -3986,6 +3996,7 @@ SinoMagan Indus Global Trade LLP
         prod_menu = tk.Menu(self.tab_prod_sourcing, tearoff=0)
         prod_menu.add_command(label="📋 Copy Product Details", command=self.copy_selected_product_details)
         prod_menu.add_command(label="🔍 Source Suppliers in URL Discovery", command=self.source_selected_product_in_discovery)
+        prod_menu.add_command(label="🌐 Source Buyers in URL Discovery", command=self.source_selected_product_buyers_in_discovery)
         prod_menu.add_separator()
         prod_menu.add_command(label="📂 Open Products_Matrix.xlsx", command=lambda: self.open_excel_file("Products_Matrix.xlsx"))
 
@@ -4559,6 +4570,7 @@ Ensure each product maps cleanly to one of the 13 niches above. If a product fal
 
         if "Indian" in stype or country.lower() == "india":
             search_query = f"{pname} manufacturers India"
+            country_name = "India"
             # Ensure India is chosen in discovery region
             for r in self.country_regions:
                 if "India" in r:
@@ -4566,19 +4578,108 @@ Ensure each product maps cleanly to one of the 13 niches above. If a product fal
                     break
         else:
             search_query = f"{pname} manufacturers {country}"
+            country_name = country
             for r in self.country_regions:
                 if country.lower() in r.lower():
                     self.region_var.set(r)
                     break
 
+        supplier_queries = [
+            search_query,
+            f"{pname} suppliers {country_name}",
+            f"{pname} exporters {country_name}",
+            f"{pname} factory OEM {country_name}"
+        ]
+
         self.query_entry.delete("0.0", "end")
         self.query_entry.insert("0.0", search_query)
+        self.populate_suggested_queries(supplier_queries)
+        self.select_suggested_query(search_query)
+
         self.tabview.set("URL Discovery")
         self.lbl_disc_status.configure(
-            text=f"Loaded product sourcing query from Product Sourcing tab.",
+            text=f"Loaded supplier sourcing query for '{pname}' ({country_name}).",
             text_color="#2ecc71"
         )
-        self.logger.info(f"Loaded '{search_query}' into URL Discovery for scraping.")
+        self.logger.info(f"Loaded supplier query '{search_query}' into URL Discovery for scraping.")
+
+    def source_selected_product_buyers_in_discovery(self):
+        """Takes the selected product from the matrix, configures URL Discovery for Buyers, and switches tabs."""
+        import tkinter.messagebox as messagebox
+        sel = self.prod_tree.selection()
+        if not sel:
+            messagebox.showinfo("Select Product", "Please select a product from the table first.")
+            return
+        item_id = sel[0]
+        row_vals = self.prod_tree.item(item_id)["values"]
+        cols = list(self.prod_tree["columns"])
+        data = dict(zip(cols, row_vals))
+
+        pname = str(data.get("Product Name", "")).strip()
+        target_region = str(data.get("Target Region", "")).strip()
+        if not pname:
+            messagebox.showinfo("No Product", "Selected row does not have a valid product name.")
+            return
+
+        # Configure URL Discovery tab for Buyers
+        self.strategy_var.set("Buyers")
+        self.on_strategy_change("Buyers")
+
+        # Match target_region against available country regions
+        matched_region = None
+        if target_region:
+            tr_lower = target_region.lower()
+            for r in self.country_regions:
+                r_name = r.split(" (")[0].strip().lower()
+                if (r_name in tr_lower or tr_lower in r_name or
+                    ("usa" in tr_lower and r_name == "usa") or
+                    ("united states" in tr_lower and r_name == "usa") or
+                    ("uk" in tr_lower and "united kingdom" in r_name) or
+                    ("uae" in tr_lower and r_name == "uae") or
+                    ("emirates" in tr_lower and r_name == "uae")):
+                    matched_region = r
+                    break
+
+        # Fallback to current region in Product Sourcing tab if available
+        if not matched_region and hasattr(self, 'prod_region_var'):
+            p_reg = self.prod_region_var.get()
+            if p_reg in self.country_regions:
+                matched_region = p_reg
+
+        if not matched_region:
+            matched_region = "Worldwide (wt-wt)"
+
+        self.region_var.set(matched_region)
+        dest = matched_region.split(" (")[0].strip()
+        if "Worldwide" in dest or "Global" in dest:
+            dest = "worldwide"
+
+        if dest == "worldwide":
+            buyer_queries = [
+                f"{pname} distributors worldwide",
+                f"{pname} importers distributors worldwide",
+                f"{pname} wholesale buyers importers",
+                f"{pname} international buyers"
+            ]
+        else:
+            buyer_queries = [
+                f"{pname} distributors {dest}",
+                f"{pname} importers {dest}",
+                f"{pname} wholesale buyers {dest}",
+                f"{pname} import companies {dest}"
+            ]
+
+        self.query_entry.delete("0.0", "end")
+        self.query_entry.insert("0.0", buyer_queries[0])
+        self.populate_suggested_queries(buyer_queries)
+        self.select_suggested_query(buyer_queries[0])
+
+        self.tabview.set("URL Discovery")
+        self.lbl_disc_status.configure(
+            text=f"Loaded buyer sourcing query for '{pname}' ({dest}).",
+            text_color="#2ecc71"
+        )
+        self.logger.info(f"Loaded buyer query '{buyer_queries[0]}' into URL Discovery for scraping.")
 
     def resolve_product_niche_link(self, product_name, raw_niche, specifications, hs_code, active_niche_filter="All Niches"):
         """Ensures newly found products are linked to one of the 13 core niches, or falls back to 'Miscellaneous Niche'."""
