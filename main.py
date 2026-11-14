@@ -163,8 +163,136 @@ NICHES_METADATA = [
         "icon": "🏎️",
         "subproducts": "Brake Pads/Discs, Shock Absorbers, Wiring, Radiators",
         "hubs": "Pune, Chennai, Gurgaon, Rajkot"
+    },
+    {
+        "id": 14,
+        "key": "Miscellaneous Niche",
+        "title": "Miscellaneous & Other",
+        "icon": "📦",
+        "subproducts": "Other Uncategorized Industrial Products & General Trade",
+        "hubs": "All India & Global Sourcing"
     }
 ]
+
+def classify_product_niche(product_name, specifications="", hs_code=""):
+    """
+    Intelligently maps a product to one of the 13 core industrial niches based on
+    product name, technical specifications, and HS tariff codes.
+    Returns the exact niche key string, or 'Miscellaneous Niche' if no match.
+    """
+    text = f"{product_name} {specifications}".lower()
+    hs = str(hs_code).strip()
+
+    # Niche 13: Automotive & Car Parts / Auto Components
+    if any(k in text for k in [
+        "brake pad", "brake disc", "rotor", "brake drum", "caliper", "brake lining",
+        "shock absorber", "strut", "suspension", "wishbone", "control arm", "ball joint",
+        "tie rod", "steering rack", "air filter", "oil filter", "fuel filter", "cabin filter",
+        "radiator", "intercooler", "cooling fan", "spark plug", "glow plug", "ignition coil",
+        "wiring harness", "automotive sensor", "car sensor", "oxygen sensor", "abs sensor",
+        "headlamp", "tail lamp", "car lighting", "alternator", "starter motor", "clutch plate",
+        "clutch kit", "friction disc", "engine valve", "piston ring", "cylinder liner",
+        "auto parts", "car spare", "automotive", "auto component"
+    ]) or hs.startswith(("8708", "8409", "8511", "8512")):
+        return "Niche 13: Automotive & Car Parts / Auto Components"
+
+    # Niche 11: Printed Circuit Boards (PCB) & PCBA
+    if any(k in text for k in [
+        "pcb", "printed circuit board", "pcba", "smt assembly", "surface mount",
+        "fr4", "mcpcb", "fpc", "copper clad laminate", "ccl", "ems manufacturing",
+        "multilayer pcb", "rigid pcb", "flexible pcb"
+    ]) or hs.startswith("8534"):
+        return "Niche 11: Printed Circuit Boards (PCB) & PCBA"
+
+    # Niche 10: Electric Vehicles & EV Infrastructure
+    if any(k in text for k in [
+        "ev charger", "electric vehicle charger", "ev charging", "dc fast charger",
+        "ac wallbox", "ccs2", "type 2 cable", "type 2 connector", "chademo",
+        "ev battery pack", "bms controller", "evse"
+    ]) or (any(k in text for k in ["ev ", "electric vehicle"]) and any(k in text for k in ["battery", "charger", "station", "cable"])):
+        return "Niche 10: Electric Vehicles & EV Infrastructure"
+
+    # Niche 5: Batteries, Solar Energy & Renewable Scrap
+    if any(k in text for k in [
+        "solar panel", "pv module", "photovoltaic", "topcon", "perc", "bifacial",
+        "solar energy", "solar scrap", "pv scrap", "decommissioned panel",
+        "lifepo4", "lithium battery pack", "energy storage", "solar inverter", "ess pack"
+    ]) or hs.startswith(("854143", "8548", "8507")):
+        return "Niche 5: Batteries, Solar Energy & Renewable Scrap"
+
+    # Niche 3: Power Distribution & Protection Relays
+    if any(k in text for k in [
+        "protection relay", "numerical relay", "feeder protection", "transformer protection",
+        "sel-", "arc-flash", "crp panel", "control and relay panel", "switchgear panel",
+        "circuit breaker", "vcb", "acb", "mccb", "pcc panel", "mcc panel",
+        "distribution transformer", "substation panel"
+    ]) or hs.startswith(("853649", "8537", "8504")):
+        return "Niche 3: Power Distribution & Protection Relays"
+
+    # Niche 2: Wires & Cables
+    if any(k in text for k in [
+        "xlpe cable", "power cable", "armored cable", "submersible cable", "flat cable",
+        "copper wire", "winding wire", "hv cable", "mv cable", "lv cable", "hose reel",
+        "binding wire", "cable wire"
+    ]) or (hs.startswith("8544") and not any(k in text for k in ["harness", "ev charging"])):
+        return "Niche 2: Wires & Cables"
+
+    # Niche 4: HVAC, Fans, Pumps & Actuators
+    if any(k in text for k in [
+        "actuator", "hydraulic actuator", "speed regulating motor", "motor governor",
+        "groschopp", "axial fan", "centrifugal fan", "submersible pump", "borehole pump",
+        "water pump", "compressor", "hvac", "refrigeration part"
+    ]) or hs.startswith(("850110", "8413", "8414")):
+        return "Niche 4: HVAC, Fans, Pumps & Actuators"
+
+    # Niche 1: Electrical & Electronic Components
+    if any(k in text for k in [
+        "rocker switch", "power switch", "toggle switch", "push button", "cable gland",
+        "terminal lug", "crimp", "terminal block", "real time clock", "rtc",
+        "integrated circuit", "epson ra-", "microcontroller", "capacitor",
+        "battery holder", "fan motor", "oled display", "lcd module", "rf remote", "cqc"
+    ]) or hs.startswith(("853650", "853690", "8542", "8528", "8532")):
+        return "Niche 1: Electrical & Electronic Components"
+
+    # Niche 7: LED Lighting & Lighting Controls
+    if any(k in text for k in [
+        "lighting control", "dimming module", "streetlight monitoring", "dali",
+        "smart lighting", "high-bay", "luminaire", "led streetlight", "floodlight",
+        "smart wifi socket", "poultry lighting"
+    ]) or hs.startswith("9405"):
+        return "Niche 7: LED Lighting & Lighting Controls"
+
+    # Niche 6: Industrial Generators
+    if any(k in text for k in [
+        "generator set", "genset", "diesel generator", "cummins generator",
+        "silent generator", "gas generator", "wind turbine"
+    ]) or hs.startswith("8502"):
+        return "Niche 6: Industrial Generators"
+
+    # Niche 8: Commercial Appliances
+    if any(k in text for k in [
+        "floor scrubber", "scrubber dryer", "cleaning machine", "dehumidifier",
+        "commercial laundry", "industrial kitchen"
+    ]) or hs.startswith(("8479", "8415")):
+        return "Niche 8: Commercial Appliances"
+
+    # Niche 9: Sensors & Testing
+    if any(k in text for k in [
+        "pir sensor", "motion sensor", "float switch", "test bench", "turns ratio",
+        "winding resistance", "multimeter", "testing equipment", "data logger"
+    ]) or hs.startswith("9030"):
+        return "Niche 9: Sensors & Testing"
+
+    # Niche 12: Building Materials & Wooden Panels
+    if any(k in text for k in [
+        "plywood", "mdf", "particle board", "laminated board", "decorative panel",
+        "melamine board", "marine plywood", "veneer panel", "wood panel"
+    ]) or hs.startswith(("4412", "4411")):
+        return "Niche 12: Building Materials & Wooden Panels"
+
+    # Fallback to Miscellaneous Niche if outside all 13 niches
+    return "Miscellaneous Niche"
+
 
 
 INDIAN_CITY_AREAS = {
@@ -3646,8 +3774,8 @@ SinoMagan Indus Global Trade LLP
         lbl_niche = ctk.CTkLabel(search_frame, text="📦 Niche:", font=("Arial", 12, "bold"))
         lbl_niche.pack(side="left", padx=(6, 4), pady=7)
 
-        self.industrial_niches_list = ["All 13 Niches"] + [m["key"] for m in NICHES_METADATA]
-        self.prod_niche_var = ctk.StringVar(value="All 13 Niches")
+        self.industrial_niches_list = ["All Niches"] + [m["key"] for m in NICHES_METADATA]
+        self.prod_niche_var = ctk.StringVar(value="All Niches")
         self.prod_niche_dropdown = ctk.CTkOptionMenu(
             search_frame, 
             values=self.industrial_niches_list, 
@@ -3712,7 +3840,7 @@ SinoMagan Indus Global Trade LLP
         btn_show_all_niches = ctk.CTkButton(
             grid_hdr, 
             text="🌟 Show All Niches", 
-            command=lambda: self.on_niche_filter_changed("All 13 Niches"), 
+            command=lambda: self.on_niche_filter_changed("All Niches"), 
             width=120, 
             height=24, 
             fg_color="#005b96", 
@@ -3793,6 +3921,17 @@ SinoMagan Indus Global Trade LLP
             hover_color="#1f3d1e"
         )
         btn_open_excel.pack(side="left", padx=(0, 6))
+
+        btn_sort_niches = ctk.CTkButton(
+            btn_bar, 
+            text="🏷️ Sort Products to Niches", 
+            command=self.sort_unassigned_products_to_niches, 
+            width=180, 
+            fg_color="#b35900", 
+            hover_color="#804000",
+            font=("Arial", 11, "bold")
+        )
+        btn_sort_niches.pack(side="left", padx=(0, 6))
 
         btn_clean = ctk.CTkButton(
             btn_bar, 
@@ -3881,14 +4020,14 @@ SinoMagan Indus Global Trade LLP
         # Tile 0: All Niches Card (Row 0, Col 0)
         self.create_niche_card(
             grid_row=0, grid_col=0,
-            niche_key="All 13 Niches",
+            niche_key="All Niches",
             icon="🌟",
-            title="All 13 Niches",
+            title="All Niches",
             subtext="Complete Export Catalog Portfolio",
             hubs="Nationwide Indian Hubs"
         )
 
-        # Tiles 1 to 13
+        # Tiles 1 to 14 (Niches 1 to 13 + Miscellaneous Niche)
         for idx, item in enumerate(NICHES_METADATA):
             slot = idx + 1
             r = slot // 5
@@ -3901,25 +4040,6 @@ SinoMagan Indus Global Trade LLP
                 subtext=item["subproducts"],
                 hubs=item["hubs"]
             )
-
-        # Tile 14 (Row 2, Col 4): Summary Card
-        card_sum = ctk.CTkFrame(
-            self.niche_cards_frame, 
-            fg_color="#1c2128", 
-            corner_radius=6, 
-            border_width=1, 
-            border_color="#30363d", 
-            height=54
-        )
-        card_sum.grid(row=2, column=4, padx=3, pady=3, sticky="nsew")
-
-        top_f = ctk.CTkFrame(card_sum, fg_color="transparent")
-        top_f.pack(fill="x", padx=6, pady=(3, 1))
-        lbl_sum_t = ctk.CTkLabel(top_f, text="📊 Trade Sourcing Stats", font=("Arial", 11, "bold"), text_color="#f39c12", anchor="w")
-        lbl_sum_t.pack(side="left")
-
-        lbl_sum_sub = ctk.CTkLabel(card_sum, text="13 Core Niches Across India Clusters", font=("Arial", 9), text_color="#8b949e", anchor="w")
-        lbl_sum_sub.pack(fill="x", padx=6, pady=(0, 3))
 
     def create_niche_card(self, grid_row, grid_col, niche_key, icon, title, subtext, hubs):
         """Creates an individual interactive niche card in the grid with click filtering and dynamic counts."""
@@ -4017,7 +4137,7 @@ SinoMagan Indus Global Trade LLP
             df = pd.read_excel(matrix_file)
 
             # Apply niche filter if selected
-            if niche_filter and niche_filter != "All 13 Niches":
+            if niche_filter and niche_filter not in ["All Niches", "All 13 Niches"]:
                 niche_num = niche_filter.split(":")[0].strip()
                 df_filtered = df[df['Niche'].astype(str).str.contains(niche_num, case=False, na=False)]
             else:
@@ -4060,17 +4180,17 @@ SinoMagan Indus Global Trade LLP
                 self.prod_tree.insert("", "end", values=list(row))
 
             # Update counts on all niche grid cards
-            self.update_niche_grid_counts(df, niche_filter or "All 13 Niches")
+            self.update_niche_grid_counts(df, niche_filter or "All Niches")
 
             if hasattr(self, 'lbl_prod_status'):
-                if niche_filter and niche_filter != "All 13 Niches":
+                if niche_filter and niche_filter not in ["All Niches", "All 13 Niches"]:
                     self.lbl_prod_status.configure(
                         text=f"Showing {len(df_filtered)} products for {niche_filter.split(':')[0]} (Total: {len(df)})",
                         text_color="#3498db"
                     )
                 else:
                     self.lbl_prod_status.configure(
-                        text=f"Showing all {len(df_filtered)} products across all 13 niches",
+                        text=f"Showing all {len(df_filtered)} products across all niches",
                         text_color="#2ecc71"
                     )
 
@@ -4083,16 +4203,17 @@ SinoMagan Indus Global Trade LLP
         counts_by_niche = df['Niche'].astype(str).value_counts().to_dict()
 
         # Update Tile 0: All Niches
-        if "All 13 Niches" in self.niche_cards:
-            w = self.niche_cards["All 13 Niches"]
-            is_active = (active_filter == "All 13 Niches")
-            prefix = "✓ " if is_active else ""
-            w["lbl_count"].configure(
-                text=f"{prefix}({total_products})",
-                text_color="#00e676" if is_active else "#3498db"
-            )
+        for all_key in ["All Niches", "All 13 Niches"]:
+            if all_key in self.niche_cards:
+                w = self.niche_cards[all_key]
+                is_active = (active_filter in ["All Niches", "All 13 Niches"])
+                prefix = "✓ " if is_active else ""
+                w["lbl_count"].configure(
+                    text=f"{prefix}({total_products})",
+                    text_color="#00e676" if is_active else "#3498db"
+                )
 
-        # Update Tiles 1 to 13
+        # Update Tiles 1 to 14
         for item in NICHES_METADATA:
             key = item["key"]
             if key in self.niche_cards:
@@ -4101,8 +4222,13 @@ SinoMagan Indus Global Trade LLP
                 # Find matching count
                 c_val = 0
                 for n_name, c in counts_by_niche.items():
-                    if niche_num in n_name:
-                        c_val += c
+                    n_lower = n_name.lower().strip()
+                    if key == "Miscellaneous Niche":
+                        if "miscellaneous" in n_lower or "unassigned" in n_lower or not n_lower or n_lower in ["nan", "none", "unknown"]:
+                            c_val += c
+                    else:
+                        if niche_num.lower() in n_lower:
+                            c_val += c
                 is_active = (active_filter == key)
                 prefix = "✓ " if is_active else ""
                 w["lbl_count"].configure(
@@ -4114,7 +4240,7 @@ SinoMagan Indus Global Trade LLP
         if hasattr(self, 'lbl_niche_summary'):
             clean_active = active_filter.split(":")[0].strip() if ":" in active_filter else active_filter
             self.lbl_niche_summary.configure(
-                text=f"13 Niches | {total_products} Products Stored | Active: {clean_active}",
+                text=f"14 Niches | {total_products} Products Stored | Active: {clean_active}",
                 text_color="#58a6ff"
             )
 
@@ -4255,7 +4381,7 @@ Optional Keyword / Specific Sub-product: {keyword or 'None (Analyze top high-mar
 
 Analyze international trade demand in {region_name} and India's manufacturing strengths (Gujarat, Maharashtra, Bangalore, Pune, Coimbatore, Jamnagar, Yamunanagar, Chennai, Delhi NCR).
 Generate 6 to 10 actionable, specific, real-world product supply opportunities.
-Ensure each product maps cleanly to one of the 13 niches above, provides a realistic 6-digit HS code, and details key technical specifications.
+Ensure each product maps cleanly to one of the 13 niches above. If a product falls outside these 13 categories, set its niche explicitly to "Miscellaneous Niche". Provide a realistic 6-digit HS code and technical specifications.
 """
 
             response = generate_with_fallback(
@@ -4313,7 +4439,7 @@ Ensure each product maps cleanly to one of the 13 niches above, provides a reali
                     existing_keys.add(key)
                     rows_to_add.append({
                         "Product Name": p_name,
-                        "Niche": p.get("niche", niche if niche != "All 13 Niches" else "Niche 1: Electrical & Electronic Components"),
+                        "Niche": self.resolve_product_niche_link(p.get("product_name", ""), p.get("niche", ""), p.get("specifications", ""), p.get("hs_code", ""), niche),
                         "Target Region": p_reg,
                         "Supplier Type": p.get("supplier_type", "Indian Supplier (Supply from India)"),
                         "Supplier Country": p.get("supplier_country", "India"),
@@ -4453,6 +4579,95 @@ Ensure each product maps cleanly to one of the 13 niches above, provides a reali
             text_color="#2ecc71"
         )
         self.logger.info(f"Loaded '{search_query}' into URL Discovery for scraping.")
+
+    def resolve_product_niche_link(self, product_name, raw_niche, specifications, hs_code, active_niche_filter="All Niches"):
+        """Ensures newly found products are linked to one of the 13 core niches, or falls back to 'Miscellaneous Niche'."""
+        raw_clean = str(raw_niche).strip()
+        if raw_clean:
+            for item in NICHES_METADATA:
+                k = item["key"].lower()
+                t = item["title"].lower()
+                r = raw_clean.lower()
+                if (r in k or k in r or r in t or t in r or f"niche {item['id']}" in r):
+                    return item["key"]
+        
+        # If user was filtering for a specific niche, prefer that niche
+        if active_niche_filter and active_niche_filter not in ["All Niches", "All 13 Niches", "Miscellaneous Niche"]:
+            for item in NICHES_METADATA:
+                if item["key"] == active_niche_filter:
+                    return item["key"]
+
+        # Run intelligent classifier
+        classified = classify_product_niche(product_name, specifications, hs_code)
+        return classified
+
+    def sort_unassigned_products_to_niches(self):
+        """Scans Products_Matrix.xlsx for any products lacking a proper niche (or marked as Miscellaneous),
+        and automatically classifies/sorts them into the appropriate industrial niche."""
+        import tkinter.messagebox as messagebox
+        import pandas as pd
+
+        matrix_file = "Products_Matrix.xlsx"
+        if not os.path.exists(matrix_file):
+            messagebox.showinfo("Matrix Not Found", f"'{matrix_file}' was not found. Please sync or create matrix first.")
+            return
+
+        try:
+            df = pd.read_excel(matrix_file)
+            if df.empty:
+                messagebox.showinfo("Empty Matrix", f"'{matrix_file}' contains no products.")
+                return
+
+            col_niche = 'Niche' if 'Niche' in df.columns else 'niche'
+            col_name = 'Product Name' if 'Product Name' in df.columns else 'product_name'
+            col_spec = 'Key Specifications' if 'Key Specifications' in df.columns else 'specifications'
+            col_hs = 'HS Code' if 'HS Code' in df.columns else 'hs_code'
+
+            unassigned_indices = []
+            for idx, row in df.iterrows():
+                val = str(row.get(col_niche, '')).strip()
+                # Check if niche is empty, NaN, Unknown, Unassigned, Miscellaneous Niche, or unformatted
+                if (not val or val.lower() in ['nan', 'none', 'unknown', 'unassigned', '', 'general'] or
+                    'miscellaneous' in val.lower() or not val.startswith("Niche ")):
+                    unassigned_indices.append(idx)
+
+            if not unassigned_indices:
+                messagebox.showinfo(
+                    "All Products Assigned", 
+                    "All products in Products_Matrix.xlsx are already successfully assigned to specific industrial niches!"
+                )
+                return
+
+            sorted_details = []
+            changed_count = 0
+            for idx in unassigned_indices:
+                row = df.loc[idx]
+                p_name = str(row.get(col_name, '')).strip()
+                p_spec = str(row.get(col_spec, '')).strip() if pd.notna(row.get(col_spec)) else ""
+                p_hs = str(row.get(col_hs, '')).strip() if pd.notna(row.get(col_hs)) else ""
+                old_val = str(row.get(col_niche, '')).strip()
+
+                new_niche = classify_product_niche(p_name, p_spec, p_hs)
+                df.at[idx, col_niche] = new_niche
+                if new_niche != old_val:
+                    changed_count += 1
+                sorted_details.append(f"• {p_name} ➔ {new_niche}")
+
+            # Save updated matrix
+            df.to_excel(matrix_file, index=False)
+            self.logger.info(f"Sorted {len(unassigned_indices)} products into niches in {matrix_file}.")
+
+            # Reload treeview and update niche grid counts
+            self.load_products_matrix(self.prod_niche_var.get())
+
+            summary_msg = f"Processed {len(unassigned_indices)} products ({changed_count} updated into niches):\n\n" + "\n".join(sorted_details[:15])
+            if len(sorted_details) > 15:
+                summary_msg += f"\n...and {len(sorted_details) - 15} more."
+            messagebox.showinfo("Niches Sorted Successfully", summary_msg)
+
+        except Exception as e:
+            self.logger.error(f"Failed to sort unassigned products: {e}")
+            messagebox.showerror("Sorting Error", f"An error occurred while sorting niches: {e}")
 
     def open_add_product_window(self):
         """Opens a modal dialog to manually add a custom product to Products_Matrix.xlsx."""
