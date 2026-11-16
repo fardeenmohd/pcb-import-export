@@ -62,8 +62,10 @@ def parse_email_response(raw_text: str, default_to: str = ""):
 NICHES_METADATA = [
     {
         "id": 1,
+        "code": "Niche 1",
         "key": "Niche 1: Electrical & Electronic Components",
-        "title": "Niche 1: Electrical & Components",
+        "title": "Electrical & Electronic Components",
+        "short_title": "Electrical & Components",
         "icon": "⚡",
         "subproducts": "Rocker Switches, Cable Glands, RTC ICs, Terminal Lugs",
         "hubs": "Gujarat, Maharashtra, Bangalore",
@@ -75,8 +77,10 @@ NICHES_METADATA = [
     },
     {
         "id": 2,
+        "code": "Niche 2",
         "key": "Niche 2: Wires & Cables",
-        "title": "Niche 2: Wires & Cables",
+        "title": "Wires & Cables",
+        "short_title": "Wires & Cables",
         "icon": "🔌",
         "subproducts": "Armored XLPE Cables, Submersible Flat, Copper Winding",
         "hubs": "Gujarat, Silvassa, Coimbatore",
@@ -88,8 +92,10 @@ NICHES_METADATA = [
     },
     {
         "id": 3,
+        "code": "Niche 3",
         "key": "Niche 3: Power Distribution & Protection Relays",
-        "title": "Niche 3: Power & Relays",
+        "title": "Power Distribution & Protection Relays",
+        "short_title": "Power & Relays",
         "icon": "🛡️",
         "subproducts": "Numerical Relays (SEL), CRP Panels, VCB Switchgear",
         "hubs": "Vadodara, Bangalore, Nashik",
@@ -101,8 +107,10 @@ NICHES_METADATA = [
     },
     {
         "id": 4,
+        "code": "Niche 4",
         "key": "Niche 4: HVAC, Fans, Pumps & Actuators",
-        "title": "Niche 4: HVAC & Actuators",
+        "title": "HVAC, Fans, Pumps & Actuators",
+        "short_title": "HVAC & Actuators",
         "icon": "🌀",
         "subproducts": "Hydraulic Actuators, Speed Motors, Submersible Pumps",
         "hubs": "Pune, Coimbatore, Bangalore",
@@ -114,8 +122,10 @@ NICHES_METADATA = [
     },
     {
         "id": 5,
+        "code": "Niche 5",
         "key": "Niche 5: Batteries, Solar Energy & Renewable Scrap",
-        "title": "Niche 5: Solar & Batteries",
+        "title": "Batteries, Solar Energy & Renewable Scrap",
+        "short_title": "Solar & Batteries",
         "icon": "☀️",
         "subproducts": "TOPCon PV Modules, LiFePO4 ESS, Solar Scrap 500MT",
         "hubs": "Gujarat, Bangalore, Nhava Sheva",
@@ -127,8 +137,10 @@ NICHES_METADATA = [
     },
     {
         "id": 6,
+        "code": "Niche 6",
         "key": "Niche 6: Industrial Generators",
-        "title": "Niche 6: Industrial Gensets",
+        "title": "Industrial Generators",
+        "short_title": "Industrial Gensets",
         "icon": "⚙️",
         "subproducts": "Cummins Silent Diesel Gensets, Containerized Power",
         "hubs": "Pune, Kolhapur, Faridabad",
@@ -140,8 +152,10 @@ NICHES_METADATA = [
     },
     {
         "id": 7,
+        "code": "Niche 7",
         "key": "Niche 7: LED Lighting & Lighting Controls",
-        "title": "Niche 7: LED & Smart Controls",
+        "title": "LED Lighting & Lighting Controls",
+        "short_title": "LED & Smart Controls",
         "icon": "💡",
         "subproducts": "Smart Streetlight SCADA, High-Bay LEDs, Dimming",
         "hubs": "Delhi NCR, Mumbai, Bangalore",
@@ -153,8 +167,10 @@ NICHES_METADATA = [
     },
     {
         "id": 8,
+        "code": "Niche 8",
         "key": "Niche 8: Commercial Appliances",
-        "title": "Niche 8: Commercial Appliances",
+        "title": "Commercial Appliances",
+        "short_title": "Commercial Appliances",
         "icon": "🧼",
         "subproducts": "Ride-On Floor Scrubbers, Industrial Dehumidifiers",
         "hubs": "Coimbatore, Pune, Delhi NCR",
@@ -166,8 +182,10 @@ NICHES_METADATA = [
     },
     {
         "id": 9,
+        "code": "Niche 9",
         "key": "Niche 9: Sensors & Testing",
-        "title": "Niche 9: Sensors & Testing",
+        "title": "Sensors & Testing",
+        "short_title": "Sensors & Testing",
         "icon": "📡",
         "subproducts": "PIR Motion Sensors, Transformer Test Benches",
         "hubs": "Vadodara, Bangalore, Delhi NCR",
@@ -179,8 +197,10 @@ NICHES_METADATA = [
     },
     {
         "id": 10,
+        "code": "Niche 10",
         "key": "Niche 10: Electric Vehicles & EV Infrastructure",
-        "title": "Niche 10: EV & Charging Infra",
+        "title": "Electric Vehicles & EV Infrastructure",
+        "short_title": "EV & Charging Infra",
         "icon": "🚗",
         "subproducts": "Fast DC Dual-Gun Chargers, Type 2 Cables, EV Battery",
         "hubs": "Bangalore, Pune, Gurgaon",
@@ -192,8 +212,10 @@ NICHES_METADATA = [
     },
     {
         "id": 11,
+        "code": "Niche 11",
         "key": "Niche 11: Printed Circuit Boards (PCB) & PCBA",
-        "title": "Niche 11: PCBs & SMT PCBA",
+        "title": "Printed Circuit Boards (PCB) & PCBA",
+        "short_title": "PCBs & SMT PCBA",
         "icon": "📟",
         "subproducts": "Multi-Layer FR4 PCBs, Turnkey PCBA, Aluminum MCPCB",
         "hubs": "Bangalore, Gandhinagar, Chennai",
@@ -205,8 +227,10 @@ NICHES_METADATA = [
     },
     {
         "id": 12,
+        "code": "Niche 12",
         "key": "Niche 12: Building Materials & Wooden Panels",
-        "title": "Niche 12: Building & Panels",
+        "title": "Building Materials & Wooden Panels",
+        "short_title": "Building & Panels",
         "icon": "🪵",
         "subproducts": "Marine Hardwood Plywood, Laminated MDF, Particle",
         "hubs": "Yamunanagar, Perumbavoor, Gujarat",
@@ -218,8 +242,10 @@ NICHES_METADATA = [
     },
     {
         "id": 13,
+        "code": "Niche 13",
         "key": "Niche 13: Automotive & Car Parts / Auto Components",
-        "title": "Niche 13: Automotive & Car Parts",
+        "title": "Automotive & Car Parts / Auto Components",
+        "short_title": "Automotive & Car Parts",
         "icon": "🏎️",
         "subproducts": "Brake Pads/Discs, Shock Absorbers, Wiring, Radiators",
         "hubs": "Pune, Chennai, Gurgaon, Rajkot",
@@ -231,8 +257,10 @@ NICHES_METADATA = [
     },
     {
         "id": 14,
+        "code": "Niche 14",
         "key": "Miscellaneous Niche",
-        "title": "Miscellaneous & Other",
+        "title": "Miscellaneous & Other Industrial Products",
+        "short_title": "Miscellaneous & Other",
         "icon": "📦",
         "subproducts": "Other Uncategorized Industrial Products & General Trade",
         "hubs": "All India & Global Sourcing",
@@ -4142,7 +4170,7 @@ SinoMagan Indus Global Trade LLP
                 grid_row=r, grid_col=c,
                 niche_key=item["key"],
                 icon=item["icon"],
-                title=item["title"],
+                title=f"{item['code']}: {item['short_title']}",
                 subtext=item["subproducts"],
                 hubs=item["hubs"]
             )
@@ -5131,6 +5159,17 @@ Ensure each product maps cleanly to one of the 13 niches above. If a product fal
         btn_open_excel = ctk.CTkButton(btn_bar, text="📂 Open Excel", command=lambda: self.open_excel_file("Niches_Matrix.xlsx"), width=95, fg_color="#2d572c", hover_color="#1f3d1e")
         btn_open_excel.pack(side="left", padx=(0, 6))
 
+        btn_sort_niches = ctk.CTkButton(
+            btn_bar, 
+            text="🏷️ Sort & Deduplicate Niches", 
+            command=self.sort_and_standardize_niches_matrix, 
+            width=185, 
+            fg_color="#b35900", 
+            hover_color="#804000",
+            font=("Arial", 11, "bold")
+        )
+        btn_sort_niches.pack(side="left", padx=(0, 6))
+
         btn_clean = ctk.CTkButton(btn_bar, text="🧹 Clean Matrix", command=lambda: self.clean_local_matrix("Niches_Matrix.xlsx", self.niche_tree), width=100, fg_color="#b30000", hover_color="#800000")
         btn_clean.pack(side="left", padx=(0, 6))
 
@@ -5162,6 +5201,7 @@ Ensure each product maps cleanly to one of the 13 niches above. If a product fal
         niche_menu.add_command(label="🔍 Source Suppliers in URL Discovery", command=self.pivot_selected_niche_to_suppliers)
         niche_menu.add_command(label="🌐 Source Buyers in URL Discovery", command=self.pivot_selected_niche_to_buyers)
         niche_menu.add_separator()
+        niche_menu.add_command(label="🏷️ Sort & Deduplicate Niches", command=self.sort_and_standardize_niches_matrix)
         niche_menu.add_command(label="📂 Open Niches_Matrix.xlsx", command=lambda: self.open_excel_file("Niches_Matrix.xlsx"))
 
         def on_niche_right_click(event):
@@ -5213,7 +5253,7 @@ Ensure each product maps cleanly to one of the 13 niches above. If a product fal
                 grid_row=r, grid_col=c,
                 niche_key=item["key"],
                 icon=item["icon"],
-                title=item["title"],
+                title=f"{item['code']}: {item['short_title']}",
                 rating_text=item.get("potential_rating", "⭐⭐⭐⭐ High (8.5/10)"),
                 flow_text=item.get("trade_flow", "Export from India"),
                 subtext=item["subproducts"],
@@ -5333,9 +5373,11 @@ Ensure each product maps cleanly to one of the 13 niches above. If a product fal
             # 1. Filter by niche if specific niche is clicked
             if active_niche and active_niche not in ["All Niches", "All 13 Niches"]:
                 niche_num = active_niche.split(":")[0].strip()
+                import re
+                pattern = rf"\b{re.escape(niche_num)}\b"
                 df_filtered = df_filtered[
-                    df_filtered['Niche Code'].astype(str).str.contains(niche_num, case=False, na=False) |
-                    df_filtered['Niche Title'].astype(str).str.contains(niche_num, case=False, na=False)
+                    df_filtered['Niche Code'].astype(str).str.contains(pattern, case=False, na=False, regex=True) |
+                    df_filtered['Niche Title'].astype(str).str.contains(pattern, case=False, na=False, regex=True)
                 ]
 
             # 2. Filter by Rating
@@ -5420,7 +5462,7 @@ Ensure each product maps cleanly to one of the 13 niches above. If a product fal
                 baseline_data = []
                 for item in NICHES_METADATA:
                     baseline_data.append({
-                        "Niche Code": f"Niche {item['id']}",
+                        "Niche Code": item["code"],
                         "Niche Title": item["title"],
                         "Target Region": "Worldwide",
                         "Potential Rating": item.get("potential_rating", "⭐⭐⭐⭐ High (8.5/10)"),
@@ -5436,6 +5478,158 @@ Ensure each product maps cleanly to one of the 13 niches above. If a product fal
                 self.logger.info(f"Initialized {matrix_file} with {len(df)} industrial trade niches.")
             except Exception as e:
                 self.logger.error(f"Failed to initialize {matrix_file}: {e}")
+
+    def standardize_niche_record(self, raw_code, raw_title):
+        """
+        Strips embedded niche code prefixes from title and resolves standard (Niche Code, clean Niche Title)
+        as per current NICHES_METADATA master list.
+        """
+        import re
+        import pandas as pd
+        t = str(raw_title).strip() if pd.notna(raw_title) else ""
+        # Strip prefixes like "Niche 13:", "Niche 13 -", "13.", "Niche 13", "Niche Miscellaneous:"
+        clean_t = re.sub(r'^(?:Niche\s*\d+\s*[:\-–—]?\s*|\d+\.\s*|Niche\s*Miscellaneous\s*[:\-–—]?\s*)', '', t, flags=re.IGNORECASE).strip()
+        if not clean_t:
+            clean_t = t
+
+        # Find niche ID from code or title
+        n_id = None
+        if raw_code and pd.notna(raw_code):
+            m = re.search(r'Niche\s*(\d+)', str(raw_code), re.IGNORECASE)
+            if m:
+                n_id = int(m.group(1))
+
+        if not n_id and t:
+            m2 = re.search(r'Niche\s*(\d+)', t, re.IGNORECASE)
+            if m2:
+                n_id = int(m2.group(1))
+
+        # Check match in NICHES_METADATA
+        matched = None
+        if n_id and 1 <= n_id <= 14:
+            for item in NICHES_METADATA:
+                if item["id"] == n_id:
+                    matched = item
+                    break
+
+        if not matched and clean_t:
+            tl = clean_t.lower()
+            for item in NICHES_METADATA:
+                it = item["title"].lower()
+                ist = item["short_title"].lower()
+                if (tl in it or it in tl or tl in ist or ist in tl):
+                    matched = item
+                    break
+
+        if matched:
+            return matched["code"], matched["title"]
+
+        code_out = f"Niche {n_id}" if n_id else (str(raw_code).strip() if raw_code and pd.notna(raw_code) else "Niche Opportunity")
+        return code_out, clean_t
+
+    def sort_and_standardize_niches_matrix(self):
+        """Scans Niches_Matrix.xlsx, removes embedded niche codes from Niche Title,
+        updates and standardizes Niche Codes as per master list, removes duplicate niches, and sorts the matrix."""
+        import tkinter.messagebox as messagebox
+        import pandas as pd
+        import re
+
+        matrix_file = "Niches_Matrix.xlsx"
+        self.ensure_niches_matrix_exists()
+        if not os.path.exists(matrix_file):
+            messagebox.showinfo("Matrix Not Found", f"'{matrix_file}' was not found.")
+            return
+
+        try:
+            df = pd.read_excel(matrix_file)
+            if df.empty:
+                messagebox.showinfo("Empty Matrix", f"'{matrix_file}' contains no niches.")
+                return
+
+            col_code = 'Niche Code' if 'Niche Code' in df.columns else 'niche_code'
+            col_title = 'Niche Title' if 'Niche Title' in df.columns else 'niche_title'
+            col_reg = 'Target Region' if 'Target Region' in df.columns else 'target_region'
+            col_rating = 'Potential Rating' if 'Potential Rating' in df.columns else 'potential_rating'
+            col_flow = 'Trade Flow' if 'Trade Flow' in df.columns else 'trade_flow'
+            col_prod = 'Key Sub-Products' if 'Key Sub-Products' in df.columns else 'key_subproducts'
+            col_hubs = 'Indian Sourcing Hubs' if 'Indian Sourcing Hubs' in df.columns else 'indian_hubs'
+            col_drivers = 'Market Demand Drivers & Rationale' if 'Market Demand Drivers & Rationale' in df.columns else 'market_demand_drivers'
+            col_tariff = 'Tariff / FTA / Scheme Advantage' if 'Tariff / FTA / Scheme Advantage' in df.columns else 'tariff_fta_advantage'
+            col_date = 'Date Analyzed' if 'Date Analyzed' in df.columns else 'date_analyzed'
+
+            initial_count = len(df)
+            titles_cleaned = 0
+            codes_updated = 0
+
+            # 1. Standardize and clean titles and codes
+            cleaned_rows = []
+            for idx, row in df.iterrows():
+                raw_c = str(row.get(col_code, '')).strip() if pd.notna(row.get(col_code)) else ''
+                raw_t = str(row.get(col_title, '')).strip() if pd.notna(row.get(col_title)) else ''
+
+                std_code, std_title = self.standardize_niche_record(raw_c, raw_t)
+                if std_title != raw_t:
+                    titles_cleaned += 1
+                if std_code != raw_c:
+                    codes_updated += 1
+
+                row_dict = dict(row)
+                row_dict[col_code] = std_code
+                row_dict[col_title] = std_title
+                cleaned_rows.append(row_dict)
+
+            # 2. Deduplicate niches by (std_code, target_region) or (std_title.lower(), target_region.lower())
+            unique_niches = {}
+            for r in cleaned_rows:
+                c = r[col_code]
+                reg = str(r.get(col_reg, 'Worldwide')).strip().lower()
+                dedup_key = (c, reg)
+
+                if dedup_key not in unique_niches:
+                    unique_niches[dedup_key] = r
+                else:
+                    # Merge with existing record - prefer higher rating or richer details
+                    existing = unique_niches[dedup_key]
+                    curr_rating = str(r.get(col_rating, ''))
+                    prev_rating = str(existing.get(col_rating, ''))
+                    if "Very High" in curr_rating and "Very High" not in prev_rating:
+                        existing[col_rating] = curr_rating
+                    for f in [col_prod, col_hubs, col_drivers, col_tariff]:
+                        if len(str(r.get(f, ''))) > len(str(existing.get(f, ''))):
+                            existing[f] = r[f]
+
+            deduped_rows = list(unique_niches.values())
+            duplicates_removed = initial_count - len(deduped_rows)
+
+            # 3. Sort by Niche Code Number (Niche 1 to 14, then others) and Region
+            def sort_key(row):
+                c = str(row.get(col_code, ''))
+                m = re.search(r'Niche\s*(\d+)', c, re.IGNORECASE)
+                n_num = int(m.group(1)) if m else 999
+                reg = str(row.get(col_reg, ''))
+                reg_order = 0 if "worldwide" in reg.lower() else 1
+                return (n_num, reg_order, reg)
+
+            sorted_rows = sorted(deduped_rows, key=sort_key)
+
+            df_sorted = pd.DataFrame(sorted_rows)
+            df_sorted.to_excel(matrix_file, index=False)
+            self.logger.info(f"Standardized & sorted {matrix_file}: {titles_cleaned} titles cleaned, {codes_updated} codes updated, {duplicates_removed} duplicates removed. Remaining: {len(sorted_rows)} niches.")
+
+            self.load_niches_matrix()
+
+            msg = (
+                f"Successfully sorted and standardized {matrix_file}!\n\n"
+                f"• Cleaned {titles_cleaned} niche titles (removed embedded niche codes).\n"
+                f"• Standardized {codes_updated} niche codes as per master list.\n"
+                f"• Removed {duplicates_removed} duplicate niche entries.\n"
+                f"• Retained {len(sorted_rows)} unique niches sorted in numerical order."
+            )
+            messagebox.showinfo("Niches Standardized & Deduplicated", msg)
+
+        except Exception as e:
+            self.logger.error(f"Failed to sort and deduplicate niches: {e}")
+            messagebox.showerror("Sorting Error", f"An error occurred while sorting niches: {e}")
 
     def start_niche_exploration_search(self):
         """Initiates AI trade niche exploration in a background thread."""
@@ -5495,7 +5689,7 @@ Target Destination / Partner Region: {region_name}
 Trade Flow Focus: {flow_instruction}
 Optional Thematic Keyword: {keyword or 'None (Evaluate top high-potential industrial trade niches)'}
 
-Evaluate the 13 core Indian industrial niches:
+Evaluate the 14 core Indian industrial niches:
 1. Electrical & Electronic Components
 2. Wires & Cables
 3. Power Distribution & Protection Relays
@@ -5509,10 +5703,11 @@ Evaluate the 13 core Indian industrial niches:
 11. Printed Circuit Boards (PCB) & PCBA
 12. Building Materials & Wooden Panels
 13. Automotive & Car Parts / Auto Components
-(Plus emergent trade sectors or Miscellaneous Niche if relevant)
+14. Miscellaneous & Other Industrial Products
 
 Assess the real-world commercial viability for an Indian company doing business with {region_name}.
 Provide 5 to 8 comprehensive niche evaluations, scoring each with a Potential Rating (e.g. '⭐⭐⭐⭐⭐ Very High (9.5/10)', '⭐⭐⭐⭐ High (8.8/10)', '⭐⭐⭐ Moderate (7.6/10)'), identifying specific Indian hubs, demand drivers, and trade agreement benefits (e.g. CEPA, ECTA, PLI schemes, China+1 sourcing).
+IMPORTANT: Return clean niche titles without embedding the niche code or number in the niche_title (e.g. niche_code='Niche 1', niche_title='Electrical & Electronic Components').
 """
 
             response = generate_with_fallback(
@@ -5551,24 +5746,27 @@ Provide 5 to 8 comprehensive niche evaluations, scoring each with a Potential Ra
 
             existing_keys = set()
             for _, r in df_existing.iterrows():
-                t_val = str(r.get('Niche Title', '')).strip().lower()
+                raw_c = str(r.get('Niche Code', '')).strip() if pd.notna(r.get('Niche Code')) else ''
+                raw_t = str(r.get('Niche Title', '')).strip() if pd.notna(r.get('Niche Title')) else ''
+                _, std_t = self.standardize_niche_record(raw_c, raw_t)
                 reg_val = str(r.get('Target Region', '')).strip().lower()
-                if t_val:
-                    existing_keys.add((t_val, reg_val))
+                if std_t:
+                    existing_keys.add((std_t.lower(), reg_val))
 
             rows_to_add = []
             for n in new_niches:
-                n_code = n.get("niche_code", "Niche Opportunity").strip()
-                n_title = n.get("niche_title", "").strip()
+                raw_code = n.get("niche_code", "Niche Opportunity").strip()
+                raw_title = n.get("niche_title", "").strip()
                 n_reg = n.get("target_region", region_name).strip()
-                if not n_title:
+                if not raw_title:
                     continue
-                key = (n_title.lower(), n_reg.lower())
+                std_code, std_title = self.standardize_niche_record(raw_code, raw_title)
+                key = (std_title.lower(), n_reg.lower())
                 if key not in existing_keys:
                     existing_keys.add(key)
                     rows_to_add.append({
-                        "Niche Code": n_code,
-                        "Niche Title": n_title,
+                        "Niche Code": std_code,
+                        "Niche Title": std_title,
                         "Target Region": n_reg,
                         "Potential Rating": n.get("potential_rating", "⭐⭐⭐⭐ High (8.5/10)"),
                         "Trade Flow": n.get("trade_flow", trade_flow if trade_flow != "All Flows" else "Export from India"),
