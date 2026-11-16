@@ -133,6 +133,12 @@ def clean_matrix(output_file: str, logger: logging.Logger):
                 if pd.isna(row.get(col_name)) or not pname or pname in ['unknown', 'none', 'nan']:
                     remove = True
                     reason = 'No product name'
+            elif 'Niche Title' in row or 'niche_title' in row or 'Niche Code' in row or 'niche_code' in row:
+                col_name = 'Niche Title' if 'Niche Title' in row else ('niche_title' if 'niche_title' in row else ('Niche Code' if 'Niche Code' in row else 'niche_code'))
+                nname = str(row.get(col_name, '')).strip().lower()
+                if pd.isna(row.get(col_name)) or not nname or nname in ['unknown', 'none', 'nan']:
+                    remove = True
+                    reason = 'No niche title or code'
             elif ('company_name' not in row) or (pd.isna(row['company_name'])) or (str(row['company_name']).strip().lower() in ['unknown', 'none', 'nan']):
                 has_email = ('contact_emails' in row and pd.notna(row['contact_emails']) and str(row['contact_emails']).strip() and str(row['contact_emails']).strip().lower() not in ['[]', 'none', 'nan'])
                 has_phone = ('phone_numbers' in row and pd.notna(row['phone_numbers']) and str(row['phone_numbers']).strip() and str(row['phone_numbers']).strip().lower() not in ['[]', 'none', 'nan'])
@@ -176,6 +182,20 @@ def clean_matrix(output_file: str, logger: logging.Logger):
                             if ent_key in seen_entities:
                                 remove = True
                                 reason = f"Duplicate product ('{row.get(col_p)}' - {row.get(col_r)})"
+                            else:
+                                seen_entities.add(ent_key)
+                    elif 'Niche Title' in row or 'niche_title' in row or 'Niche Code' in row or 'niche_code' in row:
+                        col_t = 'Niche Title' if 'Niche Title' in row else ('niche_title' if 'niche_title' in row else ('Niche Code' if 'Niche Code' in row else 'niche_code'))
+                        col_r = 'Target Region' if 'Target Region' in row else 'target_region'
+                        col_f = 'Trade Flow' if 'Trade Flow' in row else 'trade_flow'
+                        t_val = str(row.get(col_t, '')).strip().lower()
+                        r_val = str(row.get(col_r, '')).strip().lower()
+                        f_val = str(row.get(col_f, '')).strip().lower()
+                        if t_val and t_val not in ['unknown', 'none', 'nan']:
+                            ent_key = ('niche', t_val, r_val, f_val)
+                            if ent_key in seen_entities:
+                                remove = True
+                                reason = f"Duplicate niche entry ('{row.get(col_t)}' - {row.get(col_r)})"
                             else:
                                 seen_entities.add(ent_key)
                     elif 'company_name' in row:

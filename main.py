@@ -66,7 +66,12 @@ NICHES_METADATA = [
         "title": "Niche 1: Electrical & Components",
         "icon": "⚡",
         "subproducts": "Rocker Switches, Cable Glands, RTC ICs, Terminal Lugs",
-        "hubs": "Gujarat, Maharashtra, Bangalore"
+        "hubs": "Gujarat, Maharashtra, Bangalore",
+        "potential_rating": "⭐⭐⭐⭐⭐ Very High (9.2/10)",
+        "rating_score": 9.2,
+        "trade_flow": "Export from India",
+        "demand_drivers": "Surging global demand for RoHS-certified switches & brass cable glands; strong GCC & North American infrastructure buildout.",
+        "tariff_fta": "Jamnagar brass cluster raw material cost edge; India-UAE CEPA 0% duty."
     },
     {
         "id": 2,
@@ -74,7 +79,12 @@ NICHES_METADATA = [
         "title": "Niche 2: Wires & Cables",
         "icon": "🔌",
         "subproducts": "Armored XLPE Cables, Submersible Flat, Copper Winding",
-        "hubs": "Gujarat, Silvassa, Coimbatore"
+        "hubs": "Gujarat, Silvassa, Coimbatore",
+        "potential_rating": "⭐⭐⭐⭐⭐ Very High (9.5/10)",
+        "rating_score": 9.5,
+        "trade_flow": "Export from India",
+        "demand_drivers": "Worldwide electrical grid expansions, renewable solar/wind park connections, and construction boom in US, Middle East, and Australia.",
+        "tariff_fta": "India-Australia ECTA duty-free access; massive scale in Indian electrolytic copper refining."
     },
     {
         "id": 3,
@@ -82,7 +92,12 @@ NICHES_METADATA = [
         "title": "Niche 3: Power & Relays",
         "icon": "🛡️",
         "subproducts": "Numerical Relays (SEL), CRP Panels, VCB Switchgear",
-        "hubs": "Vadodara, Bangalore, Nashik"
+        "hubs": "Vadodara, Bangalore, Nashik",
+        "potential_rating": "⭐⭐⭐⭐ High (8.8/10)",
+        "rating_score": 8.8,
+        "trade_flow": "Export from India",
+        "demand_drivers": "Utility substation expansions across GCC and Africa; high demand for IEC 61850 compliant integrated CRP switchgear panels.",
+        "tariff_fta": "CPRI laboratory certifications accepted by SEC (Saudi Arabia), DEWA (Dubai), and African utilities."
     },
     {
         "id": 4,
@@ -90,7 +105,12 @@ NICHES_METADATA = [
         "title": "Niche 4: HVAC & Actuators",
         "icon": "🌀",
         "subproducts": "Hydraulic Actuators, Speed Motors, Submersible Pumps",
-        "hubs": "Pune, Coimbatore, Bangalore"
+        "hubs": "Pune, Coimbatore, Bangalore",
+        "potential_rating": "⭐⭐⭐⭐ High (8.6/10)",
+        "rating_score": 8.6,
+        "trade_flow": "Export from India",
+        "demand_drivers": "Heavy agricultural borehole pumping and industrial fluid processing in North America, Africa, and Middle East.",
+        "tariff_fta": "Coimbatore engineering cluster delivers 35% lower cost than Italian/German OEMs with equivalent durability."
     },
     {
         "id": 5,
@@ -98,7 +118,12 @@ NICHES_METADATA = [
         "title": "Niche 5: Solar & Batteries",
         "icon": "☀️",
         "subproducts": "TOPCon PV Modules, LiFePO4 ESS, Solar Scrap 500MT",
-        "hubs": "Gujarat, Bangalore, Nhava Sheva"
+        "hubs": "Gujarat, Bangalore, Nhava Sheva",
+        "potential_rating": "⭐⭐⭐⭐⭐ Very High (9.6/10)",
+        "rating_score": 9.6,
+        "trade_flow": "Two-Way Trade",
+        "demand_drivers": "Strong US demand for non-Chinese solar modules under UFLPA and AD/CVD policies; international circular economy recycling of solar scrap.",
+        "tariff_fta": "Solar PLI Scheme manufacturing incentives; Section 301 tariff exemption advantage for Indian PV exports to USA."
     },
     {
         "id": 6,
@@ -106,7 +131,12 @@ NICHES_METADATA = [
         "title": "Niche 6: Industrial Gensets",
         "icon": "⚙️",
         "subproducts": "Cummins Silent Diesel Gensets, Containerized Power",
-        "hubs": "Pune, Kolhapur, Faridabad"
+        "hubs": "Pune, Kolhapur, Faridabad",
+        "potential_rating": "⭐⭐⭐⭐ High (8.5/10)",
+        "rating_score": 8.5,
+        "trade_flow": "Export from India",
+        "demand_drivers": "Reliable backup emergency power for telecom towers, healthcare institutions, and construction hubs across Africa and GCC.",
+        "tariff_fta": "Cummins/Kirloskar Indian diesel engine platforms globally respected for fuel efficiency and low maintenance."
     },
     {
         "id": 7,
@@ -114,7 +144,12 @@ NICHES_METADATA = [
         "title": "Niche 7: LED & Smart Controls",
         "icon": "💡",
         "subproducts": "Smart Streetlight SCADA, High-Bay LEDs, Dimming",
-        "hubs": "Delhi NCR, Mumbai, Bangalore"
+        "hubs": "Delhi NCR, Mumbai, Bangalore",
+        "potential_rating": "⭐⭐⭐⭐ High (8.7/10)",
+        "rating_score": 8.7,
+        "trade_flow": "Export from India",
+        "demand_drivers": "Municipal smart city streetlighting transitions, industrial high-bay retrofits, and energy efficiency mandates across UK and Europe.",
+        "tariff_fta": "White Goods & LED PLI Scheme; CE, RoHS, and UL international luminaire safety compliance."
     },
     {
         "id": 8,
@@ -122,7 +157,12 @@ NICHES_METADATA = [
         "title": "Niche 8: Commercial Appliances",
         "icon": "🧼",
         "subproducts": "Ride-On Floor Scrubbers, Industrial Dehumidifiers",
-        "hubs": "Coimbatore, Pune, Delhi NCR"
+        "hubs": "Coimbatore, Pune, Delhi NCR",
+        "potential_rating": "⭐⭐⭐ Moderate-High (7.9/10)",
+        "rating_score": 7.9,
+        "trade_flow": "Export from India",
+        "demand_drivers": "Rapid expansion of airports, logistics distribution centers, and commercial hospitality in GCC and Southeast Asia.",
+        "tariff_fta": "Rugged rotomolded mechanical manufacturing at 40% lower initial acquisition cost than European brands."
     },
     {
         "id": 9,
@@ -130,7 +170,12 @@ NICHES_METADATA = [
         "title": "Niche 9: Sensors & Testing",
         "icon": "📡",
         "subproducts": "PIR Motion Sensors, Transformer Test Benches",
-        "hubs": "Vadodara, Bangalore, Delhi NCR"
+        "hubs": "Vadodara, Bangalore, Delhi NCR",
+        "potential_rating": "⭐⭐⭐⭐ High (8.4/10)",
+        "rating_score": 8.4,
+        "trade_flow": "Export from India",
+        "demand_drivers": "Building management automation retrofits and high-voltage transformer diagnostic testing across Asian and African utilities.",
+        "tariff_fta": "High precision electro-technical calibration with favorable labor-to-engineering arbitrage."
     },
     {
         "id": 10,
@@ -138,7 +183,12 @@ NICHES_METADATA = [
         "title": "Niche 10: EV & Charging Infra",
         "icon": "🚗",
         "subproducts": "Fast DC Dual-Gun Chargers, Type 2 Cables, EV Battery",
-        "hubs": "Bangalore, Pune, Gurgaon"
+        "hubs": "Bangalore, Pune, Gurgaon",
+        "potential_rating": "⭐⭐⭐⭐⭐ Very High (9.4/10)",
+        "rating_score": 9.4,
+        "trade_flow": "Two-Way Trade",
+        "demand_drivers": "Accelerated public EV charging infrastructure rollouts across Europe, UK, Southeast Asia, and Middle East.",
+        "tariff_fta": "FAME-II & Automotive PLI Scheme support; European standard IEC 62196-2 and OCPP 1.6/2.0 protocol compliance."
     },
     {
         "id": 11,
@@ -146,7 +196,12 @@ NICHES_METADATA = [
         "title": "Niche 11: PCBs & SMT PCBA",
         "icon": "📟",
         "subproducts": "Multi-Layer FR4 PCBs, Turnkey PCBA, Aluminum MCPCB",
-        "hubs": "Bangalore, Gandhinagar, Chennai"
+        "hubs": "Bangalore, Gandhinagar, Chennai",
+        "potential_rating": "⭐⭐⭐⭐⭐ Very High (9.3/10)",
+        "rating_score": 9.3,
+        "trade_flow": "Two-Way Trade",
+        "demand_drivers": "Global China+1 electronics hardware diversification by North American and European industrial and aerospace OEMs.",
+        "tariff_fta": "Electronics PLI & SPECS Schemes; IATF 16949, AS9100, and ISO 13485 accredited EMS manufacturing."
     },
     {
         "id": 12,
@@ -154,7 +209,12 @@ NICHES_METADATA = [
         "title": "Niche 12: Building & Panels",
         "icon": "🪵",
         "subproducts": "Marine Hardwood Plywood, Laminated MDF, Particle",
-        "hubs": "Yamunanagar, Perumbavoor, Gujarat"
+        "hubs": "Yamunanagar, Perumbavoor, Gujarat",
+        "potential_rating": "⭐⭐⭐⭐ High (8.3/10)",
+        "rating_score": 8.3,
+        "trade_flow": "Export from India",
+        "demand_drivers": "Mega construction and interior fit-out projects in UAE, Saudi Arabia, and Qatar requiring IS 710 BWP calibrated marine plywood.",
+        "tariff_fta": "India-UAE CEPA 0% tariff benefit; Yamunanagar timber cluster economies of scale."
     },
     {
         "id": 13,
@@ -162,7 +222,12 @@ NICHES_METADATA = [
         "title": "Niche 13: Automotive & Car Parts",
         "icon": "🏎️",
         "subproducts": "Brake Pads/Discs, Shock Absorbers, Wiring, Radiators",
-        "hubs": "Pune, Chennai, Gurgaon, Rajkot"
+        "hubs": "Pune, Chennai, Gurgaon, Rajkot",
+        "potential_rating": "⭐⭐⭐⭐⭐ Very High (9.7/10)",
+        "rating_score": 9.7,
+        "trade_flow": "Export from India",
+        "demand_drivers": "Worldwide aftermarket replacement spares and tier-1 OEM sourcing across North America, Europe, and Latin America.",
+        "tariff_fta": "Automobile PLI Scheme; IATF 16949 quality and ECE R90 certifications directly matching European OEM specifications."
     },
     {
         "id": 14,
@@ -170,7 +235,12 @@ NICHES_METADATA = [
         "title": "Miscellaneous & Other",
         "icon": "📦",
         "subproducts": "Other Uncategorized Industrial Products & General Trade",
-        "hubs": "All India & Global Sourcing"
+        "hubs": "All India & Global Sourcing",
+        "potential_rating": "⭐⭐⭐ Moderate (7.0/10)",
+        "rating_score": 7.0,
+        "trade_flow": "Two-Way Trade",
+        "demand_drivers": "Opportunistic merchant spot trades, customized industrial packaging, hardware fasteners, and emerging non-core buyer inquiries.",
+        "tariff_fta": "Standard DGFT merchant export incentives, duty drawback, and RoDTEP export tax remissions."
     }
 ]
 
@@ -350,6 +420,7 @@ class App(ctk.CTk):
         
         self.tab_discovery = self.tabview.add("URL Discovery")
         self.tab_prod_sourcing = self.tabview.add("Product Sourcing")
+        self.tab_niche_explorer = self.tabview.add("Niche Explorer")
         self.tab_suppliers = self.tabview.add("Suppliers Scraper")
         self.tab_sup_db = self.tabview.add("Suppliers Database")
         self.tab_buyers = self.tabview.add("Buyers Scraper")
@@ -362,6 +433,7 @@ class App(ctk.CTk):
         
         self.setup_discovery_tab()
         self.setup_prod_sourcing_tab()
+        self.setup_niche_explorer_tab()
         self.setup_suppliers_tab()
         self.setup_sup_db_tab()
         self.setup_buyers_tab()
@@ -3620,6 +3692,24 @@ SinoMagan Indus Global Trade LLP
                         tree.column(col, width=140, minwidth=100)
                     elif col in ["Date Added", "date_added"]:
                         tree.column(col, width=95, minwidth=80, anchor="center")
+                    elif col in ["Niche Code", "niche_code"]:
+                        tree.column(col, width=90, minwidth=70, anchor="center")
+                    elif col in ["Niche Title", "niche_title"]:
+                        tree.column(col, width=200, minwidth=130)
+                    elif col in ["Potential Rating", "potential_rating"]:
+                        tree.column(col, width=165, minwidth=120, anchor="center")
+                    elif col in ["Trade Flow", "trade_flow"]:
+                        tree.column(col, width=130, minwidth=90, anchor="center")
+                    elif col in ["Key Sub-Products", "key_subproducts"]:
+                        tree.column(col, width=220, minwidth=140)
+                    elif col in ["Indian Sourcing Hubs", "indian_hubs"]:
+                        tree.column(col, width=180, minwidth=120)
+                    elif col in ["Market Demand Drivers & Rationale", "market_demand_drivers"]:
+                        tree.column(col, width=260, minwidth=150)
+                    elif col in ["Tariff / FTA / Scheme Advantage", "tariff_fta_advantage"]:
+                        tree.column(col, width=220, minwidth=140)
+                    elif col in ["Date Analyzed", "date_analyzed"]:
+                        tree.column(col, width=95, minwidth=80, anchor="center")
                     elif col == "distance_km":
                         tree.column(col, width=110, minwidth=90, anchor="center")
                     elif col == "distance_from_area":
@@ -3711,7 +3801,12 @@ SinoMagan Indus Global Trade LLP
             
     def clean_local_matrix(self, output_file, tree):
         stats = clean_matrix(output_file, self.logger)
-        self.load_matrix(tree, output_file)
+        if output_file == "Niches_Matrix.xlsx" and hasattr(self, 'load_niches_matrix'):
+            self.load_niches_matrix()
+        elif output_file == "Products_Matrix.xlsx" and hasattr(self, 'load_products_matrix'):
+            self.load_products_matrix()
+        else:
+            self.load_matrix(tree, output_file)
         
         import tkinter.messagebox as messagebox
         if stats and stats.get("removed_count", 0) > 0:
@@ -4866,6 +4961,921 @@ Ensure each product maps cleanly to one of the 13 niches above. If a product fal
                 messagebox.showerror("Save Error", f"Could not save product: {e}")
 
         btn_save = ctk.CTkButton(btn_bar, text="💾 Save to Matrix", command=save_product, fg_color="#1f7a1f", hover_color="#145214", width=140)
+        btn_save.pack(side="right", padx=5)
+
+        btn_cancel = ctk.CTkButton(btn_bar, text="Cancel", command=win.destroy, fg_color="#565b5e", hover_color="#343638", width=90)
+        btn_cancel.pack(side="right", padx=5)
+
+    # =========================================================================
+    # NICHE EXPLORER & REGIONAL POTENTIAL TAB IMPLEMENTATION
+    # =========================================================================
+
+    def setup_niche_explorer_tab(self):
+        """Sets up the Niche Explorer tab to analyze trade potential across regions, explore niches, and inspect potential ratings."""
+        import tkinter as tk
+        from tkinter import ttk
+        import tkinter.messagebox as messagebox
+
+        self.tab_niche_explorer.grid_columnconfigure(0, weight=1)
+        self.tab_niche_explorer.grid_rowconfigure(0, weight=0)
+        self.tab_niche_explorer.grid_rowconfigure(1, weight=0)
+        self.tab_niche_explorer.grid_rowconfigure(2, weight=0)
+        self.tab_niche_explorer.grid_rowconfigure(3, weight=1)
+
+        # 1. Top Control / Search Bar (Row 0)
+        search_frame = ctk.CTkFrame(self.tab_niche_explorer)
+        search_frame.grid(row=0, column=0, padx=10, pady=(10, 4), sticky="ew")
+
+        lbl_region = ctk.CTkLabel(search_frame, text="🌍 Target Region:", font=("Arial", 12, "bold"))
+        lbl_region.pack(side="left", padx=(10, 4), pady=7)
+
+        self.niche_region_var = ctk.StringVar(value="Worldwide (wt-wt)")
+        self.niche_region_dropdown = ctk.CTkOptionMenu(
+            search_frame, 
+            values=self.country_regions, 
+            variable=self.niche_region_var, 
+            command=self.on_niche_explorer_filter_changed,
+            width=140
+        )
+        self.niche_region_dropdown.pack(side="left", padx=4, pady=7)
+
+        lbl_flow = ctk.CTkLabel(search_frame, text="🔄 Trade Flow:", font=("Arial", 12, "bold"))
+        lbl_flow.pack(side="left", padx=(8, 4), pady=7)
+
+        self.niche_flow_var = ctk.StringVar(value="All Flows")
+        self.niche_flow_dropdown = ctk.CTkOptionMenu(
+            search_frame,
+            values=["All Flows", "Export from India", "Two-Way Trade", "Import to India"],
+            variable=self.niche_flow_var,
+            command=self.on_niche_explorer_filter_changed,
+            width=135
+        )
+        self.niche_flow_dropdown.pack(side="left", padx=4, pady=7)
+
+        lbl_rating = ctk.CTkLabel(search_frame, text="⭐ Potential Rating:", font=("Arial", 12, "bold"))
+        lbl_rating.pack(side="left", padx=(8, 4), pady=7)
+
+        self.niche_rating_filter_var = ctk.StringVar(value="All Ratings")
+        self.niche_rating_dropdown = ctk.CTkOptionMenu(
+            search_frame,
+            values=["All Ratings", "⭐⭐⭐⭐⭐ Very High", "⭐⭐⭐⭐ High", "⭐⭐⭐ Moderate"],
+            variable=self.niche_rating_filter_var,
+            command=self.on_niche_explorer_filter_changed,
+            width=150
+        )
+        self.niche_rating_dropdown.pack(side="left", padx=4, pady=7)
+
+        self.niche_keyword_entry = ctk.CTkEntry(
+            search_frame, 
+            placeholder_text="Optional Keyword / Trade Theme (e.g. solar, auto, relays)...", 
+            width=210
+        )
+        self.niche_keyword_entry.pack(side="left", padx=6, pady=7)
+        self.niche_keyword_entry.bind("<Return>", lambda event: self.start_niche_exploration_search())
+
+        self.btn_niche_explore = ctk.CTkButton(
+            search_frame, 
+            text="✨ Explore Niches (AI)", 
+            command=self.start_niche_exploration_search,
+            width=155,
+            fg_color="#1f7a1f",
+            hover_color="#145214",
+            font=("Arial", 12, "bold")
+        )
+        self.btn_niche_explore.pack(side="left", padx=(6, 10), pady=7)
+
+        self.lbl_niche_status = ctk.CTkLabel(
+            search_frame, 
+            text="", 
+            font=("Arial", 11, "italic"),
+            text_color="#2ecc71"
+        )
+        self.lbl_niche_status.pack(side="left", padx=4, pady=7)
+
+        # 2. Interactive Niches Potential Grid Section (Row 1)
+        self.niche_exp_grid_visible = True
+        self.niche_exp_grid_container = ctk.CTkFrame(self.tab_niche_explorer, fg_color="#181b20", corner_radius=8, border_width=1, border_color="#282e36")
+        self.niche_exp_grid_container.grid(row=1, column=0, padx=10, pady=(2, 6), sticky="ew")
+
+        grid_hdr = ctk.CTkFrame(self.niche_exp_grid_container, fg_color="transparent")
+        grid_hdr.pack(fill="x", padx=10, pady=(6, 4))
+
+        lbl_grid_title = ctk.CTkLabel(
+            grid_hdr, 
+            text="🏷️ Industrial Niches Trade Potential Portfolio (Indian Import/Export Focus):", 
+            font=("Arial", 12, "bold"), 
+            text_color="#ffffff"
+        )
+        lbl_grid_title.pack(side="left")
+
+        self.lbl_niche_exp_summary = ctk.CTkLabel(
+            grid_hdr, 
+            text="14 Niches Analyzed | Loading Matrix...", 
+            font=("Arial", 11, "italic"), 
+            text_color="#58a6ff"
+        )
+        self.lbl_niche_exp_summary.pack(side="left", padx=(12, 10))
+
+        btn_show_all = ctk.CTkButton(
+            grid_hdr, 
+            text="🌟 Show All Niches", 
+            command=lambda: self.on_niche_explorer_card_clicked("All Niches"), 
+            width=120, 
+            height=24, 
+            fg_color="#005b96", 
+            hover_color="#003f66",
+            font=("Arial", 11, "bold")
+        )
+        btn_show_all.pack(side="right", padx=(6, 0))
+
+        self.btn_toggle_niche_exp_grid = ctk.CTkButton(
+            grid_hdr, 
+            text="👁️ Hide Grid", 
+            command=self.toggle_niche_explorer_grid, 
+            width=90, 
+            height=24, 
+            fg_color="#3a3a3a", 
+            hover_color="#2b2b2b",
+            font=("Arial", 11)
+        )
+        self.btn_toggle_niche_exp_grid.pack(side="right")
+
+        self.niche_exp_cards_frame = ctk.CTkFrame(self.niche_exp_grid_container, fg_color="transparent")
+        self.niche_exp_cards_frame.pack(fill="x", padx=8, pady=(2, 8))
+        for c in range(5):
+            self.niche_exp_cards_frame.grid_columnconfigure(c, weight=1, uniform="niche_exp_group")
+
+        self.niche_exp_cards = {}
+        self.active_niche_exp_card = "All Niches"
+        self.build_niche_explorer_grid()
+
+        # 3. Action Toolbar (Row 2)
+        btn_bar = ctk.CTkFrame(self.tab_niche_explorer, fg_color="transparent")
+        btn_bar.grid(row=2, column=0, padx=10, pady=(2, 6), sticky="ew")
+
+        btn_add = ctk.CTkButton(btn_bar, text="➕ Add Custom Niche", command=self.open_add_niche_window, width=135, fg_color="#1f7a1f", hover_color="#145214")
+        btn_add.pack(side="left", padx=(0, 6))
+
+        btn_copy = ctk.CTkButton(btn_bar, text="📋 Copy Details", command=self.copy_selected_niche_details, width=105, fg_color="#3a3a3a", hover_color="#2b2b2b")
+        btn_copy.pack(side="left", padx=(0, 6))
+
+        btn_pivot_prod = ctk.CTkButton(btn_bar, text="📦 Source Products", command=self.pivot_selected_niche_to_products, width=130, fg_color="#005b96", hover_color="#003f66")
+        btn_pivot_prod.pack(side="left", padx=(0, 6))
+
+        btn_pivot_sup = ctk.CTkButton(btn_bar, text="🔍 Source Suppliers", command=self.pivot_selected_niche_to_suppliers, width=130, fg_color="#2b580c", hover_color="#1c3b08")
+        btn_pivot_sup.pack(side="left", padx=(0, 6))
+
+        btn_pivot_buy = ctk.CTkButton(btn_bar, text="🌐 Source Buyers", command=self.pivot_selected_niche_to_buyers, width=125, fg_color="#5c3c00", hover_color="#3d2800")
+        btn_pivot_buy.pack(side="left", padx=(0, 6))
+
+        btn_open_excel = ctk.CTkButton(btn_bar, text="📂 Open Excel", command=lambda: self.open_excel_file("Niches_Matrix.xlsx"), width=95, fg_color="#2d572c", hover_color="#1f3d1e")
+        btn_open_excel.pack(side="left", padx=(0, 6))
+
+        btn_clean = ctk.CTkButton(btn_bar, text="🧹 Clean Matrix", command=lambda: self.clean_local_matrix("Niches_Matrix.xlsx", self.niche_tree), width=100, fg_color="#b30000", hover_color="#800000")
+        btn_clean.pack(side="left", padx=(0, 6))
+
+        btn_delete_all = ctk.CTkButton(btn_bar, text="🗑️ Delete All", command=lambda: self.delete_all_entries("Niches_Matrix.xlsx", self.niche_tree), width=90, fg_color="#660000", hover_color="#4d0000")
+        btn_delete_all.pack(side="left", padx=6)
+
+        # 4. Interactive Treeview Frame (Row 3)
+        tree_frame = ctk.CTkFrame(self.tab_niche_explorer)
+        tree_frame.grid(row=3, column=0, sticky="nsew", padx=10, pady=(0, 10))
+        tree_frame.grid_columnconfigure(0, weight=1)
+        tree_frame.grid_rowconfigure(0, weight=1)
+
+        self.niche_tree = ttk.Treeview(tree_frame, show='headings')
+        vsb = ttk.Scrollbar(tree_frame, orient="vertical", command=self.niche_tree.yview)
+        hsb = ttk.Scrollbar(tree_frame, orient="horizontal", command=self.niche_tree.xview)
+        self.niche_tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+
+        self.niche_tree.grid(row=0, column=0, sticky='nsew')
+        vsb.grid(row=0, column=1, sticky='ns')
+        hsb.grid(row=1, column=0, sticky='ew')
+
+        # Double click to copy
+        self.niche_tree.bind("<Double-1>", lambda event: self.copy_selected_niche_details())
+
+        # Right click context menu
+        niche_menu = tk.Menu(self.tab_niche_explorer, tearoff=0)
+        niche_menu.add_command(label="📋 Copy Niche Details", command=self.copy_selected_niche_details)
+        niche_menu.add_command(label="📦 Find Products in Product Sourcing", command=self.pivot_selected_niche_to_products)
+        niche_menu.add_command(label="🔍 Source Suppliers in URL Discovery", command=self.pivot_selected_niche_to_suppliers)
+        niche_menu.add_command(label="🌐 Source Buyers in URL Discovery", command=self.pivot_selected_niche_to_buyers)
+        niche_menu.add_separator()
+        niche_menu.add_command(label="📂 Open Niches_Matrix.xlsx", command=lambda: self.open_excel_file("Niches_Matrix.xlsx"))
+
+        def on_niche_right_click(event):
+            item = self.niche_tree.identify_row(event.y)
+            if item:
+                self.niche_tree.selection_set(item)
+                try:
+                    niche_menu.tk_popup(event.x_root, event.y_root)
+                finally:
+                    niche_menu.grab_release()
+
+        self.niche_tree.bind("<Button-3>", on_niche_right_click)
+
+        # 5. Initialize and load Niches_Matrix.xlsx
+        self.ensure_niches_matrix_exists()
+        self.load_niches_matrix()
+
+    def toggle_niche_explorer_grid(self):
+        """Toggles the visibility of the Niche Explorer Grid to maximize table space."""
+        if self.niche_exp_grid_visible:
+            self.niche_exp_cards_frame.pack_forget()
+            self.btn_toggle_niche_exp_grid.configure(text="👁️ Show Grid")
+            self.niche_exp_grid_visible = False
+        else:
+            self.niche_exp_cards_frame.pack(fill="x", padx=8, pady=(2, 8))
+            self.btn_toggle_niche_exp_grid.configure(text="👁️ Hide Grid")
+            self.niche_exp_grid_visible = True
+
+    def build_niche_explorer_grid(self):
+        """Constructs the interactive 5-column grid of niche cards displaying current potential ratings."""
+        # Tile 0: All Niches Card (Row 0, Col 0)
+        self.create_niche_explorer_card(
+            grid_row=0, grid_col=0,
+            niche_key="All Niches",
+            icon="🌟",
+            title="All Niches Portfolio",
+            rating_text="⭐⭐⭐⭐⭐ Top Rating (9.7/10)",
+            flow_text="All Trade Flows",
+            subtext="Complete 14 Industrial Niches",
+            hubs="Nationwide Indian Hubs"
+        )
+
+        # Tiles 1 to 14 (Niches 1 to 13 + Miscellaneous Niche)
+        for idx, item in enumerate(NICHES_METADATA):
+            slot = idx + 1
+            r = slot // 5
+            c = slot % 5
+            self.create_niche_explorer_card(
+                grid_row=r, grid_col=c,
+                niche_key=item["key"],
+                icon=item["icon"],
+                title=item["title"],
+                rating_text=item.get("potential_rating", "⭐⭐⭐⭐ High (8.5/10)"),
+                flow_text=item.get("trade_flow", "Export from India"),
+                subtext=item["subproducts"],
+                hubs=item["hubs"]
+            )
+
+    def create_niche_explorer_card(self, grid_row, grid_col, niche_key, icon, title, rating_text, flow_text, subtext, hubs):
+        """Creates an individual interactive card displaying a niche's potential rating and trade profile."""
+        card = ctk.CTkFrame(
+            self.niche_exp_cards_frame, 
+            fg_color="#22272e", 
+            corner_radius=6, 
+            border_width=1, 
+            border_color="#30363d",
+            cursor="hand2"
+        )
+        card.grid(row=grid_row, column=grid_col, padx=4, pady=4, sticky="nsew")
+
+        top_f = ctk.CTkFrame(card, fg_color="transparent")
+        top_f.pack(fill="x", padx=6, pady=(4, 2))
+
+        lbl_title = ctk.CTkLabel(
+            top_f, 
+            text=f"{icon} {title}", 
+            font=("Arial", 11, "bold"), 
+            text_color="#ffffff",
+            anchor="w"
+        )
+        lbl_title.pack(side="left", fill="x", expand=True)
+
+        rating_color = "#00e676" if "Very High" in rating_text else ("#58a6ff" if "High" in rating_text else "#f39c12")
+        lbl_rating = ctk.CTkLabel(
+            card,
+            text=rating_text,
+            font=("Arial", 10, "bold"),
+            text_color=rating_color,
+            anchor="w"
+        )
+        lbl_rating.pack(fill="x", padx=6, pady=(0, 2))
+
+        lbl_flow = ctk.CTkLabel(
+            card,
+            text=f"🔄 {flow_text}",
+            font=("Arial", 9, "bold"),
+            text_color="#a0aec0",
+            anchor="w"
+        )
+        lbl_flow.pack(fill="x", padx=6, pady=(0, 2))
+
+        lbl_sub = ctk.CTkLabel(
+            card, 
+            text=subtext, 
+            font=("Arial", 9), 
+            text_color="#768390", 
+            anchor="w",
+            wraplength=190,
+            justify="left"
+        )
+        lbl_sub.pack(fill="x", padx=6, pady=(0, 4))
+
+        def on_click(event=None):
+            self.on_niche_explorer_card_clicked(niche_key)
+
+        card.bind("<Button-1>", on_click)
+        top_f.bind("<Button-1>", on_click)
+        lbl_title.bind("<Button-1>", on_click)
+        lbl_rating.bind("<Button-1>", on_click)
+        lbl_flow.bind("<Button-1>", on_click)
+        lbl_sub.bind("<Button-1>", on_click)
+
+        self.niche_exp_cards[niche_key] = {
+            "card": card,
+            "lbl_title": lbl_title,
+            "lbl_rating": lbl_rating,
+            "lbl_flow": lbl_flow,
+            "lbl_sub": lbl_sub,
+            "icon": icon,
+            "title": title
+        }
+
+    def on_niche_explorer_card_clicked(self, niche_key):
+        """Called when a niche card in the grid is clicked to filter the matrix view."""
+        self.active_niche_exp_card = niche_key
+        self.highlight_active_niche_explorer_card(niche_key)
+        self.load_niches_matrix(niche_filter=niche_key)
+
+    def highlight_active_niche_explorer_card(self, active_choice):
+        """Highlights the active card in the Niche Explorer grid."""
+        for key, w in self.niche_exp_cards.items():
+            card = w["card"]
+            lbl_rating = w["lbl_rating"]
+            cur_txt = lbl_rating.cget("text").replace("✓ ", "")
+            if key == active_choice:
+                card.configure(border_color="#00d26a", border_width=2, fg_color="#162a3d")
+                lbl_rating.configure(text=f"✓ {cur_txt}")
+            else:
+                card.configure(border_color="#30363d", border_width=1, fg_color="#22272e")
+                lbl_rating.configure(text=cur_txt)
+
+    def on_niche_explorer_filter_changed(self, choice=None):
+        """Called when any filter dropdown in Niche Explorer changes."""
+        self.load_niches_matrix()
+
+    def load_niches_matrix(self, niche_filter=None):
+        """Loads and filters Niches_Matrix.xlsx into self.niche_tree."""
+        matrix_file = "Niches_Matrix.xlsx"
+        if not os.path.exists(matrix_file):
+            return
+
+        try:
+            import pandas as pd
+            df = pd.read_excel(matrix_file)
+
+            active_niche = niche_filter if niche_filter is not None else self.active_niche_exp_card
+            df_filtered = df
+
+            # 1. Filter by niche if specific niche is clicked
+            if active_niche and active_niche not in ["All Niches", "All 13 Niches"]:
+                niche_num = active_niche.split(":")[0].strip()
+                df_filtered = df_filtered[
+                    df_filtered['Niche Code'].astype(str).str.contains(niche_num, case=False, na=False) |
+                    df_filtered['Niche Title'].astype(str).str.contains(niche_num, case=False, na=False)
+                ]
+
+            # 2. Filter by Rating
+            if hasattr(self, 'niche_rating_filter_var'):
+                r_filter = self.niche_rating_filter_var.get()
+                if r_filter and r_filter != "All Ratings":
+                    clean_kw = r_filter.replace("⭐", "").strip()
+                    df_filtered = df_filtered[df_filtered['Potential Rating'].astype(str).str.contains(clean_kw, case=False, na=False)]
+
+            # 3. Filter by Trade Flow
+            if hasattr(self, 'niche_flow_var'):
+                f_filter = self.niche_flow_var.get()
+                if f_filter and f_filter != "All Flows":
+                    df_filtered = df_filtered[df_filtered['Trade Flow'].astype(str).str.contains(f_filter, case=False, na=False)]
+
+            # 4. Filter by Target Region
+            if hasattr(self, 'niche_region_var'):
+                reg_filter = self.niche_region_var.get()
+                if reg_filter and reg_filter != "Worldwide (wt-wt)":
+                    reg_clean = reg_filter.split(" (")[0].strip()
+                    df_filtered = df_filtered[
+                        df_filtered['Target Region'].astype(str).str.contains(reg_clean, case=False, na=False) |
+                        df_filtered['Target Region'].astype(str).str.contains("Worldwide", case=False, na=False)
+                    ]
+
+            self.niche_tree.delete(*self.niche_tree.get_children())
+            cols = list(df.columns)
+            self.niche_tree["columns"] = cols
+
+            for col in cols:
+                self.niche_tree.heading(col, text=col, command=lambda _c=col: self.sort_tree_column(self.niche_tree, _c, False))
+                if col in ["Niche Code", "niche_code"]:
+                    self.niche_tree.column(col, width=90, minwidth=70, anchor="center")
+                elif col in ["Niche Title", "niche_title"]:
+                    self.niche_tree.column(col, width=200, minwidth=130)
+                elif col in ["Target Region", "target_region"]:
+                    self.niche_tree.column(col, width=130, minwidth=90)
+                elif col in ["Potential Rating", "potential_rating"]:
+                    self.niche_tree.column(col, width=175, minwidth=120, anchor="center")
+                elif col in ["Trade Flow", "trade_flow"]:
+                    self.niche_tree.column(col, width=130, minwidth=90, anchor="center")
+                elif col in ["Key Sub-Products", "key_subproducts"]:
+                    self.niche_tree.column(col, width=220, minwidth=140)
+                elif col in ["Indian Sourcing Hubs", "indian_hubs"]:
+                    self.niche_tree.column(col, width=180, minwidth=120)
+                elif col in ["Market Demand Drivers & Rationale", "market_demand_drivers"]:
+                    self.niche_tree.column(col, width=270, minwidth=160)
+                elif col in ["Tariff / FTA / Scheme Advantage", "tariff_fta_advantage"]:
+                    self.niche_tree.column(col, width=220, minwidth=140)
+                elif col in ["Date Analyzed", "date_analyzed"]:
+                    self.niche_tree.column(col, width=95, minwidth=80, anchor="center")
+                else:
+                    self.niche_tree.column(col, width=150, minwidth=100)
+
+            for _, row in df_filtered.iterrows():
+                self.niche_tree.insert("", "end", values=list(row))
+
+            if hasattr(self, 'lbl_niche_status'):
+                self.lbl_niche_status.configure(
+                    text=f"Showing {len(df_filtered)} of {len(df)} trade niches ({active_niche})",
+                    text_color="#2ecc71" if len(df_filtered) > 0 else "#f39c12"
+                )
+
+            if hasattr(self, 'lbl_niche_exp_summary'):
+                clean_active = active_niche.split(":")[0].strip() if ":" in active_niche else active_niche
+                self.lbl_niche_exp_summary.configure(
+                    text=f"{len(df)} Niches Analyzed | Active: {clean_active}",
+                    text_color="#58a6ff"
+                )
+
+        except Exception as e:
+            self.logger.error(f"Failed to load niches matrix: {e}")
+
+    def ensure_niches_matrix_exists(self):
+        """Ensures Niches_Matrix.xlsx exists and is pre-seeded with all 13 industrial niches + Miscellaneous niche with trade potential ratings."""
+        matrix_file = "Niches_Matrix.xlsx"
+        if not os.path.exists(matrix_file):
+            try:
+                import pandas as pd
+                from datetime import datetime
+                today_str = datetime.now().strftime("%Y-%m-%d")
+                baseline_data = []
+                for item in NICHES_METADATA:
+                    baseline_data.append({
+                        "Niche Code": f"Niche {item['id']}",
+                        "Niche Title": item["title"],
+                        "Target Region": "Worldwide",
+                        "Potential Rating": item.get("potential_rating", "⭐⭐⭐⭐ High (8.5/10)"),
+                        "Trade Flow": item.get("trade_flow", "Export from India"),
+                        "Key Sub-Products": item.get("subproducts", ""),
+                        "Indian Sourcing Hubs": item.get("hubs", "Pan-India Clusters"),
+                        "Market Demand Drivers & Rationale": item.get("demand_drivers", "High global industrial demand and expanding Indian manufacturing capacity."),
+                        "Tariff / FTA / Scheme Advantage": item.get("tariff_fta", "Eligible for DGFT export incentives and duty drawback benefits."),
+                        "Date Analyzed": today_str
+                    })
+                df = pd.DataFrame(baseline_data)
+                df.to_excel(matrix_file, index=False)
+                self.logger.info(f"Initialized {matrix_file} with {len(df)} industrial trade niches.")
+            except Exception as e:
+                self.logger.error(f"Failed to initialize {matrix_file}: {e}")
+
+    def start_niche_exploration_search(self):
+        """Initiates AI trade niche exploration in a background thread."""
+        import threading
+        region = self.niche_region_var.get()
+        trade_flow = self.niche_flow_var.get()
+        keyword = self.niche_keyword_entry.get().strip()
+
+        region_name = region.split(" (")[0].strip()
+        self.btn_niche_explore.configure(state="disabled")
+        self.lbl_niche_status.configure(
+            text=f"⏳ Exploring trade niches & export-import potential for {region_name} via Gemini...",
+            text_color="#f39c12"
+        )
+
+        threading.Thread(
+            target=self.niche_exploration_search_thread,
+            args=(region_name, trade_flow, keyword),
+            daemon=True
+        ).start()
+
+    def niche_exploration_search_thread(self, region_name, trade_flow, keyword):
+        """Background worker that calls Gemini to analyze trade potential and discover niche opportunities for an Indian company."""
+        try:
+            import pandas as pd
+            from datetime import datetime
+            from google.genai import types
+            from pydantic import BaseModel, Field
+            from typing import List
+            from llm_fallback import generate_with_fallback
+
+            class NicheOpportunityItem(BaseModel):
+                niche_code: str = Field(description="Niche identifier, e.g. 'Niche 13', 'Niche 2', 'Niche 5', or 'New Opportunity'")
+                niche_title: str = Field(description="Name and title of the industrial trade niche")
+                target_region: str = Field(default=region_name, description="Target destination/partner region")
+                potential_rating: str = Field(description="Potential rating, e.g. '⭐⭐⭐⭐⭐ Very High (9.6/10)' or '⭐⭐⭐⭐ High (8.7/10)'")
+                trade_flow: str = Field(description="'Export from India', 'Import to India', or 'Two-Way Trade'")
+                key_subproducts: str = Field(description="Specific high-value products and commercial materials")
+                indian_hubs: str = Field(description="Major manufacturing & supply clusters in India (e.g. Pune, Jamnagar, Coimbatore, Mundra)")
+                market_demand_drivers: str = Field(description="2-3 sentences explaining market appetite, infrastructure drivers, replacement demand, or supply chain diversification")
+                tariff_fta_advantage: str = Field(description="Relevant bilateral trade pact (CEPA, ECTA, FTA), tariff concession, duty drawback, or Indian PLI scheme")
+
+            class NicheListResponse(BaseModel):
+                niches: List[NicheOpportunityItem]
+
+            flow_instruction = (
+                f"Focus specifically on '{trade_flow}' dynamics between India and {region_name}."
+                if trade_flow != "All Flows" else
+                f"Evaluate both Indian manufacturing exports to {region_name} and strategic industrial imports into India from {region_name}."
+            )
+
+            prompt = f"""You are an elite international trade strategist and export-import consultant for Indian B2B industry.
+Our company (SinoMagan Indus Global Trade LLP) is an Indian international trade and export-import firm.
+We analyze bilateral trade potential across major global regions and identify high-margin, scalable niche opportunities.
+
+Target Destination / Partner Region: {region_name}
+Trade Flow Focus: {flow_instruction}
+Optional Thematic Keyword: {keyword or 'None (Evaluate top high-potential industrial trade niches)'}
+
+Evaluate the 13 core Indian industrial niches:
+1. Electrical & Electronic Components
+2. Wires & Cables
+3. Power Distribution & Protection Relays
+4. HVAC, Fans, Pumps & Actuators
+5. Batteries, Solar Energy & Renewable Scrap
+6. Industrial Generators
+7. LED Lighting & Lighting Controls
+8. Commercial Appliances
+9. Sensors & Testing
+10. Electric Vehicles & EV Infrastructure
+11. Printed Circuit Boards (PCB) & PCBA
+12. Building Materials & Wooden Panels
+13. Automotive & Car Parts / Auto Components
+(Plus emergent trade sectors or Miscellaneous Niche if relevant)
+
+Assess the real-world commercial viability for an Indian company doing business with {region_name}.
+Provide 5 to 8 comprehensive niche evaluations, scoring each with a Potential Rating (e.g. '⭐⭐⭐⭐⭐ Very High (9.5/10)', '⭐⭐⭐⭐ High (8.8/10)', '⭐⭐⭐ Moderate (7.6/10)'), identifying specific Indian hubs, demand drivers, and trade agreement benefits (e.g. CEPA, ECTA, PLI schemes, China+1 sourcing).
+"""
+
+            response = generate_with_fallback(
+                prompt=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=NicheListResponse,
+                    temperature=0.2
+                ),
+                logger=self.logger
+            )
+
+            new_niches = []
+            if hasattr(response, 'parsed') and response.parsed and hasattr(response.parsed, 'niches'):
+                for item in response.parsed.niches:
+                    new_niches.append(item.model_dump())
+            elif response and response.text:
+                import json
+                cleaned_text = response.text.strip()
+                if cleaned_text.startswith("```json"):
+                    cleaned_text = cleaned_text[7:]
+                if cleaned_text.endswith("```"):
+                    cleaned_text = cleaned_text[:-3]
+                data = json.loads(cleaned_text.strip())
+                if isinstance(data, dict) and "niches" in data:
+                    new_niches = data["niches"]
+                elif isinstance(data, list):
+                    new_niches = data
+
+            matrix_file = "Niches_Matrix.xlsx"
+            self.ensure_niches_matrix_exists()
+            df_existing = pd.read_excel(matrix_file)
+
+            today_str = datetime.now().strftime("%Y-%m-%d")
+            added_count = 0
+
+            existing_keys = set()
+            for _, r in df_existing.iterrows():
+                t_val = str(r.get('Niche Title', '')).strip().lower()
+                reg_val = str(r.get('Target Region', '')).strip().lower()
+                if t_val:
+                    existing_keys.add((t_val, reg_val))
+
+            rows_to_add = []
+            for n in new_niches:
+                n_code = n.get("niche_code", "Niche Opportunity").strip()
+                n_title = n.get("niche_title", "").strip()
+                n_reg = n.get("target_region", region_name).strip()
+                if not n_title:
+                    continue
+                key = (n_title.lower(), n_reg.lower())
+                if key not in existing_keys:
+                    existing_keys.add(key)
+                    rows_to_add.append({
+                        "Niche Code": n_code,
+                        "Niche Title": n_title,
+                        "Target Region": n_reg,
+                        "Potential Rating": n.get("potential_rating", "⭐⭐⭐⭐ High (8.5/10)"),
+                        "Trade Flow": n.get("trade_flow", trade_flow if trade_flow != "All Flows" else "Export from India"),
+                        "Key Sub-Products": n.get("key_subproducts", ""),
+                        "Indian Sourcing Hubs": n.get("indian_hubs", "Gujarat, Maharashtra, Bangalore"),
+                        "Market Demand Drivers & Rationale": n.get("market_demand_drivers", ""),
+                        "Tariff / FTA / Scheme Advantage": n.get("tariff_fta_advantage", ""),
+                        "Date Analyzed": today_str
+                    })
+                    added_count += 1
+
+            if rows_to_add:
+                df_new = pd.DataFrame(rows_to_add)
+                df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+                df_combined.to_excel(matrix_file, index=False)
+                self.logger.info(f"Appended {added_count} new niche evaluations to {matrix_file}.")
+
+            self.ui_queue.put((self.on_niche_search_completed, (added_count, region_name)))
+
+        except Exception as e:
+            self.logger.error(f"Niche exploration search failed: {e}")
+            self.ui_queue.put((self.on_niche_search_failed, (str(e), region_name)))
+
+    def on_niche_search_completed(self, added_count, region_name):
+        """Called on main thread when niche exploration search completes."""
+        self.btn_niche_explore.configure(state="normal")
+        if added_count > 0:
+            self.lbl_niche_status.configure(
+                text=f"✅ Added {added_count} niche opportunities for {region_name}! (Matrix Updated)",
+                text_color="#2ecc71"
+            )
+        else:
+            self.lbl_niche_status.configure(
+                text=f"ℹ️ Evaluated niches already exist in matrix.",
+                text_color="#3498db"
+            )
+        self.load_niches_matrix()
+
+    def on_niche_search_failed(self, err_msg, region_name):
+        """Called on main thread when niche exploration encounters an error."""
+        self.btn_niche_explore.configure(state="normal")
+        self.lbl_niche_status.configure(
+            text=f"❌ Error: {err_msg[:45]}...",
+            text_color="#e74c3c"
+        )
+
+    def pivot_selected_niche_to_products(self):
+        """Pivots the selected niche into the Product Sourcing tab to explore or find matching products."""
+        import tkinter.messagebox as messagebox
+        sel = self.niche_tree.selection()
+        if not sel:
+            messagebox.showinfo("Select Niche", "Please select a niche from the table first.")
+            return
+        item_id = sel[0]
+        row_vals = self.niche_tree.item(item_id)["values"]
+        cols = list(self.niche_tree["columns"])
+        data = dict(zip(cols, row_vals))
+
+        n_code = str(data.get("Niche Code", "")).strip()
+        n_title = str(data.get("Niche Title", "")).strip()
+        t_reg = str(data.get("Target Region", "")).strip()
+
+        matched_key = None
+        for k in self.industrial_niches_list:
+            if n_code.lower() in k.lower() or n_title.lower() in k.lower():
+                matched_key = k
+                break
+
+        if not matched_key:
+            matched_key = "All Niches"
+
+        self.tabview.set("Product Sourcing")
+        self.on_niche_filter_changed(matched_key)
+
+        if t_reg and t_reg != "Worldwide":
+            for r in self.country_regions:
+                if t_reg.lower() in r.lower():
+                    self.prod_region_var.set(r)
+                    break
+
+        self.lbl_prod_status.configure(
+            text=f"Pivoted from Niche Explorer: Active Niche '{matched_key.split(':')[0]}'.",
+            text_color="#2ecc71"
+        )
+        self.logger.info(f"Pivoted '{n_title}' into Product Sourcing tab.")
+
+    def pivot_selected_niche_to_suppliers(self):
+        """Pivots the selected niche into URL Discovery configured for finding Indian manufacturers/suppliers."""
+        import tkinter.messagebox as messagebox
+        sel = self.niche_tree.selection()
+        if not sel:
+            messagebox.showinfo("Select Niche", "Please select a niche from the table first.")
+            return
+        item_id = sel[0]
+        row_vals = self.niche_tree.item(item_id)["values"]
+        cols = list(self.niche_tree["columns"])
+        data = dict(zip(cols, row_vals))
+
+        n_title = str(data.get("Niche Title", "")).strip()
+        subproducts = str(data.get("Key Sub-Products", "")).strip()
+        first_prod = subproducts.split(",")[0].strip() if subproducts else n_title
+
+        self.strategy_var.set("Suppliers")
+        self.on_strategy_change("Suppliers")
+
+        for r in self.country_regions:
+            if "India" in r:
+                self.region_var.set(r)
+                break
+
+        search_query = f"{first_prod} manufacturers India"
+        supplier_queries = [
+            search_query,
+            f"{first_prod} suppliers India",
+            f"{first_prod} exporters India",
+            f"{n_title} manufacturers India"
+        ]
+
+        self.query_entry.delete("0.0", "end")
+        self.query_entry.insert("0.0", search_query)
+        self.populate_suggested_queries(supplier_queries)
+        self.select_suggested_query(search_query)
+
+        self.tabview.set("URL Discovery")
+        self.lbl_disc_status.configure(
+            text=f"Loaded supplier discovery query for '{first_prod}' (India).",
+            text_color="#2ecc71"
+        )
+        self.logger.info(f"Loaded niche supplier query '{search_query}' into URL Discovery.")
+
+    def pivot_selected_niche_to_buyers(self):
+        """Pivots the selected niche into URL Discovery configured for finding global buyers/importers."""
+        import tkinter.messagebox as messagebox
+        sel = self.niche_tree.selection()
+        if not sel:
+            messagebox.showinfo("Select Niche", "Please select a niche from the table first.")
+            return
+        item_id = sel[0]
+        row_vals = self.niche_tree.item(item_id)["values"]
+        cols = list(self.niche_tree["columns"])
+        data = dict(zip(cols, row_vals))
+
+        n_title = str(data.get("Niche Title", "")).strip()
+        subproducts = str(data.get("Key Sub-Products", "")).strip()
+        target_region = str(data.get("Target Region", "")).strip()
+        first_prod = subproducts.split(",")[0].strip() if subproducts else n_title
+
+        self.strategy_var.set("Buyers")
+        self.on_strategy_change("Buyers")
+
+        matched_region = None
+        if target_region:
+            tr_lower = target_region.lower()
+            for r in self.country_regions:
+                r_name = r.split(" (")[0].strip().lower()
+                if (r_name in tr_lower or tr_lower in r_name or
+                    ("usa" in tr_lower and r_name == "usa") or
+                    ("united states" in tr_lower and r_name == "usa") or
+                    ("uk" in tr_lower and "united kingdom" in r_name) or
+                    ("uae" in tr_lower and r_name == "uae")):
+                    matched_region = r
+                    break
+
+        if not matched_region:
+            matched_region = "Worldwide (wt-wt)"
+
+        self.region_var.set(matched_region)
+        dest = matched_region.split(" (")[0].strip()
+        if "Worldwide" in dest or "Global" in dest:
+            dest = "worldwide"
+
+        search_query = f"{first_prod} distributors {dest}"
+        buyer_queries = [
+            search_query,
+            f"{first_prod} importers {dest}",
+            f"{first_prod} wholesale buyers {dest}",
+            f"{n_title} distributors {dest}"
+        ]
+
+        self.query_entry.delete("0.0", "end")
+        self.query_entry.insert("0.0", search_query)
+        self.populate_suggested_queries(buyer_queries)
+        self.select_suggested_query(search_query)
+
+        self.tabview.set("URL Discovery")
+        self.lbl_disc_status.configure(
+            text=f"Loaded buyer discovery query for '{first_prod}' ({dest}).",
+            text_color="#2ecc71"
+        )
+        self.logger.info(f"Loaded niche buyer query '{search_query}' into URL Discovery.")
+
+    def copy_selected_niche_details(self):
+        """Copies details of the selected niche to clipboard."""
+        import tkinter.messagebox as messagebox
+        import pandas as pd
+        sel = self.niche_tree.selection()
+        if not sel:
+            messagebox.showinfo("Select Niche", "Please select a niche from the table first.")
+            return
+        item_id = sel[0]
+        row_vals = self.niche_tree.item(item_id)["values"]
+        cols = list(self.niche_tree["columns"])
+        data = dict(zip(cols, row_vals))
+
+        lines = [f"{k}: {v}" for k, v in data.items() if pd.notna(v)]
+        summary_text = "\n".join(lines)
+        self.clipboard_clear()
+        self.clipboard_append(summary_text)
+        self.lbl_niche_status.configure(
+            text="📋 Copied niche details to clipboard!",
+            text_color="#2ecc71"
+        )
+        self.tab_niche_explorer.after(2500, lambda: self.lbl_niche_status.configure(text=""))
+
+    def open_add_niche_window(self):
+        """Opens a modal dialog to manually add a custom niche opportunity to Niches_Matrix.xlsx."""
+        import tkinter.messagebox as messagebox
+        from datetime import datetime
+
+        win = ctk.CTkToplevel(self)
+        win.title("➕ Add Custom Niche Opportunity")
+        win.geometry("640x680")
+        win.attributes("-topmost", True)
+        win.focus_set()
+
+        hdr = ctk.CTkFrame(win, fg_color="#1f232a", corner_radius=8)
+        hdr.pack(fill="x", padx=15, pady=(15, 10))
+
+        lbl_t = ctk.CTkLabel(hdr, text="Add New Trade Niche to Niches_Matrix.xlsx", font=("Arial", 15, "bold"), text_color="#ffffff")
+        lbl_t.pack(anchor="w", padx=15, pady=(10, 2))
+        lbl_sub = ctk.CTkLabel(hdr, text="Define niche code, title, potential rating, target region, and Indian sourcing hubs.", font=("Arial", 11), text_color="#a0a0a0")
+        lbl_sub.pack(anchor="w", padx=15, pady=(0, 10))
+
+        content = ctk.CTkScrollableFrame(win, height=480)
+        content.pack(fill="both", expand=True, padx=15, pady=5)
+
+        def make_field(label, default=""):
+            f = ctk.CTkFrame(content, fg_color="transparent")
+            f.pack(fill="x", pady=4)
+            lbl = ctk.CTkLabel(f, text=label, width=180, anchor="w", font=("Arial", 12, "bold"))
+            lbl.pack(side="left")
+            entry = ctk.CTkEntry(f, height=30)
+            entry.pack(side="left", fill="x", expand=True)
+            if default:
+                entry.insert(0, default)
+            return entry
+
+        def make_option(label, values, default=None):
+            f = ctk.CTkFrame(content, fg_color="transparent")
+            f.pack(fill="x", pady=4)
+            lbl = ctk.CTkLabel(f, text=label, width=180, anchor="w", font=("Arial", 12, "bold"))
+            lbl.pack(side="left")
+            var = ctk.StringVar(value=default or values[0])
+            opt = ctk.CTkOptionMenu(f, values=values, variable=var, height=30)
+            opt.pack(side="left", fill="x", expand=True)
+            return var
+
+        entry_code = make_field("Niche Code *:", "Niche 15")
+        entry_title = make_field("Niche Title *:", "")
+        entry_region = make_field("Target Region:", "Worldwide")
+        var_rating = make_option("Potential Rating *:", ["⭐⭐⭐⭐⭐ Very High (9.5/10)", "⭐⭐⭐⭐ High (8.5/10)", "⭐⭐⭐ Moderate (7.5/10)"], "⭐⭐⭐⭐ High (8.5/10)")
+        var_flow = make_option("Trade Flow *:", ["Export from India", "Two-Way Trade", "Import to India"], "Export from India")
+        entry_products = make_field("Key Sub-Products:", "")
+        entry_hubs = make_field("Indian Sourcing Hubs:", "Gujarat, Maharashtra, Bangalore")
+        entry_drivers = make_field("Demand Drivers & Rationale:", "")
+        entry_tariff = make_field("Tariff / FTA Advantage:", "")
+
+        btn_bar = ctk.CTkFrame(win, fg_color="transparent")
+        btn_bar.pack(fill="x", padx=15, pady=(10, 15))
+
+        def save_niche():
+            ncode = entry_code.get().strip()
+            ntitle = entry_title.get().strip()
+            if not ntitle:
+                messagebox.showwarning("Validation Error", "Niche Title is required.")
+                return
+
+            new_row = {
+                "Niche Code": ncode,
+                "Niche Title": ntitle,
+                "Target Region": entry_region.get().strip() or "Worldwide",
+                "Potential Rating": var_rating.get(),
+                "Trade Flow": var_flow.get(),
+                "Key Sub-Products": entry_products.get().strip(),
+                "Indian Sourcing Hubs": entry_hubs.get().strip() or "Pan-India Clusters",
+                "Market Demand Drivers & Rationale": entry_drivers.get().strip(),
+                "Tariff / FTA / Scheme Advantage": entry_tariff.get().strip(),
+                "Date Analyzed": datetime.now().strftime("%Y-%m-%d")
+            }
+
+            try:
+                import pandas as pd
+                matrix_file = "Niches_Matrix.xlsx"
+                self.ensure_niches_matrix_exists()
+                df = pd.read_excel(matrix_file)
+                df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+                df.to_excel(matrix_file, index=False)
+                self.load_niches_matrix()
+                self.lbl_niche_status.configure(
+                    text=f"✅ Added '{ntitle}' to Niches_Matrix.xlsx!",
+                    text_color="#2ecc71"
+                )
+                win.destroy()
+            except Exception as e:
+                messagebox.showerror("Save Error", f"Could not save niche: {e}")
+
+        btn_save = ctk.CTkButton(btn_bar, text="💾 Save to Matrix", command=save_niche, fg_color="#1f7a1f", hover_color="#145214", width=140)
         btn_save.pack(side="right", padx=5)
 
         btn_cancel = ctk.CTkButton(btn_bar, text="Cancel", command=win.destroy, fg_color="#565b5e", hover_color="#343638", width=90)
