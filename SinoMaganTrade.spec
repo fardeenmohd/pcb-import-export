@@ -43,7 +43,7 @@ hiddenimports = [
     'ddgs',
     'bs4',
     'resource_util',
-] + collect_submodules('playwright')
+] + collect_submodules('playwright') + collect_submodules('ddgs')
 
 a = Analysis(
     ['main.py'],
